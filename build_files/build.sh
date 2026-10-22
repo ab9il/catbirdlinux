@@ -133,7 +133,7 @@ ADDITIONAL_SYSTEM_APPS=(
     poppler-utils
     proxychains-ng
     ripgrep
-	ripgre-all
+	ripgrep-all
     sshuttle
 	starship
 	thunar
