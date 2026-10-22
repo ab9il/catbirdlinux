@@ -194,6 +194,33 @@ else
 		"${ADDITIONAL_SYSTEM_APPS[@]}"
 fi
 
+# Packages to exclude - common to all versions
+EXCLUDED_PACKAGES=(
+    cosign
+    fedora-bookmarks
+    fedora-chromium-config
+    fedora-chromium-config-gnome
+    firefox
+    firefox-langpacks
+    gnome-extensions-app
+    gnome-shell-extension-background-logo
+    gnome-software
+    gnome-software-rpm-ostree
+    gnome-terminal-nautilus
+    podman-docker
+    yelp
+)
+
+# Remove excluded packages if they are installed
+if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
+    readarray -t INSTALLED_EXCLUDED < <(rpm -qa --queryformat='%{NAME}\n' "${EXCLUDED_PACKAGES[@]}" 2>/dev/null || true)
+    if [[ "${#INSTALLED_EXCLUDED[@]}" -gt 0 ]]; then
+        dnf5 -y remove "${INSTALLED_EXCLUDED[@]}"
+    else
+        echo "No excluded packages found to remove."
+    fi
+fi
+
 #######################################################################
 ### Disable repositeories so they aren't cluttering up the final image
 
