@@ -39,6 +39,7 @@ Reboot and your switch to this customized version of Bluefin will be complete.
 
 > [!WARNING]
 > Switching your image via `bootc switch` will replace your current OS base. Your home directory (`~`) and `/etc` are preserved. Always back up important data before rebasing.
+> Your Homebrew environment may change. Backup your packages using `brew bundle dump` to create a `Brewfile`, allowing you to easily reinstall any CLI tools after the rebase, if necessary.
 
 ### Switch back / Rollback
 
