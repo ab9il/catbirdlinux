@@ -12,14 +12,18 @@ log() {
 
 log "Enable Copr repos..."
 COPR_REPOS=(
+    atim/starship # starship
+    bigjapka/VeraCrypt # veracrypt
 	errornointernet/packages
 	heus-sueh/packages                # for matugen/swww
 	leloubil/wl-clip-persist
 	lionheartp/Hyprland # provides packages needed for niri on Fedora 44
+	lukasfr/ripgrep-all # ripgrep-all
 	tofik/sway
 	ulysg/xwayland-satellite
 	yalter/niri
 	scottames/ghostty
+	supervillain/i2pd # i2pd
 )
 
 for repo in "${COPR_REPOS[@]}"; do
@@ -49,6 +53,11 @@ FONTS=(
 	fira-code-fonts
 	fontawesome-fonts-all
 	google-noto-emoji-fonts
+    mathjax-typewriter-fonts
+    overpass-fonts
+    overpass-mono-fonts
+    polarsys-b612-fonts
+    urw-base35-fonts
 )
 
 # Niri compositor + Noctalia Shell dependencies.
@@ -104,15 +113,49 @@ NIRI_PKGS=(
 # for most things with GUIs, and homebrew for CLI apps. This list is
 # only special GUI apps that need to be installed at the system level.
 ADDITIONAL_SYSTEM_APPS=(
-	thunar
-	thunar-volman
-	thunar-archive-plugin
-	ghostty
+    aria2
+    asciidoc
+    dnscrypt-proxy
 	fcitx5
 	fcitx5-configtool
 	fcitx5-gtk
 	fcitx5-qt
+    fd-find
+	ghostty
+    glow
+	i2pd
 	kcm-fcitx5
+	moreutils
+    neovim
+	pandoc
+    parallel
+    poppler
+    poppler-utils
+    proxychains-ng
+    ripgrep
+	ripgre-all
+    sshuttle
+	starship
+	thunar
+	thunar-volman
+	thunar-archive-plugin
+	tor
+	veracrypt
+    xorriso
+    # --- software-defined-radio ---
+    hackrf
+    hackrf-devel
+    rtl-sdr
+    rtl-sdr-devel
+    SoapySDR
+    SoapySDR-devel
+    soapy-rtlsdr
+    soapy-uhd
+    texlive-collection-fontsrecommended
+    texlive-collection-xetex
+    texlive-latex
+    uhd
+    uhd-devel
 )
 
 #######################################################################
