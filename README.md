@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌊 Catbirdlinux
+# 🌊 Catbird Linux
 
 **An immutable, daily-built Wayland desktop powered by Niri, based on Bluefin.**
 
