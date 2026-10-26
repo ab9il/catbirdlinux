@@ -1,0 +1,56 @@
+###############################################################################
+# bash aliases
+###############################################################################
+
+# grep with colors
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# clear
+alias c='clear'
+
+# delete bash history
+alias cc='history -c; >~/.bash_history; clear'
+
+# syntax highlighting for cat (requires bat binary)
+alias cat="bat --color=always"
+alias less="less -R"
+
+# check running daemons
+alias daemons='systemctl | grep daemon'
+
+# check loaded services
+alias services='systemctl --type=service --state=running'
+
+alias proxychains='proxychains4'
+
+# tmux
+alias tmux="tmux -2"
+
+# wget
+alias wget='wget -N -c'
+
+# use nvim for default editor
+alias vi="nvim"
+alias vim="nvim"
+
+# nvim -d for vimdiff
+alias vimdiff='nvim -d'
+
+# vim keys to exit
+alias :q='exit'
+
+# fzf
+alias fzf='fzf --preview="bat --color=always {}"'
+
+# sshuttle
+alias sshu='/var/home/"$(logname)"/.local/bin/sshuttle-controller'
+
+# check public IP location
+alias ckip='curl -s https://ipinfo.io | jq ".loc, .city, .country"'

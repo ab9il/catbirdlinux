@@ -1,0 +1,5 @@
+# editing mode vi and cursor indication
+set editing-mode vi
+set show-mode-in-prompt on
+set vi-cmd-mode-string "\x01\e[0;38;5;27m\x02 cmd \x01\e[2 q\e(B\e[m\x02"
+set vi-ins-mode-string "\x01\e[0;38;5;41m\x02 ins \x01\e[5 q\e(B\e[m\x02"
