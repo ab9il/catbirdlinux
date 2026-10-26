@@ -115,6 +115,7 @@ NIRI_PKGS=(
 ADDITIONAL_SYSTEM_APPS=(
     aria2
     asciidoc
+    bat
     dnscrypt-proxy
 	fcitx5
 	fcitx5-configtool
