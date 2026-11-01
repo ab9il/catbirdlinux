@@ -25,14 +25,12 @@ With daily automated builds ensuring you always have the latest security patches
 
 ## 💿 Install by Rebasing
 
-You must first install either the official release of Bluefin, or any other flavor of Fedora Atomic or Universal Blue Linux, then rebase to this image. You will thereby get the necessary verification keys and trust policies. The second rebase task fully installs and verifies authenticity of this customized Bluefin version:
+You must first install either the official release of Bluefin, or any other flavor of Fedora Atomic or Universal Blue Linux, then rebase to this image. You will get both the image and necessary verification keys and trust policies.
 
 Rebase with the "bootc switch" command for the latest images:
 
 ```bash
 sudo bootc switch --enforce-container-sigpolicy ghcr.io/ab9il/catbirdlinux:latest
-```
-```
 ```
 
 Reboot and your switch to this customized version of Bluefin will be complete.
