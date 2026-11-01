@@ -19,6 +19,7 @@ With daily automated builds ensuring you always have the latest security patches
 [![Catbird Linux is now image based.](https://github.com/ab9il/AB9IL/raw/master/catbirdlinux-v4.jpg)]()
 
 </div>
+
 ### ✨ Key Pillars
 
 - 🌀 **Scrollable Tiling**: Navigate windows on an infinite horizontal ribbon using Niri, augmented by the [Noctalia](https://github.com/noctalia-dev/noctalia) desktop shell.
