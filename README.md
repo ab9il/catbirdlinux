@@ -14,6 +14,9 @@
 
 With daily automated builds ensuring you always have the latest security patches and upstream updates, `Catbird Linux` provides a highly customized yet remarkably stable desktop experience.
 
+<div align="center">
+[![Catbird Linux is now image based.](https://github.com/ab9il/AB9IL/raw/master/catbirdlinux-v4.jpg)]
+</div>
 ### ✨ Key Pillars
 
 - 🌀 **Scrollable Tiling**: Navigate windows on an infinite horizontal ribbon using Niri, augmented by the [Noctalia](https://github.com/noctalia-dev/noctalia) desktop shell.
@@ -112,4 +115,5 @@ Built with ❤️ on top of [Universal Blue](https://universal-blue.org), [Bluef
 
 - 💬 [Universal Blue Forums](https://universal-blue.discourse.group/)
 - 📖 [bootc Discussion](https://github.com/bootc-dev/bootc/discussions)
+- 📖 [Book: The Era of Atomic Linux](https://skywavelinux.com/atomic-linux)
 
