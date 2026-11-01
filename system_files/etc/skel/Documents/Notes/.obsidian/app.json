@@ -1,0 +1,10 @@
+{
+  "spellcheck": true,
+  "vimMode": true,
+  "trashOption": "none",
+  "foldHeading": true,
+  "useMarkdownLinks": true,
+  "promptDelete": false,
+  "readableLineLength": false,
+  "showUnsupportedFiles": true
+}

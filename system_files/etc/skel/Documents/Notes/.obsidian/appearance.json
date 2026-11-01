@@ -1,0 +1,15 @@
+{
+  "baseFontSize": 15,
+  "translucency": false,
+  "cssTheme": "Obsidianite",
+  "enabledCssSnippets": [
+    "dark-graphite-pie",
+    "fonts"
+  ],
+  "accentColor": "",
+  "monospaceFontFamily": "Source Code Pro",
+  "textFontFamily": "Liberation Sans",
+  "interfaceFontFamily": "Liberation Sans",
+  "baseFontSizeAction": true,
+  "theme": "obsidian"
+}

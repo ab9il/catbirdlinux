@@ -111,7 +111,7 @@ input {
 // https://niri-wm.github.io/niri/Configuration:-Layout
 layout {
     // Set gaps around windows in logical pixels.
-    gaps 16
+    gaps 10
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -159,7 +159,7 @@ layout {
         // off
 
         // How many logical pixels the ring extends out from the windows.
-        width 4
+        width 2
 
         // Colors can be set in a variety of ways:
         // - CSS named colors: "red"
@@ -197,7 +197,7 @@ layout {
         // If you enable the border, you probably want to disable the focus ring.
         off
 
-        width 4
+        width 2
         active-color "#ffc87f"
         inactive-color "#505050"
 
@@ -365,6 +365,8 @@ binds {
     Mod+T hotkey-overlay-title="Open a Terminal: Ptyxis" { spawn "ptyxis"; }
     Ctrl+Alt+T hotkey-overlay-title="Open a Terminal: Ptyxis" { spawn "ptyxis"; }
     Mod+Return hotkey-overlay-title="Open a Terminal: Ptyxis" { spawn "ptyxis"; }
+    Mod+B hotkey-overlay-title="Run an Application: Vivaldi" { spawn-sh "flatpak run com.vivaldi.Vivaldi"; }
+    // Mod+B hotkey-overlay-title="Run an Application: Brave" { spawn-sh "flatpak run com.brave.Browser"; }
     Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     Mod+E hotkey-overlay-title="Open a File Manager: Nautilus" { spawn "nautilus"; }

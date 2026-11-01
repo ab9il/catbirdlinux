@@ -122,7 +122,6 @@ ADDITIONAL_SYSTEM_APPS=(
 	fcitx5-gtk
 	fcitx5-qt
     fd-find
-	ghostty
     glow
 	i2pd
 	kcm-fcitx5
@@ -137,9 +136,6 @@ ADDITIONAL_SYSTEM_APPS=(
 	ripgrep-all
     sshuttle
 	starship
-	thunar
-	thunar-volman
-	thunar-archive-plugin
 	tor
 	veracrypt
     xorriso
