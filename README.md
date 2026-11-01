@@ -15,7 +15,9 @@
 With daily automated builds ensuring you always have the latest security patches and upstream updates, `Catbird Linux` provides a highly customized yet remarkably stable desktop experience.
 
 <div align="center">
-[![Catbird Linux is now image based.](https://github.com/ab9il/AB9IL/raw/master/catbirdlinux-v4.jpg)]
+
+[![Catbird Linux is now image based.](https://github.com/ab9il/AB9IL/raw/master/catbirdlinux-v4.jpg)]()
+
 </div>
 ### ✨ Key Pillars
 
