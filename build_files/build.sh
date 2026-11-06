@@ -16,12 +16,9 @@ COPR_REPOS=(
     errornointernet/packages
     heus-sueh/packages                # for matugen/swww
     leloubil/wl-clip-persist
-    lionheartp/Hyprland # provides packages needed for niri on Fedora 44
     lukasfr/ripgrep-all # ripgrep-all
     tofik/sway
     ulysg/xwayland-satellite
-    yalter/niri
-    scottames/ghostty
     supervillain/i2pd # i2pd
 )
 
@@ -66,7 +63,7 @@ FONTS=(
 NIRI_PKGS=(
     # --- Compositor + Noctalia shell ---
     niri
-    noctalia-git
+    noctalia
 
     # --- Audio backend (Noctalia volume IPC calls into these) ---
     pamixer            # volume backend called by Noctalia IPC
