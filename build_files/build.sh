@@ -221,37 +221,3 @@ for repo in "${COPR_REPOS[@]}"; do
     dnf5 -y copr disable "$repo"
 done
 
-### Install fcitx5-lotus from GitHub Releases
-
-log "Installing fcitx5-lotus from GitHub releases..."
-
-FCITX5_LOTUS_REPO="LotusInputMethod/fcitx5-lotus"
-FEDORA_VERSION="$(rpm -E %fedora)"
-
-# Map the Fedora version to the release artifact suffix used by fcitx5-lotus
-case "${FEDORA_VERSION}" in
-    42) FCITX5_LOTUS_RPM_SUFFIX="42" ;;
-    43) FCITX5_LOTUS_RPM_SUFFIX="43" ;;
-    44) FCITX5_LOTUS_RPM_SUFFIX="44" ;;
-    *)  FCITX5_LOTUS_RPM_SUFFIX="rawhide" ;;
-esac
-
-# Get the latest release tag (e.g. "v3.4.0") and strip the leading "v" for the filename
-FCITX5_LOTUS_TAG="$(
-    curl -fsSL "https://api.github.com/repos/${FCITX5_LOTUS_REPO}/releases/latest" \
-        | grep -oP '"tag_name":\s*"\K[^"]+'
-)"
-FCITX5_LOTUS_VERSION="${FCITX5_LOTUS_TAG#v}"
-
-# Construct the download URL from the known filename pattern
-FCITX5_LOTUS_RPM_FILENAME="fcitx5-lotus-${FCITX5_LOTUS_VERSION}-1.x86_64.${FCITX5_LOTUS_RPM_SUFFIX}.rpm"
-FCITX5_LOTUS_RPM_URL="https://github.com/${FCITX5_LOTUS_REPO}/releases/download/${FCITX5_LOTUS_TAG}/${FCITX5_LOTUS_RPM_FILENAME}"
-FCITX5_LOTUS_RPM_TMP="/tmp/${FCITX5_LOTUS_RPM_FILENAME}"
-
-log "Downloading fcitx5-lotus ${FCITX5_LOTUS_VERSION} for Fedora ${FEDORA_VERSION}..."
-curl -fsSL -o "${FCITX5_LOTUS_RPM_TMP}" "${FCITX5_LOTUS_RPM_URL}"
-
-log "Installing ${FCITX5_LOTUS_RPM_FILENAME}..."
-dnf5 install --setopt=install_weak_deps=False -y "${FCITX5_LOTUS_RPM_TMP}"
-
-rm -f "${FCITX5_LOTUS_RPM_TMP}"

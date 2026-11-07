@@ -24,8 +24,6 @@ With daily automated builds ensuring you always have the latest security patches
 
 - 🌀 **Scrollable Tiling**: Navigate windows on an infinite horizontal ribbon using Niri, augmented by the [Noctalia](https://github.com/noctalia-dev/noctalia) desktop shell.
 - 🛡️ **Daily Security & Atomic Upgrades**: Images are rebuilt daily (`cron: "05 10 * * *"`) pulling the latest upstream updates and packages. Updates apply atomically in the background.
-- 🇻🇳 **Vietnamese Input**: Out-of-the-box support via `fcitx5-lotus`, automatically tracking the latest GitHub releases during the image build.
-- ⚡ **Curated Wayland Toolstack**: Ships with essential tools like Ghostty, Waybar, Rofi-Wayland/Fuzzel, SwayNC, Thunar, and more.
 
 ---
 
@@ -62,27 +60,6 @@ To make the system immediately usable, `Catbird Linux` pairs Niri with **Noctali
 - An integrated status bar
 - Launcher / app switcher
 - Native workspace overview for the scrolling layout
-
----
-
-## 🇻🇳 Vietnamese Input Configuration
-
-The image ships with [**fcitx5-lotus**](https://github.com/LotusInputMethod/fcitx5-lotus), compiled directly from the latest release for your Fedora base.
-
-**Post-install setup:**
-Add the following to `~/.config/environment.d/fcitx5.conf` (create if missing):
-```ini
-XMODIFIERS=@im=fcitx
-GTK_IM_MODULE=fcitx
-QT_IM_MODULE=fcitx
-SDL_IM_MODULE=fcitx
-GLFW_IM_MODULE=ibus
-
-```
-
-Then launch **fcitx5-configtool**, add **Lotus**, and choose your preferred typing method (Telex / VNI / VIQR). Make sure to configure `fcitx5 &` to auto-start in your Niri configuration!
-
-**More Languages are in the works. Check back again later for updates.**
 
 ---
 
