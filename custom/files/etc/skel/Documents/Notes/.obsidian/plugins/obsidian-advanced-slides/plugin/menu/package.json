@@ -25,7 +25,7 @@
     "@babel/preset-env": "7.29.7",
     "@rollup/plugin-babel": "5.3.1",
     "@rollup/plugin-commonjs": "13.0.2",
-    "@rollup/plugin-node-resolve": "8.4.0",
+    "@rollup/plugin-node-resolve": "16.0.3",
     "babel-plugin-transform-html-import-to-string": "0.0.1",
     "core-js": "3.51.0",
     "gulp": "4.0.2",
