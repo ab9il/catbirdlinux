@@ -1,0 +1,467 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+###############################################################################
+# Niri + Noctalia desktop
+###############################################################################
+# Replaces the GNOME desktop inherited from Bluefin with the niri compositor and
+# the Noctalia shell. Destructive on purpose: GNOME is removed, not added beside.
+#
+# niri and noctalia are in Fedora's repositories. Ghostty comes from a COPR and
+# the greeter from Terra, each isolated to the one package it provides.
+#
+# The Containerfile sets install_weak_deps=0, so every package is named here.
+###############################################################################
+
+# shellcheck source=/dev/null
+source /ctx/build/copr-helpers.sh
+
+# Enable nullglob for all glob operations to prevent failures on empty matches
+shopt -s nullglob
+
+echo "::group:: Install More Default Packages"
+
+# From supervillain/i2pd
+copr_install_isolated "supervillain/i2pd" "i2pd"
+
+# From agriffis/neovim-nightly
+copr_install_isolated "villainy/neovim" "neovim python3-neovim"
+
+# From lukasfr/ripgrep-all
+copr_install_isolated "lukasfr/ripgrep-all" "ripgrep-all"
+
+# From starship/starship
+copr_install_isolated "atim/starship" "starship"
+
+# persistence for clipboard items
+copr_install_isolated "leloubil/wl-clip-persist" "wl-clip-persist"
+
+FONTS=(
+    fira-code-fonts
+    fontawesome-fonts-all
+    google-noto-emoji-fonts
+    polarsys-b612-fonts
+)
+
+ADDITIONAL_SYSTEM_APPS=(
+    aria2
+    bat
+    cliphist
+    fuzzel
+    glow
+    pandoc
+    parallel
+    poppler
+    poppler-utils
+    ripgrep
+    sshuttle
+    tor
+	wl-clipboard
+    # --- software-defined-radio ---
+    hackrf
+    hackrf-devel
+    rtl-sdr
+    rtl-sdr-devel
+    SoapySDR
+    SoapySDR-devel
+    soapy-rtlsdr
+    soapy-uhd
+    texlive-collection-fontsrecommended
+    texlive-collection-xetex
+    texlive-latex
+    uhd
+    uhd-devel
+)
+
+# Install all Fedora packages (bulk - safe from COPR injection)
+echo "Installing packages from Fedora repos..."
+dnf5 install --setopt=install_weak_deps=False -y \
+    "${FONTS[@]}" \
+    "${ADDITIONAL_SYSTEM_APPS[@]}"
+
+# Remove excluded packages if they are installed
+if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
+    readarray -t INSTALLED_EXCLUDED < <(rpm -qa --queryformat='%{NAME}\n' "${EXCLUDED_PACKAGES[@]}" 2>/dev/null || true)
+    if [[ "${#INSTALLED_EXCLUDED[@]}" -gt 0 ]]; then
+        dnf5 -y remove "${INSTALLED_EXCLUDED[@]}"
+    else
+        echo "No excluded packages found to remove."
+    fi
+fi
+
+echo "::endgroup::"
+
+echo "::group:: Install niri and Noctalia"
+
+# xwayland-satellite is niri's hard requirement today; named anyway, because a
+# demotion to Recommends would silently drop X11 support.
+NIRI_PKGS=(
+	niri
+	noctalia
+	sound-theme-freedesktop
+    xwayland-satellite
+)
+dnf5 install -y "${NIRI_PKGS[@]}"
+
+echo "::endgroup::"
+
+echo "::group:: Install session support packages"
+
+# Weak dependencies of niri and noctalia, plus the utilities niri's defaults and
+# Noctalia's screenshot panel shell out to. ddcutil drives brightness on
+# external monitors; gnome-keyring-pam unlocks the keyring at login.
+SESSION_SUPP_PKGS=(
+	brightnessctl
+	ddcutil
+	gnome-keyring
+	gnome-keyring-pam
+	grim
+	playerctl
+	slurp
+	upower
+    blueman
+    bluez
+    bluez-tools
+    gnome-bluetooth
+    gvfs
+    libgtop2
+    pamixer
+    pavucontrol
+    pipewire
+    playerctl
+    swappy
+    upower
+    wget2
+    wireplumber
+    xdg-desktop-portal-gnome
+    xdg-desktop-portal-gtk
+)
+dnf5 install -y "${SESSION_SUPP_PKGS[@]}"
+
+echo "::endgroup::"
+
+echo "::group:: Install the terminal and file manager"
+
+# From the base image, and outside the GNOME removal's closure below. Named
+# because /etc/niri/config.kdl binds Mod+E to it.
+dnf5 install -y nautilus ptyxis
+
+# Also from the base image, and nothing requires it, so it would leave silently.
+# It is the GTK 3 half of Noctalia's gtk3/gtk4 templates: the templates' apply
+# hook sets gtk-theme to adw-gtk3 or adw-gtk3-dark and skips that step when the
+# theme is absent, leaving GTK 3 applications on Adwaita with a stylesheet
+# written for adw-gtk3. custom/config/noctalia/ turns those templates on.
+dnf5 install -y adw-gtk3-theme
+
+# Likewise unrequired by anything, and it owns the SSH agent this session runs:
+# see "Restore the SSH agent" below.
+dnf5 install -y gcr
+
+echo "::endgroup::"
+
+echo "::group:: Install the network connection editor"
+
+###############################################################################
+# Editing a network connection
+###############################################################################
+# Noctalia's network panel is connect-only, and its string catalogue is the
+# whole surface: connect, password, the 802.1X fields, and status. There is no
+# forget, no static address, no DNS, no autoconnect or metered flag. The shell
+# drives NetworkManager over D-Bus but exposes no editor, and the editor GNOME
+# supplied was gnome-control-center, removed below.
+#
+# nm-connection-editor is NetworkManager's own, and the gap's exact shape:
+# addressing, routes, 802.1X, autoconnect, metered, and the VPN types the
+# NetworkManager-*-gnome packages in this image provide. Those packages are
+# editor plugins -- without the editor nothing in the image can create a VPN
+# profile, only toggle one that already exists.
+#
+# It is in the base image already and nothing requires it, so like nautilus and
+# gcr above it is one rebase from leaving silently; naming it is the point. It
+# links against GTK 3, libnm and libnma, and against nothing from gnome-shell
+# or gnome-session, so the GNOME removal below has no claim on it.
+###############################################################################
+
+dnf5 install -y nm-connection-editor
+
+echo "::endgroup::"
+
+echo "::group:: Install the greeter"
+
+###############################################################################
+# Switching the greeter
+###############################################################################
+# gdm hard-requires gnome-shell and gnome-session (`rpm -q --requires gdm`), so
+# removing GNOME takes the greeter with it and one has to be chosen.
+#
+# Noctalia Greeter is the login screen from the same project as the shell, so
+# the two share a visual language and `noctalia msg greeter-sync` pushes the
+# session's wallpaper and palette to it. It is a greetd greeter and brings its
+# own wlroots compositor, so nothing here needs an X server or a kiosk
+# compositor, and it reads /usr/share/wayland-sessions unaided.
+###############################################################################
+
+# Fedora does not package it; Terra, which upstream's install guide points
+# Fedora users at, does. Restricted two ways:
+#
+#   includepkgs  Terra's own noctalia is older than Fedora's and would be free
+#                to downgrade the shell. Only the greeter may come from here.
+#   gpgkey       Terra publishes no .repo file to inherit, and signs each
+#                Fedora release with a different key. Pinning per major makes a
+#                rebase fail here until someone verifies the new key, which is
+#                the point: a rotated trust root should be a decision.
+declare -A TERRA_KEY_FINGERPRINTS=(
+	[43]="47F7A5060E38FC07F674D11BE43DBFE05C4F92A3"
+	[44]="AE09157A4DE88B497EA1D5D300CDAB43DE226D6F"
+	[45]="C2AC02124AF114F086592E3C8DDE7D14C1C23D8C"
+)
+
+FEDORA_MAJOR="$(sed -nE 's/^VERSION_ID=([0-9]+)$/\1/p' /usr/lib/os-release)"
+if [[ -z "${FEDORA_MAJOR}" ]]; then
+	echo "ERROR: could not read VERSION_ID from /usr/lib/os-release" >&2
+	exit 1
+fi
+
+EXPECTED_FINGERPRINT="${TERRA_KEY_FINGERPRINTS[${FEDORA_MAJOR}]:-}"
+if [[ -z "${EXPECTED_FINGERPRINT}" ]]; then
+	echo "ERROR: no pinned Terra signing key for Fedora ${FEDORA_MAJOR}." >&2
+	echo "       Verify https://repos.fyralabs.com/terra${FEDORA_MAJOR}/key.asc and add" >&2
+	echo "       its fingerprint to TERRA_KEY_FINGERPRINTS in this script." >&2
+	exit 1
+fi
+
+TERRA_KEY_FILE="/etc/pki/rpm-gpg/RPM-GPG-KEY-terra"
+TERRA_GPG_HOME="$(mktemp -d)"
+trap 'rm -rf -- "${TERRA_GPG_HOME}"' EXIT
+
+curl --fail --retry 3 --silent --show-error --location \
+	--proto '=https' --proto-redir '=https' \
+	--output "${TERRA_KEY_FILE}" \
+	"https://repos.fyralabs.com/terra${FEDORA_MAJOR}/key.asc"
+
+ACTUAL_FINGERPRINT="$(gpg --batch --homedir "${TERRA_GPG_HOME}" \
+	--show-keys --with-colons "${TERRA_KEY_FILE}" |
+	awk -F: '$1 == "fpr" { print $10; exit }')"
+
+if [[ "${ACTUAL_FINGERPRINT}" != "${EXPECTED_FINGERPRINT}" ]]; then
+	echo "ERROR: Terra signing key fingerprint mismatch for Fedora ${FEDORA_MAJOR}" >&2
+	echo "       expected ${EXPECTED_FINGERPRINT}" >&2
+	echo "       got      ${ACTUAL_FINGERPRINT:-<none>}" >&2
+	exit 1
+fi
+
+cat >/etc/yum.repos.d/terra.repo <<EOF
+[terra]
+name=Terra \$releasever
+baseurl=https://repos.fyralabs.com/terra\$releasever
+enabled=1
+includepkgs=noctalia-greeter
+gpgcheck=1
+repo_gpgcheck=0
+gpgkey=file://${TERRA_KEY_FILE}
+EOF
+
+# greetd is a hard requirement of the greeter; named to keep the display
+# manager visible here rather than arriving as somebody else's dependency.
+dnf5 install -y greetd noctalia-greeter
+
+# A third-party repository is a build-time source only.
+rm -f /etc/yum.repos.d/terra.repo
+
+echo "::endgroup::"
+
+echo "::group:: Remove GNOME"
+
+# The -session packages own /usr/share/wayland-sessions, so leaving them would
+# keep offering a session that can no longer start. dnf5 takes the dependents
+# along; nautilus, ptyxis, gnome-keyring and both portal backends are outside
+# that closure and stay.
+EXCLUDED_PACKAGES=(
+    cosign
+    fedora-bookmarks
+    fedora-chromium-config
+    fedora-chromium-config-gnome
+    firefox
+    firefox-langpacks
+	gdm
+	gnome-control-center
+	gnome-classic-session
+    gnome-extensions-app
+	gnome-initial-setup
+    gnome-session
+    gnome-session-wayland-session
+    gnome-shell
+    "gnome-shell-extension-*"
+    gnome-software
+    gnome-software-rpm-ostree
+    gnome-terminal-nautilus
+    mutter
+    podman-docker
+    yelp
+)
+
+# Remove excluded packages if they are installed
+if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
+    readarray -t INSTALLED_EXCLUDED < <(rpm -qa --queryformat='%{NAME}\n' "${EXCLUDED_PACKAGES[@]}" 2>/dev/null || true)
+    if [[ "${#INSTALLED_EXCLUDED[@]}" -gt 0 ]]; then
+        dnf5 -y remove "${INSTALLED_EXCLUDED[@]}"
+    else
+        echo "No excluded packages found to remove."
+    fi
+fi
+
+echo "::endgroup::"
+
+echo "::group:: Verify the desktop is coherent"
+
+# Every check below is a way the image boots to a black screen, which a
+# container build cannot otherwise catch. Fail here instead.
+
+test -f /usr/share/wayland-sessions/niri.desktop
+if compgen -G "/usr/share/wayland-sessions/gnome*.desktop" >/dev/null; then
+	echo "ERROR: a GNOME session entry survived the removal" >&2
+	exit 1
+fi
+
+# niri speaks Mutter's ScreenCast D-Bus API, so the GNOME portal backend stays
+# correct with mutter gone. niri's own niri-portals.conf names these three
+# backends, which is why this image ships no portal config of its own.
+rpm -q xdg-desktop-portal-gnome xdg-desktop-portal-gtk gnome-keyring
+test -f /usr/share/xdg-desktop-portal/niri-portals.conf
+
+# The editor and the entry that launches it. Fedora's package ships no desktop
+# file, so that half comes from custom/files via the overlay phase: the two are
+# installed by different phases and meet for the first time here. Validating
+# rather than testing for the file covers both -- a missing file and a
+# malformed one are the same symptom, an application the launcher never shows.
+rpm -q nm-connection-editor
+test -x /usr/bin/nm-connection-editor
+desktop-file-validate /usr/share/applications/nm-connection-editor.desktop
+
+# The builtin templates custom/config/noctalia/ selects, and the GTK 3 theme
+# their apply hook expects. A template dropped upstream would otherwise be a
+# line in a config file that Noctalia silently ignores.
+test -f /usr/share/noctalia/assets/templates/gtk/gtk3.css
+test -f /usr/share/noctalia/assets/templates/gtk/gtk4.css
+test -d /usr/share/themes/adw-gtk3-dark
+
+# The same argument as `niri validate` below, for the other half of the
+# session. The overlay phase seeded this from custom/config/, and an unknown
+# key or a bad value would be a broken Noctalia config in every new account.
+# Whole directory rather than a filename, so it follows the seam and not one
+# file; a fork that ships no Noctalia defaults has nothing to check.
+if [[ -d /etc/skel/.config/noctalia ]]; then
+	noctalia config validate /etc/skel/.config/noctalia
+fi
+
+# custom/files placed the config during the overlay phase; this is the first
+# point in the build where a compositor exists to check it.
+niri validate --config /etc/niri/config.kdl
+
+# Every bind in that config is an IPC call into a running Noctalia.
+noctalia --version
+
+# greetd must run the wrapper, not the greeter binary: the wrapper starts the
+# bundled compositor. The assets tree carries the fonts, icons and UI; the
+# Polkit action is what lets `greeter-sync` apply the session's theme.
+test -x /usr/bin/noctalia-greeter-session
+test -x /usr/bin/noctalia-greeter
+test -x /usr/bin/noctalia-greeter-compositor
+test -d /usr/share/noctalia-greeter/assets
+test -x /usr/bin/noctalia-greeter-apply-appearance
+test -f /usr/share/polkit-1/actions/org.noctalia.greeter.apply-appearance.policy
+
+# From custom/files, via the overlay phase. rsync carries the mode across, and
+# a lost execute bit would leave the greeter with no state directory and no
+# keyboard layout -- the second of which reads as a rejected password.
+test -x /usr/libexec/noctiri-greeter-setup.sh
+
+echo "::endgroup::"
+
+echo "::group:: Configure and enable the greeter"
+
+# Written here rather than through custom/files: greetd owns this path, so an
+# overlaid copy would have been moved aside as .rpmsave when greetd installed.
+#
+# greetd's own service account stands in for upstream's `greeter`, which on
+# Fedora would duplicate it. The session is left unpinned so the picker stays
+# meaningful if a second one is ever added.
+mkdir -p /etc/greetd
+cat >/etc/greetd/config.toml <<'EOF'
+# Written by build/60-niri-noctalia.sh. Replaced on every image update.
+[terminal]
+vt = 1
+
+[default_session]
+command = "/usr/bin/noctalia-greeter-session"
+user = "greetd"
+EOF
+
+# The greeter needs a logind session to reach the seat's DRM and input devices;
+# Fedora only reaches pam_systemd through system-auth, optionally. Use the
+# vendor's helper, then drop the timestamped backup it leaves: every build
+# starts from the same base layer, so it has nothing to restore.
+/usr/share/noctalia-greeter/setup_greetd_pam.sh
+rm -f /etc/pam.d/greetd.bak.noctalia.*
+grep -q 'pam_systemd.so' /etc/pam.d/greetd
+
+# /var/lib/noctalia-greeter cannot ship in the image -- 90-cleanup.sh prunes
+# /var -- so a unit from custom/files creates it on first boot, before greetd.
+systemctl enable noctalia-greeter-setup.service
+
+# gdm's removal leaves the display-manager alias dangling, and systemctl will
+# not replace an existing symlink: skipping this boots to no greeter at all.
+rm -f /etc/systemd/system/display-manager.service
+systemctl enable greetd.service
+
+systemctl set-default graphical.target
+
+echo "::endgroup::"
+
+echo "::group:: Restore the SSH agent"
+
+###############################################################################
+# Restore the SSH agent
+###############################################################################
+# gnome-session started an SSH agent; removing GNOME above took that with it,
+# and niri starts nothing in its place. Fedora ships gcr's agent disabled and
+# expects a desktop session to enable it, so without this the image has no
+# agent at all.
+#
+# The failure is quiet and reads as the user's own mistake. gcr's socket unit
+# still sets SSH_AUTH_SOCK to %t/gcr/ssh, so ssh is pointed at a socket nobody
+# is listening on: a passphrased key then fails with `Permission denied
+# (publickey)` while sitting in plain sight in ~/.ssh, and `ssh-add -l` answers
+# "Error connecting to agent". Nothing names the session as the cause.
+#
+# --global is what makes it every user's default: it links the unit into
+# /etc/systemd/user/, which each user's systemd instance reads. It stays a
+# default -- `systemctl --user disable gcr-ssh-agent.socket` masks it per user.
+#
+# Socket-activated, so enabling it costs nothing until something connects, and
+# the agent picks its passphrases up from the login keyring that
+# pam_gnome_keyring unlocks in /etc/pam.d/greetd.
+###############################################################################
+
+test -f /usr/lib/systemd/user/gcr-ssh-agent.socket
+systemctl --global enable gcr-ssh-agent.socket
+test -L /etc/systemd/user/sockets.target.wants/gcr-ssh-agent.socket
+
+echo "::endgroup::"
+
+echo "::group:: Record the desktop in the image identity"
+
+# fastfetch and `bootc status` read os-release; VARIANT is how an installed
+# system says which desktop it carries. 00-image-info.sh owns the rest.
+sed -i '/^VARIANT=/d; /^VARIANT_ID=/d' /usr/lib/os-release
+cat >>/usr/lib/os-release <<'EOF'
+VARIANT="Niri"
+VARIANT_ID=niri
+EOF
+
+echo "::endgroup::"
+
+shopt -u nullglob
+
+echo "Niri + Noctalia phase complete!"

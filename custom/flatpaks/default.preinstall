@@ -13,8 +13,8 @@
 # `just validate-flatpaks` before a change can land.
 
 # Email, calendar and newsgroup client. Fedora ships no mail client by default.
-[Flatpak Preinstall org.mozilla.Thunderbird]
-Branch=stable
+# [Flatpak Preinstall org.mozilla.Thunderbird]
+# Branch=stable
 
 # Audit and restrict the permissions of installed Flatpaks. There is no RPM
 # equivalent, so this only makes sense as a Flatpak.
@@ -30,3 +30,51 @@ Branch=stable
 #
 # [Flatpak Preinstall io.github.flattool.Warehouse]
 # Branch=stable
+
+# Audacity (audio editor))
+[Flatpak Preinstall org.audacityteam.Audacity]
+Branch=stable
+
+# Bleachbit (system cleaner)
+[Flatpak Preinstall org.bleachbit.BleachBit]
+Branch=stable
+
+# Bottles (run Windows apps)
+[Flatpak Preinstall com.usebottles.bottles]
+Branch=stable
+
+# Brave (web browser)
+[Flatpak Preinstall com.brave.Browser]
+Branch=stable
+
+# GIMP (photo editor)
+[Flatpak Preinstall org.gimp.GIMP]
+Branch=stable
+
+# Image Viewer (image viewer)
+[Flatpak Preinstall org.gnome.Loupe]
+Branch=stable
+
+# LibreOffice (office suite)
+[Flatpak Preinstall org.libreoffice.LibreOffice]
+Branch=stable
+
+# Obsidian (Markdown based note-taking)
+[Flatpak Preinstall md.obsidian.Obsidian]
+Branch=stable
+
+# Shotcut (video editor)
+[Flatpak Preinstall org.shotcut.Shotcut]
+Branch=stable
+
+# Transmission (bit torrent client)
+[Flatpak Preinstall com.transmissionbt.Transmission]
+Branch=stable
+
+# VLC (media player)
+[Flatpak Preinstall org.videolan.VLC]
+Branch=stable
+
+# Zathura (PDF reader)
+[Flatpak Preinstall org.pwmt.zathura]
+Branch=stable

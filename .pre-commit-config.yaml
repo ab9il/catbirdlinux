@@ -8,7 +8,17 @@ repos:
       - id: check-toml
       - id: check-yaml
       - id: end-of-file-fixer
+        exclude: |
+          (?x)(
+              ^custom/files/
+            | ^custom/config/
+          )
       - id: trailing-whitespace
+        exclude: |
+          (?x)(
+              ^custom/files/
+            | ^custom/config/
+          )
 
   # Brewfile validation has exactly one implementation: build/validate-brewfiles.sh.
   # This hook must stay a caller of that script and must never hand a repository

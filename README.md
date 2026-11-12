@@ -1,130 +1,119 @@
-# finpilot
+<div align="center">
 
-A template for building your own bootc operating system image, assembled the
-same way Bluefin, Aurora, and Bluefin LTS are: from shared OCI layers rather
-than by modifying an existing image. The desktop configuration comes from
-[`projectbluefin/common`](https://github.com/projectbluefin/common), Homebrew
-from [`ublue-os/brew`](https://github.com/ublue-os/brew), and the rest is yours.
+# 🌊 Catbird Linux
 
-It is built to be driven by hand or by an agent.
+**An immutable, daily-built Wayland desktop powered by Niri, based on Bluefin.**
 
-> Be the one who moves, not the one who is moved.
+</div>
 
-## What Makes this Raptor Different?
+---
 
-Here are the changes from [Base Image Name]. This image is based on
-[Bluefin/Bazzite/Aurora/etc] and includes these customizations:
+## 📖 About
 
-### Added Packages (Build-time)
+Catbird Linux is now adopting atomic / image-based architecture! It comes to
+you as a bootc operating system image, assembled similarly to Bluefin and Bazzite,
+using shared OCI layers. It is practically unbreakable, since the system core
+is built and tested here in the cloud, before deployed to you, while your userpace
+applications are separately built, tested, and maintained.
 
-- List the packages you install at build time
+Catbird Linux no longer packs as many tools into the initial download, so you can get
+up and going faster. You also have tremendous freedom in the applications you install,
+including Podman / Docker containers from any of the popular Linux distributions. With
+containers, you can run a mix of apps from various distributions, and even Windows, if
+you so choose.
 
-### Added Applications (Runtime)
+**In other words, you can now run just about anything imaginable.**
 
-- **CLI tools (Homebrew)**: list them
-- **GUI apps (Flatpak)**: list them
+<div align="center">
 
-### Removed or Disabled
+[![Catbird Linux is now image based.](https://github.com/ab9il/AB9IL/raw/master/catbirdlinux-v4.jpg)]()
 
-- List anything removed from the base image
+</div>
 
-### Configuration Changes
+### ✨ Key Pillars
 
-- Systemd services enabled or disabled
-- Desktop environment changes
-- Other notable modifications
+- 🐧 **Fedora Linux Core:** This base image uses [Fedora Hummingbird](https://fedoraproject.org/wiki/hummingbird).
+- 🌀 **Scrollable Tiling**: Navigate windows on an infinite horizontal ribbon using Niri, augmented by the [Noctalia](https://github.com/noctalia-dev/noctalia) desktop shell.
+- 🛡️ **Frequent Security & Atomic Upgrades**: Images are rebuilt daily, pulling the latest upstream updates and packages. Updates apply atomically in the background.
 
-_Last updated: [date]_
+---
 
-> This section is what tells your users how your image differs from its base.
-> Update it whenever you add or remove a package, app, or service.
+### Get this image by _rebasing:_
 
-## Quick start
+1. Install Bluefin, Bazzite, Aurora, or any Universal Blue Linux system.
+2. Paste and execute this command in the terminal:
+3. Allow time for your Homebrew and Flatpak apps to download and install.
 
-1. **Create your repository** — "Use this template" on GitHub.
-2. **Rename the project.** The published name is your repository name. Three
-   files carry it as a literal, and `just test-contract` fails if they disagree:
+```bash
+sudo bootc switch --transport registry ghcr.io/ab9il/catbirdlinux:stable
+sudo systemctl reboot
+```
 
-   - `Containerfile` — the `# Name:` comment and `ARG IMAGE_NAME`
-   - `Justfile` — the `IMAGE_NAME` default
-   - `artifacthub-repo.yml` — `repositoryID`
+Then, as your user, in the terminal:
 
-   Grep for `finpilot` afterwards to catch the prose and the examples.
-3. **Finish setup.** [The `onboarding` skill](.agents/skills/onboarding/SKILL.md)
-   carries the rest — enabling Actions, auto-merge and workflow permissions, the
-   Renovate token, the `stable` branch, branch protection on both branches, and
-   the labels. Every step has a `gh` command and a GitHub-website route, and the
-   skill ends by auditing that each setting matches.
+```bash
+ujust install-default-apps    # Homebrew: the default Brewfile
+ujust install-dev-tools       # Homebrew: the development Brewfile
+ujust configure-dev-groups    # add yourself to docker and libvirt
+ujust install-config          # re-apply the image defaults, backing up yours
+```
 
-## What's included
+First boot unpacks Homebrew and installs the declared Flatpaks; both need a
+network connection. Check them with `systemctl status brew-setup.service` and
+`systemctl status flatpak-preinstall.service`.
 
-**Build system**
+### Switch back / Rollback
 
-- A build on every push to `main`, publishing `:stable-testing`
-- Renovate through `projectbluefin/actions`, updating pinned actions and image
-  digests every six hours
-- Images older than 90 days pruned automatically
-- Pull requests validated for shellcheck, hadolint, Brewfiles, Flatpaks,
-  Justfiles, and Renovate config
-- Keyless OIDC signing on every published image, enforced at promotion
-  ([where the signature is checked](#where-the-signature-is-checked))
+To revert to your previous image at any time:
+```bash
+sudo bootc rollback
+```
 
-**Runtime**
+---
 
-- Homebrew, pre-staged at build time and unpacked on first boot
-- Flatpaks declared in `custom/flatpaks/`, installed on first boot
-- `ujust` shortcuts for the Brewfiles and for re-applying configuration
-- `uupd` for scheduled system updates
+## 🪟 Niri & Noctalia
 
-## Customize
+[**Niri**](https://github.com/YaLTeR/niri) abandons the standard grid layout for a scrollable horizontal workspace. Windows never shrink uncontrollably; instead, they tile into columns that you can scroll through effortlessly.
 
-Pick your base image on the `Containerfile`'s `FROM` line; the template defaults
-to Fedora Silverblue. That line is the only place the base is chosen: `just build`
-reads the image name and the tag from it, and the Fedora major comes from the
-base image itself during the build.
+To make the system immediately usable, `Catbird Linux` pairs Niri with **Noctalia**, a dedicated desktop shell providing:
+- An integrated status bar
+- Launcher / app switcher
+- Native workspace overview for the scrolling layout
 
-Then add to your image:
+---
 
-- **System packages** — `build/20-packages-and-services.sh` ([guide](build/README.md))
-- **CLI tools** — `custom/brew/` ([guide](custom/brew/README.md))
-- **GUI apps** — `custom/flatpaks/` ([guide](custom/flatpaks/README.md))
-- **Commands** — `custom/ujust/` ([guide](custom/ujust/README.md))
+## 🏗️ Under the Hood
 
-[The `customize` skill](.agents/skills/customize/SKILL.md) decides which of
-those a given package belongs in.
+### Repository Structure
 
-## Releases
+```text
+catbirdlinux/
+├── Containerfile           # Image definitions pulling from uBlue bases
+├── build/
+│   └── build scripts       # Injects packages, configs, and COPR repos
+├── custom/
+│   └── brew, config...     # Injects files and configurations
+├── .github/workflows/      # CI that builds images daily and on-push
+└── iso/                    # build-time metadata for isi creation
+└── tests/                  # build0time quality and integrity tests
+```
 
-| Branch   | Image tag         | Audience                       |
-| -------- | ----------------- | ------------------------------ |
-| `main`   | `:stable-testing` | Testers and release candidates |
-| `stable` | `:stable`         | Production                     |
-
-Merging to `main` publishes `:stable-testing`; the promotion PR that follows
-publishes `:stable` when merged. Promotion verifies the cosign signature on the
-testing image before it reports ready, and refuses to promote at all once `main`
-has moved past the commit the promotion PR was built from.
-
-> **Known gap:** the promotion gate checks the digest and the signature only. It
-> runs no end-to-end tests, so `release/ready` means "signed and unmodified",
-> not "functionally validated".
-
-## Image signing
+### Image Authenticity and Signing
 
 Images are signed with keyless OIDC via Cosign and GitHub Actions. There is no
 key to generate or store.
 
 ```bash
 cosign verify \
-  --certificate-identity-regexp="https://github.com/your-username/your-repo-name/.github/workflows/" \
+  --certificate-identity-regexp="https://github.com/ab9il/catbirdlinux/.github/workflows/" \
   --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
-  ghcr.io/your-username/your-repo-name:stable
+  ghcr.io/ab9il/catbirdlinux:stable
 ```
 
 Unsigned images fail the promotion gate, so `main → stable` reports
 `release/blocked` until signing is restored.
 
-### Where the signature is checked
+#### Where the signature is checked
 
 **In CI, on the way to `:stable` — and not verified on the device.** The
 promotion gate is the only enforcement point. An installed system pulls its
@@ -148,65 +137,124 @@ namespace into the inherited policy (with `jq`, during
 `policy.json` through `custom/files/`, which freezes every scope you inherited),
 add a `registries.d` entry with `use-sigstore-attachments: true` for it, and
 flip `IMAGE_REF` back to `ostree-image-signed:`. Validate that on a real
-install before shipping it: a scope that does not match turns `bootc upgrade`
+catcatbirdtall before shipping it: a scope that does not match turns `bootc upgrade`
 into a hard refusal. `tests/contract/image-signing_test.bats` holds the two
 sides together, so changing one without the other fails the suite.
 
-## Using your image
+---
 
-Switch to a built image:
+#### History
 
-```bash
-sudo bootc switch --transport registry ghcr.io/your-username/your-repo-name:stable-testing
-sudo systemctl reboot
-```
+The Project began in 2019 as "Pemmican Linux" for web scraping and data science. It encompassed several successive respins of Linux Mint, Ubuntu, and Debian, and expanded in scope to include web development and media creation tools. Original distribution was via bit torrents and traditional iso files. It carried tools useful for data science, open source intelligence gathering, and creating multimedia content.
 
-Then, as your user:
+This is the fourth generation of Catbird Linux. Since adopting image-based Linux architecture and containerized / universal application packaging, it is a system which can truly operate on the frontiers of general purpose computing. The system is now distributed as a lightweight bootc image, and users install whatever software they want via Flatpaks, AppImages, Homebrew, or Docker images.
 
-```bash
-ujust install-default-apps    # Homebrew: the default Brewfile
-ujust install-dev-tools       # Homebrew: the development Brewfile
-ujust configure-dev-groups    # add yourself to docker and libvirt
-ujust install-config          # re-apply the image defaults, backing up yours
-```
+### What Makes this System Different?
 
-First boot unpacks Homebrew and installs the declared Flatpaks; both need a
-network connection. Check them with `systemctl status brew-setup.service` and
-`systemctl status flatpak-preinstall.service`.
+This image is based on [Project Bluefin](https://projectbluefin.io) and includes these customizations:
 
-## Local testing
+#### Added Applications (Runtime):
 
-```bash
-just build            # build the container image
-just build-qcow2      # build a QCOW2 disk image
-just run-vm-qcow2     # boot it in a browser-based VM
-just build-iso        # build an installer ISO
-just test-unit        # run the test suite
-```
+- **CLI tools (Homebrew)**:
+  - Extra bling and conveniences for the Bash shell
+  - Cosign (authentication keys for git, etc.)
+  - Fzf / Ripgrep / terminal based search tools
+  - Tor (The Onion Router)
+  - I2P (Invisible Internet Project)
+  - Lazygit (git content manager)
+  - Lf (file manager)
+  - Neovim (text / code editor)
+  - Sshuttle (ssh based tunneling / VPN)
+  - Uv (Python manager)
+- **GUI apps (Flatpak)**:
+  - Audacity (audio editor)
+  - Bleachbit (system cleaner)
+  - Bottles (run Windows apps)
+  - Brave (web browser)
+  - GIMP (image editor)
+  - LibreOffice (office suite)
+  - Obsidian (Markdown based note-taking)
+  - Shotcut (video editor)
+---
 
-## Troubleshooting
+#### History
 
-[The `troubleshooting` skill](.agents/skills/troubleshooting/SKILL.md) covers
-build, CI, and runtime failures symptom-first. The two most common first-boot
-surprises:
+The Project began in 2019 as "Pemmican Linux" for web scraping and data science. It encompassed several successive respins of Linux Mint, Ubuntu, and Debian, and expanded in scope to include web development and media creation tools. Original distribution was via bit torrents and traditional iso files. It carried tools useful for data science, open source intelligence gathering, and creating multimedia content.
 
-- **No Flatpaks.** `flatpak-preinstall.service` needs a network connection and
-  reports success even when it cannot reach Flathub, so a first boot before
-  Wi-Fi is configured installs nothing. Reboot once you are online.
-- **No `brew`.** `brew-setup.service` unpacks Homebrew on first boot; check its
-  status before reaching for a reinstall.
+This is the fourth generation of Catbird Linux. Since adopting image-based Linux architecture and containerized / universal application packaging, it is a system which can truly operate on the frontiers of general purpose computing. The system is now distributed as a lightweight bootc image, and users install whatever software they want via Flatpaks, AppImages, Homebrew, or Docker images.
 
-## Community
+### What Makes this System Different?
 
-- [Universal Blue Discord](https://discord.gg/WEu6BdFEtp)
-- [bootc discussions](https://github.com/bootc-dev/bootc/discussions)
+This image is based on [Project Bluefin](https://projectbluefin.io) and includes these customizations:
 
-## Learn more
+#### Added Applications (Runtime):
+
+- **CLI tools (Homebrew)**:
+  - Extra bling and conveniences for the Bash shell
+  - Cosign (authentication keys for git, etc.)
+  - Fzf / Ripgrep / terminal based search tools
+  - Tor (The Onion Router)
+  - I2P (Invisible Internet Project)
+  - Lazygit (git content manager)
+  - Lf (file manager)
+  - Neovim (text / code editor)
+  - Sshuttle (ssh based tunneling / VPN)
+  - Uv (Python manager)
+- **GUI apps (Flatpak)**:
+  - Audacity (audio editor)
+  - Bleachbit (system cleaner)
+  - Bottles (run Windows apps)
+  - Brave (web browser)
+  - GIMP (image editor)
+  - LibreOffice (office suite)
+  - Obsidian (Markdown based note-taking)
+  - Shotcut (video editor)
+  - Transmission (bit torrent client)
+  - VLC (media player)
+  - Zathura (PDF reader)
+
+#### Removed or Disabled
+
+- Firefox (web browser)
+
+#### Configuration Changes
+
+- **Desktop Environment:**
+  - Niri Scrolling Window Manager with Noctalia.
+- **SDR Hardware Drivers:**
+  - hackrf
+  - hackrf-devel
+  - rtl-sdr
+  - rtl-sdr-devel
+  - SoapySDR
+  - SoapySDR-devel
+  - soapy-rtlsdr
+  - soapy-uhd
+  - uhd (You still need to install a binary for your uhd radio.)
+  - uhd-devel
+- **Timekeeing:** Extra Chrony settings for tighter NTP clock sync.
+
+
+_Last updated: [2026-11-09]_
+
+## 🤝 Community & Support
+
+Built with ❤️ on top of [Universal Blue](https://universal-blue.org) and [Bluefin](https://projectbluefin.io).
+
+- 💬 [Universal Blue Forums](https://universal-blue.discourse.group/)
+- 📖 [bootc Discussion](https://github.com/bootc-dev/bootc/discussions)
+- 📖 [Book: The Era of Atomic Linux](https://skywavelinux.com/atomic-linux)
+
+### Learn more
 
 - [Universal Blue](https://universal-blue.org/)
 - [bootc](https://containers.github.io/bootc/)
 - [Project Bluefin contributing guide](https://docs.projectbluefin.io/contributing/)
 
-## Contributing
+### Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+
+---
+This repository is still under construction!

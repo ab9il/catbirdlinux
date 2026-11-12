@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- am-streamer application version 2.0 -->
+    <!-- Copyright 2025, Philip Collier. All rights reserved. -->
+<head>
+    <title>AM Radio Streamer</title>
+    <style>
+        @viewport {
+        width:100vw;
+        zoom:1.0;
+        }
+
+        @page {
+        size:A4;
+        width:100vw;
+        font-size:100%;
+        background-color:#030309;
+        }
+
+        body {
+        max-width:70vw;
+        display:block;
+        margin:auto;
+        color:#CCCCD0;
+        background-color:#030309;
+        font-family:"Noto Sans","Liberation Sans",Roboto,sans-serif,
+        Helvetica,Verda,"Noto Sans Mono","Liberation Mono",monospace;
+        font-size:100%;
+        font-weight:400;
+        text-justify:auto;
+        padding:0px;
+        }
+        * {font-size:100%;font-weight:400;color:#CCCCD0;background-color:#030309;}
+        a:link {text-decoration:none;color:#5CB3FF;}
+        a:visited {color:#F190FF;}
+        a:hover {color:#FEFEFF;}
+        a.hugefont:link, a.hugefont:visited, a.hugefont:hover {color:#D03570;}
+        a.littlefont:link, a.littlefont:visited {font-size:85%;color:#CCCCD0;}
+        a.littlefont:hover {font-weight:700;color:#CCCCD0;}
+        a.stations:link, a.stations:visited {color:#1FC6ED;background-color:#0B1A2A;}
+        a.stations:hover {color:#DDDDFF;background-color:#094582;}
+        b {background-color: inherit;color:#CCCCD0;font-size:100%;font-weight:700;}
+        b.red {color:#FF0000;}
+        b.amber {color:#CC8400;}
+        b.amber:hover {color:#DDDDFF;}
+        blockquote {font-family:monospace;color:#CCCCD0;background-color:#304358;}
+        button {float:left;padding-left:4px;padding-right:4px;margin:4px;
+        border:1px solid #1B3060;border-radius:2px;cursor:pointer;font-weight:500;font-size:100%;
+        color:#CCCCD0;background-color:#1B3060;}
+        button:hover {background-color:#3758A2;color:#DDDDFF;border:1px solid #3758A2;}
+        button:active {background-color:#3758A2;color:#DDDDFF;border:1px solid #DDDDFF;}
+        button.tablinks {float:none;font-size:105%;font-weight:400;color:#BBBBDD;background-color:#003366;
+        padding:7px;border:1px solid #003366;margin:2px;}
+        button.tablinks:hover {color:#DDDDFF;background-color:#006699;cursor: pointer;
+        padding:7px;border:1px solid #006699;}
+        button.tablinks:active {background-color:#006699;color:#DDDDFF;padding:2px 6px 2px 6px;border:1px solid #DDDDFF;}
+        button.tablinks.active {background-color:#006699;color:#FFAD19;padding:2px 6px 2px 6px;border:1px solid #003366;}
+        button.talltabs {float:none;color:#9999BB;background-color:#304358;min-width:100px;font-size:150%;
+        font-weight:400;padding:2px 6px 2px 6px;border:1px solid #304358;margin:2px;}
+        button.talltabs:hover {color:#DDDDFF;background-color:#304358;cursor: pointer;
+        padding:2px 6px 2px 6px;border:1px solid #304358;}
+        button.talltabs:active {background-color:#6586A9;color:#DDDDFF;padding:2px 6px 2px 6px;border:1px solid #6586A9;}
+        button.talltabs.active {background-color:#304358;color:#FFAD19;padding:2px 6px 2px 6px;border:1px solid #304358;}
+        button.places {float:none;width:20vw;min-width:110px;font-size:100%;font-weight:400;color:#BBBBDD;background-color:#003366;
+        padding:7px;border:1px solid #003366;margin:2px;}
+        button.places:hover {color:#DDDDFF;background-color:#006699;cursor:pointer;
+        padding:7px;border:1px solid #006699;}
+        button.places:active {background-color:#006699;color:#DDDDFF;padding:7px;border:1px solid #DDDDFF;}
+        button.places.active {background-color:#006699;color:#FFAD19;padding:7px;border:1px solid #003366;}
+        button.stations {font-size:95%;line-height:1.0;display:inline-block;width:25%;text-align:center;
+        border:1px solid #304358;border-radius:4px;cursor:pointer;color:#1FC6ED;
+        background-color:#0B1A2A;margin:2px;}
+        button.stations:hover {line-height:1.0;background-color:#094582;border:1px solid #245E9A;}
+        button.stations:active {line-height:1.0;color:#DDDDFF;background-color:#094582;border:1px solid #DDDDFF;}
+        .stations.active {line-height:1.0;color:#DDDDFF;background-color:#094582;border:1px solid #DDDDFF;}
+        .stations.focused {line-height:1.0;color:#BBBBDD;background-color:#094582;border:1px solid #245E9A;}
+        button.contents {line-height:1.1;background-color:#030309;clear:both;
+        padding:0;margin:0;border:0px;cursor:pointer;font-size:110%;font-weight:400;color:#9999BB;text-align:left;}
+        button.contents:hover {color:#DDDDFF;}
+        button.contents:active {color:#DDDDFF;background-color:#3758A2;}
+        button.contents.active {color:#FFAD19}
+        button2 {float:left;padding:4px 15px;margin:3px;border:2px;
+        border-radius:2px;cursor:pointer;text-align:center;font-weight:400;font-size:100%;
+        color:#CCCCD0;background-color:#1B3060;}
+        button2:hover {background-color:#3758A2;color:#DDDDFF;}
+        button2:active {padding:2px 13px;border:2px solid #DDDDFF;
+        border-radius:2px;background-color:#3758A2;color:#DDDDFF;}
+        button3 {float:left;padding-left:4px;padding-right:4px;
+        border:2px;border-radius:2px;margin:4px;cursor:pointer;text-align:left;
+        font-weight:600;font-size:105%;color:#20CCCC;}
+        button4 {display:inline-block;width:25%;text-align:center;border:1px solid #304358;
+        border-radius:4px;cursor:pointer;font-size:100%;font-weight:400;color:#20CCCC;
+        background-color:#0B1A2A;margin:auto;padding:auto;}
+        button4:hover {color:#CCCCD0;background-color:#094582;border:1px solid #245E9A;}
+        button4:active {color:#CCCCD0;background-color:#094582;border:1px solid #DDDDFF;}
+        button5 {float:left;padding:4px 15px;margin:3px;border:2px;
+        border-radius:2px;cursor:pointer;text-align:center;font-weight:400;font-size:100%;
+        color:#CCCCD0;background-color:#304358;}
+        button5:hover {background-color:#6586A9;color:#DDDDFF;}
+        button5:active {padding:2px 13px;border:2px solid #DDDDFF;
+        border-radius:2px;background-color:#6586A9;color:#DDDDFF;}
+        i {background-color: inherit;}
+        input[type="text"] {border:2px solid #20CCCC;margin-left:3px;margin-right:3px;}
+        input[type="radio"]:first-child {margin-left:1px;padding-left:1px;margin-right:1px;}
+        input[type="button"] {padding-left:5px;padding-right:5px;border:1px;
+        border-radius:2px;margin:4px;color:#20CCCC;background-color:#245E9A;}
+        input[type="button"]:hover {color:#CCCCD0;background-color:#304358;
+        cursor:pointer;}
+        input[type="button"]:active {border:1px solid #DDDDFF;border-radius:2px;
+        cursor:pointer;color:#CCCCD0;background-color:#304358;}
+        input[type="submit"] {padding:4px 6px;border:1px;margin:4px;
+        border-radius:2px;cursor:pointer;color:#20CCCC;background-color:#304358;}
+        input[type="submit"]:hover {color:#CCCCD0;background-color:#245E9A;}
+        input[type="submit"]:active {padding:3px 5px;border:1px solid #DDDDFF;
+        border-radius:2px;margin:4px;color:#CCCCD0;background-color:#304358;}
+        label:hover {background-color:#303040;}
+        div.amber {color:#CC8400;}
+        div.article {float:left;line-height:1.5;margin-top:5px;margin-bottom:15px;
+        width:80wv;max-width:85vw;}
+        div.bigfont {font-weight:600;font-size:130%;padding:7px;}
+        div.bookbar {height:315px;width:80wv;float:left;overflow:hidden;}
+        div.buttonbar {margin-left:auto;margin-right:auto;height:40px;padding-top:5px;
+        padding-bottom:5px}
+        div.button {float:left;padding-left 5px;padding-right:5px;}
+        div.center {margin-left:auto;margin-right:auto;margin-top:10px;margin-bottom:10px;}
+        div.clear {height:0;line-height:0px;font-size:0;clear:both;}
+        div.column {float:left;width:440px;padding:0;}
+        div.column4 {float:left;width:160px;height:250px;padding-left:8px;}
+        div.first {width:80wv;height:60px;float:left;}
+        div.header {display:block;width:80wv;margin:auto;}
+        div.hugefont {font-family:"Helvetica Neue",Helvetica,Roboto,Arial,"Times New Roman";
+        padding-right:5px;float:left;height:40px;width:340px;font-weight:600;
+        font-size:130%;color:#D03570;}
+        div.imagebar {margin-left:auto;margin-right:auto;width:80wv;
+        padding-top:5px;padding-bottom:5px;overflow:hidden;}
+        div.image {float:left;padding:15px 5px;}
+        div.index {line-height:1.5;}
+        div.inner {width:80wv;font-size:100%;display:block;margin:0 auto;}
+        div.intro {font-size:100%;width:80wv;}
+        div.list0 {height:275px;width:80wv;font-size:100%;}
+        div.list1 {height:150px;width:710px;font-size:100%;font-weight:600;}
+        div.listitem {float:left;width:150px;padding:4px;font-size:100%;font-weight:600;}
+        div.next {float:left;height:40px;width:550px;line-height:1.5;}
+        div.player {width:165px;margin-left:auto;margin-right:auto;}
+        div.quotes {font-family:monospace;color:#CCCCD0;background-color:#1B3060;
+        width:80wv;max-width:85vw;margin-top:10px;margin-bottom:10px;}
+        div.region {width:80vw;display:block;margin:auto;}
+        div.rightside {width:336px;top:2px;left:685px;position:fixed;}
+        div.tabs {width:80vw;display:block;margin:auto;}
+        div.video {float:left;padding:5px;}
+        font.mini {color:#CCCCD0;font-size:85%;}
+        h1 {font-family:"Helvetica Neue",Helvetica,Roboto,Arial,"Times New Roman";text-align:left;
+        font-size:170%;font-weight:600;color:#D03570;max-width:95vw;}
+        h1.title {text-align:left;padding:0;padding-top:5px;padding-bottom:5px;margin:0;
+        font-size:170%;font-weight:600;color:#D03570;max-width:95vw;}
+        h2 {font-family:"Helvetica Neue",Helvetica,Roboto,Arial,"Times New Roman";margin-top:15px;
+        padding-top:20px;text-align:left;font-size:130%;font-weight:400;color:#00CCCC;max-width:82vw;}
+        h2.c3 {text-align:center;font-size:130%;font-weight:400;color:#00CCCC;max-width:82vw;}
+        h2.c6 {margin-top:15px;text-align:center;font-size:130%;font-weight:400;color:#00CCCC;max-width:82vw;}
+        h3 {font-family:"Helvetica Neue",Helvetica,Roboto,Arial,"Times New Roman";margin-top:15px;
+        padding-top:20px;text-align:left;font-size:100%;font-weight:600;color:#00CCCC;max-width:82vw;}
+        h3.c6 {margin-top:15px;text-align:center;font-size:100%;font-weight:600;color:#00CCCC;max-width:82vw;}
+        h4 {font-family:"Helvetica Neue",Helvetica,Roboto,Arial,"Times New Roman";font-size:100%;
+        font-weight:600;color:#61d6d6;max-width:82vw;}
+        h4.c6 {font-size:100%;font-weight:600;color:#61d6d6;max-width:82vw;}
+        iframe.ads1 {border:none;height:30vh;max-height:85px;width:80wv;max-width:82vw;padding:0;margin:0;}
+        img {width:auto;max-width:100%;height:auto;padding:7px;}
+        li {padding-top:2px;padding-bottom:2px;max-width:82vw;}
+        ol {margin-left:15px;margin-bottom:10px;padding-left:10px;padding-right:10px;max-width:85vw;}
+        ul {list-style-type:square;margin-left:15px;margin-bottom:10px;padding-left 10px;padding-right:10px;max-width:85vw;}
+        mark {background-color:#999999;color:#000000;}
+        mark2 {color:#61d6d6;}
+        mark3 {color:#FF2D2D;}
+        pre {text-align:left;font-weight:400;font-size:100%;color:#CCCCD0;margin-bottom:15px;overflow-x:auto;}
+        pre.amber {text-align:left;font-weight:400;font-size:100%;color:#CC8400;margin-bottom:15px;}
+        pre.code {font-family:monospace;font-weight:300;font-size:100%;background-color:#052135;
+        padding-top:10px;padding-bottom:5px;}
+        pre.contents {font-family:monospace;font-weight:300;font-size:100%;line-height:1.5;
+        padding-top:10px;padding-bottom:5px;}
+        pre.quotes {font-family:monospace;color:#CCCCD0;background-color:#1B3060;}
+        span.huge {font-size:120%; color: #00CCCC; font-weight: 400;}
+        strong.colorful {color:#00CCCC;}
+        summary {font-weight:600;}
+        summary.cyan:hover, summary.amber:hover {color:#CCCCD0;}
+        summary.cyan {font-weight:600;color:#00CCCC;}
+        summary.amber {font-weight:600;color:#CC8400;}
+        p {font-size:100%;text-align:justify;padding-top:5px;padding-bottom:5px;width:80wv;
+        max-width:95vw;background-color: inherit;}
+        /*-----------BlinkingText------------*/
+        #blink_effect {color:#dd0000;transition:0s;}
+    </style>
+</head>
+<body>
+<div class="header">
+<h1>AM Radio on Internet SDRs</h1>
+
+<!-- set up the tabs -->
+<div class="tabs" style="margin-left:0;">
+  <button class="talltabs" onclick="openRegion(event, 'global')" id="defaultOpen">Global Stations</button>
+  <button class="talltabs" onclick="openRegion(event, 'USA')">USA</button>
+  <button class="talltabs" onclick="openRegion(event, 'Canada')">Canada</button>
+  <button class="talltabs" onclick="openRegion(event, 'AusNz')">Australia & New Zealand</button>
+  <button class="talltabs" onclick="openRegion(event, 'India')">India</button>
+  <button class="talltabs" onclick="openRegion(event, 'About')">About</button>
+</div>
+</div>
+
+<!-- content for first region tab -->
+<div id="global" class="tabcontent">
+<p style="font-family:monospace;font-size:18px;font-weight:700;text-align:left;">Receiver Locations (Click for Stations):</p>
+
+<div class="tabs">
+  <button class="places" onclick="openCity(event, 'WEEU')" id="defaultSelect">Western Europe</button>
+  <button class="places" onclick="openCity(event, 'EAEU')">Eastern Europe</button>
+  <button class="places" onclick="openCity(event, 'MEDS')">Meditrranean</button>
+  <button class="places" onclick="openCity(event, 'TWROC')">Taiwan</button>
+  <button class="places" onclick="openCity(event, 'BANG')">Bangkok, Thailand</button>
+  <button class="places" onclick="openCity(event, 'NOTHAI')">Northern Thailand</button>
+  <button class="places" onclick="openCity(event, 'THENAM')">Vietnam</button>
+  <button class="places" onclick="openCity(event, 'JAPN')">Japan</button>
+  <button class="places" onclick="openCity(event, 'INDO')">Indonesia</button>
+  <button class="places" onclick="openCity(event, 'SCA')">Argentina and Uruguay</button>
+  <button class="places" onclick="openCity(event, 'SPB')">Sao Paulo, Brasil</button>
+</div>
+
+<div id="WEEU" class="region">
+  <h2>Western Europe <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('252');">RTE Radio 1 252</button>
+  <button class="stations" onclick="tuneSDR('648');">Radio Caroline 648</button>
+  <button class="stations" onclick="tuneSDR('693');">BBC 5 Live 693</button>
+  <button class="stations" onclick="tuneSDR('738');">RNE Catalonia 738</button>
+  <button class="stations" onclick="tuneSDR('783');">RNE Catalonia 783</button>
+  <button class="stations" onclick="tuneSDR('810');">BBC Radio Scotland 810</button>
+  <button class="stations" onclick="tuneSDR('909');">BBC 5 Live 909</button>
+  <button class="stations" onclick="tuneSDR('999');">COPE Madrid 999</button>
+  <button class="stations" onclick="tuneSDR('1053');">TalkSPORT 1053</button>
+  <button class="stations" onclick="tuneSDR('1089');">TalkSPORT 1089</button>
+  <button class="stations" onclick="tuneSDR('1215');">Absolute Radio 1215</button>
+  <button class="stations" onclick="tuneSDR('1458');">LycaRadio 1458</button>
+  <button class="stations" onclick="tuneSDR('1584');">Panjab Radio 1584</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://sdr.vebik.cz:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, J. Hradec, Czech Republic</a><br>
+  <a href="http://g3sdr.com:8077/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Weston-super-Mare, United Kingdom</a><br>
+  <a href="http://g3sdr.com:8078/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Weston-super-Mare, United Kingdom</a><br>
+  <a href="http://g3sdr.com:8074/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Weston-super-Mare, United Kingdom</a><br>
+  <a href="http://g3sdr.com:8075/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Weston-super-Mare, United Kingdom</a><br>
+  <a href="http://g3sdr.com:8076/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Weston-super-Mare, United Kingdom</a><br>
+  <a href="http://sa4bna.hopto.org:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Arvika,Sweden</a><br>
+  <a href="http://howa.proxy.rx-888.com:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">Web-888, Frankfurt (Oder) Germany</a><br>
+
+
+</div>
+
+
+<div id="EAEU" class="region">
+  <h2>Eastern Europe <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('153');">Radio Antena Satelor 153</button>
+  <button class="stations" onclick="tuneSDR('225');">Polskie Radio Jedynka 225</button>
+  <button class="stations" onclick="tuneSDR('540');">Kossuth Radio 540</button>
+  <button class="stations" onclick="tuneSDR('558');">Romania Actualitati 558</button>
+  <button class="stations" onclick="tuneSDR('576');">BNR Horizont 576</button>
+  <button class="stations" onclick="tuneSDR('603');">Romania Actualitati 603</button>
+  <button class="stations" onclick="tuneSDR('630');">Radio Antena Satelor 630</button>
+  <button class="stations" onclick="tuneSDR('855');">Romania Actualitati 855</button>
+  <button class="stations" onclick="tuneSDR('909');">Romania Actualitati 909</button>
+  <button class="stations" onclick="tuneSDR('954');">Radio Cesky Rohzlas 954</button>
+  <button class="stations" onclick="tuneSDR('1053');">Radio Lasi 1053</button>
+  <button class="stations" onclick="tuneSDR('1116');">Danko Radio 1116</button>
+  <button class="stations" onclick="tuneSDR('1062');">Country Chzech 1062</button>
+  <button class="stations" onclick="tuneSDR('1089');">TalkSPORT 1089</button>
+  <button class="stations" onclick="tuneSDR('1152');">Radio Cluj Romania 1152</button>
+  <button class="stations" onclick="tuneSDR('1179');">Romania Actualitati 1179</button>
+  <button class="stations" onclick="tuneSDR('1197');">Radio Romania Targu 1197</button>
+  <button class="stations" onclick="tuneSDR('1215');">Absolute Radio 1215</button>
+  <button class="stations" onclick="tuneSDR('1251');">Danko Radio 1251</button>
+  <button class="stations" onclick="tuneSDR('1314');">Radio Antena Satelor 1314</button>
+  <button class="stations" onclick="tuneSDR('1404');">Radio Sighet 1404</button>
+  <button class="stations" onclick="tuneSDR('1413');">Vesti FM 1413</button>
+  <button class="stations" onclick="tuneSDR('1494');">Radio Moldova 1494</button>
+  <button class="stations" onclick="tuneSDR('1530');">Radio Constanta 1530</button>
+  <button class="stations" onclick="tuneSDR('1584');">Radio Studio X 1584</button>
+  <div class="clear"></div>
+  <br>
+  <a href="https://sv1btl.tunnel.ubersdr.org/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0" target="_blank">UberSDR, Athens, Greece</a><br>
+  <a href="http://fsdr.duckdns.org/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Szekesfehervar/Maroshegy, Hungary</a><br>
+  <a href="http://194.36.182.122:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Esztergom - GRANTE Tower, Hungary</a><br>
+  <a href="http://sv2srx.hopto.org:8901/?frequency=10000000&modulation=AM/?frequency=1000000&modulation=am" target="_blank">NovaSDR, Neochori-Chalkidikis, Greece</a><br>
+  <a href="https://oe3gbb-1.tunnel.ubersdr.org/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0" target="_blank">UberSDR, Wartmannstetten, Austria</a><br>
+  <a href="http://9a7aof.ddns.net:8905/?frequency=10000000&modulation=AM/?frequency=1000000&modulation=am" target="_blank">NovaSDR, Bisag, Croatia</a><br>
+  <a href="http://hg5acz.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Bősárkány, Hungary</a><br>
+  <a href="http://21900.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, EDESSA, GREECE</a><br>
+
+
+</div>
+
+
+<div id="MEDS" class="region">
+  <h2>Mediterranean <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('153');">Radio Antena Satelor 153</button>
+  <button class="stations" onclick="tuneSDR('171');">Medi 1 Radio 171</button>
+  <button class="stations" onclick="tuneSDR('252');">Radio Algérienne Ch-3 252</button>
+  <button class="stations" onclick="tuneSDR('531');">Jil FM Algeria 531</button>
+  <button class="stations" onclick="tuneSDR('540');">Onda Cero Barcelona 540</button>
+  <button class="stations" onclick="tuneSDR('549');">Jil FM Algeria 549</button>
+  <button class="stations" onclick="tuneSDR('576');">Radio Horizont 576</button>
+  <button class="stations" onclick="tuneSDR('630');">Radio Tunisia National 630</button>
+  <button class="stations" onclick="tuneSDR('639');">BBC World Service 639</button>
+  <button class="stations" onclick="tuneSDR('666');">SER Radio Barcelona 666</button>
+  <button class="stations" onclick="tuneSDR('711');">COPE Murica 711</button>
+  <button class="stations" onclick="tuneSDR('720');">BBC World Service 720</button>
+  <button class="stations" onclick="tuneSDR('729');">ERA-1 Radio Athens 729</button>
+  <button class="stations" onclick="tuneSDR('783');">COPE Barcelona 783</button>
+  <button class="stations" onclick="tuneSDR('819');">Egyptian Radio 819</button>
+  <button class="stations" onclick="tuneSDR('864');">Quran Radio Egypt 864</button>
+  <button class="stations" onclick="tuneSDR('891');">Algeria 891</button>
+  <button class="stations" onclick="tuneSDR('927');">TRT Radio 1 927</button>
+  <button class="stations" onclick="tuneSDR('963');">Radio Tunisia International 963</button>
+  <button class="stations" onclick="tuneSDR('981');">Radio Dzzayer Algeria Ch-2 981</button>
+  <button class="stations" onclick="tuneSDR('1179');">SER Radio Valencia 1179</button>
+  <button class="stations" onclick="tuneSDR('1296');">Radio Fantasiaia (Gr) 1296</button>
+  <button class="stations" onclick="tuneSDR('1305');">ERA-1 Tripolis Greece 1305</button>
+  <button class="stations" onclick="tuneSDR('1422');">Radio Algérienne Ch-3 1422</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://iz6198swl.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Alvito, Italy 0-30 MHz Frequencies</a><br>
+  <a href="http://sdr.autreradioautreculture.com:8074/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, TREMOLAT (24), FRANCE</a><br>
+  <a href="http://f4joy.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, PRADIERS DEP 15 JN15LG, FRANCE</a><br>
+  <a href="http://linkz.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Isere, France</a><br>
+  <a href="http://sdr.autreradioautreculture.com:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, TREMOLAT (24), FRANCE</a><br>
+  <a href="http://linkz.ddns.net:8076/?f=1000/-5000,5000amz9&1hz" target="_blank">Web-888, Isere, France</a><br>
+  <a href="http://linkz.ddns.net:8075/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Isere, France</a><br>
+  <a href="http://sardinia-sdr.ddns.net/?frequency=10000000&modulation=AM/?tune=1000am?zoom=4" target="_blank">WebSDR, Sardinia Perfugas, Italy</a><br>
+
+  <a href="https://sv1btl.tunnel.ubersdr.org/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0" target="_blank">UberSDR, Athens, Greece</a><br>
+  <a href="http://sv2srx.hopto.org:8901/?frequency=10000000&modulation=AM/?frequency=1000000&modulation=am" target="_blank">NovaSDR, Neochori-Chalkidikis, Greece</a><br>
+  <a href="http://21900.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, EDESSA, GREECE</a><br>
+  <a href="http://ik7fmo.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, CONVERSANO (BARI) - CENTRAL PUGLIA - ITALIA - ITALY ***O***</a><br>
+  <a href="http://94.159.134.215:8074/?f=1000/-5000,5000amz9&1hz" target="_blank">Web-888, Rishon Leziyon, ISRAEL</a><br>
+  <a href="http://sv1cmg.no-ip.org/?tune=1575am/?tune=1000am?zoom=4" target="_blank">WebSDR, Lamia, Greece</a><br>
+  <a href="http://sv3gcb.ddns.net:8905/?tune=729am/?tune=1000am?zoom=4" target="_blank">WebSDR, Sparta, Greece</a><br>
+  <a href="http://kiwisdr.yo3bn.ro:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Bucharest, Romania</a><br>
+
+
+</div>
+
+
+<div id="TWROC" class="region">
+  <h2>Taiwan <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('531');">Zhong Guang i go 531 540</button>
+  <button class="stations" onclick="tuneSDR('558');">Fuxing Radio 1 558</button>
+  <button class="stations" onclick="tuneSDR('648');">China News Radio 648</button>
+  <button class="stations" onclick="tuneSDR('693');">Hansheng Radio 693</button>
+  <button class="stations" onclick="tuneSDR('729');">Shih Hsin Radio 729</button>
+  <button class="stations" onclick="tuneSDR('774');">First Voice Radio 774</button>
+  <button class="stations" onclick="tuneSDR('819');">Positive Voice Broadcasting 819</button>
+  <button class="stations" onclick="tuneSDR('855');">PBC Radio 2 855</button>
+  <button class="stations" onclick="tuneSDR('909');">Renaissance Radio 909</button>
+  <button class="stations" onclick="tuneSDR('936');">Hansheng Radio 936</button>
+  <button class="stations" onclick="tuneSDR('963');">Guangdong Folks Network 963</button>
+  <button class="stations" onclick="tuneSDR('981');">The Sound of Brilliance 981</button>
+  <button class="stations" onclick="tuneSDR('999');">Tiannan Broadcasting Company 999</button>
+  <button class="stations" onclick="tuneSDR('1089');">Fuxing Radio 2 1089</button>
+  <button class="stations" onclick="tuneSDR('1116');">Hansheng Radio 1116</button>
+  <button class="stations" onclick="tuneSDR('1152');">Huasheng Radio 1152</button>
+  <button class="stations" onclick="tuneSDR('1224');">Huasheng Radio 1224</button>
+  <button class="stations" onclick="tuneSDR('1296');">PBC Radio 1 1296</button>
+  <button class="stations" onclick="tuneSDR('1323');">Taiwan Broadcasting Corporation 1323</button>
+  <button class="stations" onclick="tuneSDR('1350');">Taiwan Broadcasting Corporation 1350</button>
+  <button class="stations" onclick="tuneSDR('1422');">China Central Radio 1422</button>
+  <button class="stations" onclick="tuneSDR('1494');">National Education Radio 1494</button>
+  <button class="stations" onclick="tuneSDR('1557');">National Education Radio 1557</button>
+  <button class="stations" onclick="tuneSDR('1593');">Fisheries Radio 1593</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://jplin53c.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Taiwan</a><br>
+  <a href="http://jplin53z.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Taiwan</a><br>
+  <a href="http://114.34.207.164:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Taoyuan, Taiwan</a><br>
+  <a href="http://114.34.207.164:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Taoyuan, Taiwan</a><br>
+
+
+</div>
+
+
+<div id="BANG" class="region">
+  <h2>Bangkok, Thailand <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('540');">Cavalry Center Radio 540</button>
+  <button class="stations" onclick="tuneSDR('594');">AAA Brigade 594</button>
+  <button class="stations" onclick="tuneSDR('630');">11th Army Radio 630</button>
+  <button class="stations" onclick="tuneSDR('657');">Dept. of Military Comms 657</button>
+  <button class="stations" onclick="tuneSDR('675');">Voice of the Navy 675</button>
+  <button class="stations" onclick="tuneSDR('711');">Music 711</button>
+  <button class="stations" onclick="tuneSDR('747');">Border Patrol Radio 747</button>
+  <button class="stations" onclick="tuneSDR('792');">Dept. of Military Affairs 792</button>
+  <button class="stations" onclick="tuneSDR('837');">Islamic Radio 837</button>
+  <button class="stations" onclick="tuneSDR('945');">Air Force Techs 945</button>
+  <button class="stations" onclick="tuneSDR('999');">Royal Guard, 1st Infantry 999</button>
+  <button class="stations" onclick="tuneSDR('1053');">11th Army Radio 1053</button>
+  <button class="stations" onclick="tuneSDR('1071');">Parliament Radio 1071</button>
+  <button class="stations" onclick="tuneSDR('1269');">Royal Thai Signal Corps 1269</button>
+  <button class="stations" onclick="tuneSDR('1422');">Royal Guard, 1st Infantry 1422</button>
+  <button class="stations" onclick="tuneSDR('1440');">Army Signal Corps 1440</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://la6lukiwisdrth.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Cha-Am, Thailand</a><br>
+  <a href="http://hs0zqs.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Nonthaburi, Thailand</a><br>
+
+
+</div>
+
+
+<div id="NOTHAI" class="region">
+  <h2>Northern Thailand <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('567');">Lao National Radio 567</button>
+  <button class="stations" onclick="tuneSDR('603');">Army Radio Khon Kaen 603</button>
+  <button class="stations" onclick="tuneSDR('621');">Thailand National Education 621</button>
+  <button class="stations" onclick="tuneSDR('891');">Rado Thailand National 891</button>
+  <button class="stations" onclick="tuneSDR('918');">National Radio of Cambodia 918</button>
+  <button class="stations" onclick="tuneSDR('1296');">China Radio International 1296</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://ve3hls.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, So Phisai, Thailand</a><br>
+
+
+</div>
+
+
+<div id="THENAM" class="region">
+  <h2>Vietnam <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('549');">VOV2 Ban Van 549</button>
+  <button class="stations" onclick="tuneSDR('675');">VOV1 Ban Thoi Su 675</button>
+  <button class="stations" onclick="tuneSDR('918');">National Radio of Cambodia 918</button>
+  <button class="stations" onclick="tuneSDR('1080');">China Radio International 1080</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://ve3hls.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, So Phisai, Thailand</a><br>
+  <a href="http://113.22.29.220:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Hanoi, Vietnam</a><br>
+
+<p>No receivers found for --SouthernVietnam--</p>
+
+</div>
+
+<div id="JAPN" class="region">
+  <h2>Japan <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('594');">JOAK NHKラジオ第1 東京 594</button>
+  <button class="stations" onclick="tuneSDR('666');">JOBK NHKラジオ第1 大阪666</button>
+  <button class="stations" onclick="tuneSDR('693');">JOAB NHKラジオ第2 東京 693</button>
+  <button class="stations" onclick="tuneSDR('729');">JOCK NHKラジオ第1 愛知 729</button>
+  <button class="stations" onclick="tuneSDR('774');">JOUB NHKラジオ第2 秋田 774</button>
+  <button class="stations" onclick="tuneSDR('810');">AFN Eagle / NPR News 810</button>
+  <button class="stations" onclick="tuneSDR('828');">JOBB NHKラジオ第2 大阪 828</button>
+  <button class="stations" onclick="tuneSDR('954');">JOKR TBSラジオ 954</button>
+  <button class="stations" onclick="tuneSDR('1134');">JOQR 文化放送 1134</button>
+  <button class="stations" onclick="tuneSDR('1242');">JOLF ニッポン放送 1242</button>
+  <button class="stations" onclick="tuneSDR('1422');">JORF ラジオ日本 JORF</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://ja5fp2.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Chiba, Japan</a><br>
+  <a href="http://sdrhkd.ddns.net:8484/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Shinhidaka, Hokkaido JAPAN</a><br>
+  <a href="http://ja0veu.hopto.org:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Nagano, Japan</a><br>
+  <a href="http://jp1odj.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Okegawa Saitama JAPAN</a><br>
+  <a href="http://kiwisdr.hirokinet.com:8074/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Adachi, Tokyo, Japan</a><br>
+  <a href="http://21554.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Edogawa-ku, Tokyo, Japan</a><br>
+  <a href="http://jq1zyv.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Ibaraki,JAPAN</a><br>
+  <a href="http://ja5fp1.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Chiba, Japan</a><br>
+
+  <a href="http://web888.web-sdr.net:80/?f=1000/-5000,5000amz9&1hz" target="_blank">Web-888, Oita,Japan</a><br>
+  <a href="http://183.76.42.115:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Mie, Japan</a><br>
+  <a href="http://jh4glg.proxy.rx-888.com:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">Web-888, Kurashiki-city Japan</a><br>
+  <a href="http://kiwi.web-sdr.net/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Oita,Japan</a><br>
+  <a href="http://22299.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Chiba, Japan</a><br>
+  <a href="http://118.87.9.113:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, JK1EIO YOKOHAMA,JAPAN</a><br>
+  <a href="http://sdrfukuyama.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Fukuyama, Japan</a><br>
+  <a href="http://22052.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, OKAYAMA,JAPAN</a><br>
+
+
+</div>
+
+
+<div id="INDO" class="region">
+  <h2>Indonesia <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('540');">RRI Bandung Pro-4 540</button>
+  <button class="stations" onclick="tuneSDR('630');">Radio Samhan 630</button>
+  <button class="stations" onclick="tuneSDR('675');">Radio Syair Tauhid 675</button>
+  <button class="stations" onclick="tuneSDR('720');">Radio Silaturahim 720</button>
+  <button class="stations" onclick="tuneSDR('846');">Radio Suara Al-Iman 846</button>
+  <button class="stations" onclick="tuneSDR('936');">Radio P2SC 936</button>
+  <button class="stations" onclick="tuneSDR('954');">Radio Benda Baru 954</button>
+  <button class="stations" onclick="tuneSDR('963');">Radio Prestasi 963</button>
+  <button class="stations" onclick="tuneSDR('1062');">Radio Sangkakala 1062</button>
+  <button class="stations" onclick="tuneSDR('1089');">Radio Qu (Bogor) 1089</button>
+  <button class="stations" onclick="tuneSDR('1134');">Radio Safari - Jawa 1134</button>
+  <button class="stations" onclick="tuneSDR('1152');">Radio Yasmara 1152</button>
+  <button class="stations" onclick="tuneSDR('1242');">RRI Pro 1 Bogor 1242</button>
+  <button class="stations" onclick="tuneSDR('1458');">Radio Fajri Bandung 1458</button>
+  <button class="stations" onclick="tuneSDR('1476');">Radio Rodja Bandung 1476</button>
+  <div class="clear"></div>
+  <br>
+<p>No receivers found for --WesternIndonesia--</p>
+<p>No receivers found for --EasternIndonesia--</p>
+
+</div>
+
+
+<div id="SCA" class="region">
+  <h2>Argentina and Uruguay <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('570');">Radio Argentina 570</button>
+  <button class="stations" onclick="tuneSDR('580');">CX58 Radio Clarin 580</button>
+  <button class="stations" onclick="tuneSDR('590');">LS4 Radio Continental 590</button>
+  <button class="stations" onclick="tuneSDR('610');">Radio Rural Uruguay 610</button>
+  <button class="stations" onclick="tuneSDR('650');">CX6 Classica 650</button>
+  <button class="stations" onclick="tuneSDR('690');">CX8 Radio Sarandi 690</button>
+  <button class="stations" onclick="tuneSDR('730');">CX10 Radio Dios es Amor 730</button>
+  <button class="stations" onclick="tuneSDR('750');">LRL203 Radio AM 750</button>
+  <button class="stations" onclick="tuneSDR('770');">CX12 Radio Oriental 770</button>
+  <button class="stations" onclick="tuneSDR('790');">LR6 Radio Mitre 790</button>
+  <button class="stations" onclick="tuneSDR('810');">CX14 Radio El Espectador 810</button>
+  <button class="stations" onclick="tuneSDR('830');">Radio del Pueblo 830</button>
+  <button class="stations" onclick="tuneSDR('870');">LRA1 Radio Nacional 870</button>
+  <button class="stations" onclick="tuneSDR('890');">Radio Libre CABA 890</button>
+  <button class="stations" onclick="tuneSDR('930');">CX20 Radio Monte Carlo 930</button>
+  <button class="stations" onclick="tuneSDR('970');">CX22 Radio Universal 970</button>
+  <button class="stations" onclick="tuneSDR('990');">LR4 Radio Splendid 990</button>
+  <button class="stations" onclick="tuneSDR('1020');">Radio Nacional 1020</button>
+  <button class="stations" onclick="tuneSDR('1050');">CX26 Radio Uruguay 1050</button>
+  <button class="stations" onclick="tuneSDR('1110');">LS1 Radio Ciudad 1110</button>
+  <button class="stations" onclick="tuneSDR('1130');">CX30 La Treinta 1130</button>
+  <button class="stations" onclick="tuneSDR('1170');">CX32 Radio Mundo 1170</button>
+  <button class="stations" onclick="tuneSDR('1210');">LS1 Radio Las Flores 1210</button>
+  <button class="stations" onclick="tuneSDR('1250');">CX36 Radio Centenario 1250</button>
+  <button class="stations" onclick="tuneSDR('1290');">CX38 Radio Cultura 1290</button>
+  <button class="stations" onclick="tuneSDR('1330');">CX40 Radio Fenix 1330</button>
+  <button class="stations" onclick="tuneSDR('1350');">LS6 Radio Buenos Aires 1350</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://190.123.83.42:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, ALPA CORRAL ARGENTINA</a><br>
+  <a href="http://LU8MIL.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Mendoza, Argentina</a><br>
+
+  <a href="http://lu4aa.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Berazategui, Provincia de Buenos Aires, Argentina</a><br>
+  <a href="http://lu4eec.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Ramos Mejia, Buenos Aires, ARGENTINA</a><br>
+
+
+</div>
+
+
+<div id="SPB" class="region">
+  <h2>Sao Paulo, Brazil <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('550');">Radio Banda 550</button>
+  <button class="stations" onclick="tuneSDR('590');">ZYJ234 Difusora AM 590</button>
+  <button class="stations" onclick="tuneSDR('730');">ZYH759 Sagres AM 730</button>
+  <button class="stations" onclick="tuneSDR('750');">ZYH709 Jovem Pan News 750</button>
+  <button class="stations" onclick="tuneSDR('800');">ZYJ457 Radio MEC 800</button>
+  <button class="stations" onclick="tuneSDR('840');">ZYK687 Radio Bandeirantes 840</button>
+  <button class="stations" onclick="tuneSDR('940');">ZYJ453 Super Rede Boa Vontade 940</button>
+  <button class="stations" onclick="tuneSDR('960');">ZYH802 Deus e Amor 960</button>
+  <button class="stations" onclick="tuneSDR('980');">ZYH707 Rádio Nacional 980</button>
+  <button class="stations" onclick="tuneSDR('1040');">ZYK537 Radio Capital 1040</button>
+  <button class="stations" onclick="tuneSDR('1080');">ZYH708 Rede Aleluia 1080</button>
+  <button class="stations" onclick="tuneSDR('1150');">ZYK656 Super Radio 1150</button>
+  <button class="stations" onclick="tuneSDR('1200');">ZYK520 Radio Cultura 1200</button>
+  <button class="stations" onclick="tuneSDR('1260');">ZYK688 Radio Deus e Amor 1260</button>
+  <button class="stations" onclick="tuneSDR('1430');">ZYJ200 Radio Evangelizar 1430</button>
+  <button class="stations" onclick="tuneSDR('1600');">ZYK779 Radio 9 de Julho 1600</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://pardinho.websdr.com.br:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Little Paradise Farm- Pardinho -SP, BRAZIL</a><br>
+
+  <a href="http://22702.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Goiania, Brazil</a><br>
+
+
+</div>
+
+</div>
+<!-- first tab complete -->
+
+<!-- content for second region tab -->
+<div id="USA" class="tabcontent">
+<p style="font-family:monospace;font-size:18px;font-weight:700;text-align:left;">Receiver Locations (Click for Stations):</p>
+
+<div class="tabs">
+<button class="places" onclick="openCity(event, 'BOSTON')">Boston, MA, USA</button>
+<button class="places" onclick="openCity(event, 'NEWYORK')">New York, NY, USA</button>
+<button class="places" onclick="openCity(event, 'WASHDC')">Washington, DC, USA</button>
+<button class="places" onclick="openCity(event, 'ATLGA')">Atlanta, GA, USA</button>
+<button class="places" onclick="openCity(event, 'CHIC')">Chicago, IL, USA</button>
+<button class="places" onclick="openCity(event, 'MPLS')">Minneapolis, MN, USA</button>
+<button class="places" onclick="openCity(event, 'CFLA')">Orlando, FL, USA</button>
+<button class="places" onclick="openCity(event, 'DENV')">Denver, CO, USA</button>
+<button class="places" onclick="openCity(event, 'LAUS')">Southern CA, USA</button>
+<button class="places" onclick="openCity(event, 'SANF')">Northern CA, USA</button>
+<button class="places" onclick="openCity(event, 'CUUS')">Northern UT, USA</button>
+<button class="places" onclick="openCity(event, 'TXUS')">Eastern TX, USA</button>
+</div>
+
+<div id="BOSTON" class="region">
+  <h2>Boston Massachusetts, USA <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('660');">WFAN Sports 660</button>
+  <button class="stations" onclick="tuneSDR('680');">WRKO Boston 680</button>
+  <button class="stations" onclick="tuneSDR('720');">CFZM Zoomer Radio 720</button>
+  <button class="stations" onclick="tuneSDR('730');">CKAC Montreal 730</button>
+  <button class="stations" onclick="tuneSDR('900');">CHML News Radio 900</button>
+  <button class="stations" onclick="tuneSDR('920');">WHJJ News Radio 920</button>
+  <button class="stations" onclick="tuneSDR('1030');">WBZ News Radio 1030</button>
+  <button class="stations" onclick="tuneSDR('1080');">WTIC News Radio 1080</button>
+  <button class="stations" onclick="tuneSDR('1300');">WJDA Latina 1300</button>
+  <button class="stations" onclick="tuneSDR('1510');">WMEX Greatest Hits 1510</button>
+  <button class="stations" onclick="tuneSDR('1560');">WFME Family Radio 1560</button>
+  <button class="stations" onclick="tuneSDR('1600');">WUNR International Radio 1600</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://sigmasdr.ddns.net:8076/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Holland, MA</a><br>
+  <a href="http://sigmasdr.ddns.net:8074/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Holland, MA</a><br>
+  <a href="http://sigmasdr.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Holland, MA</a><br>
+  <a href="http://kiwisdr.njctech.com:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Sutton, MA USA</a><br>
+  <a href="https://k1yw.tunnel.ubersdr.org/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0" target="_blank">UberSDR, Lancaster, MA, USA</a><br>
+  <a href="http://sigmasdr.ddns.net:8075/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Holland, MA</a><br>
+  <a href="http://173.48.189.54:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, ASHLAND MA USA</a><br>
+  <a href="http://22008.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Boston, Mass</a><br>
+
+
+</div>
+
+
+<div id="NEWYORK" class="region">
+  <h2>New York, New York, USA <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('570');">WMCA The Mission 570</button>
+  <button class="stations" onclick="tuneSDR('660');">WFAN Sports 660</button>
+  <button class="stations" onclick="tuneSDR('700');">WLW News Radio 700</button>
+  <button class="stations" onclick="tuneSDR('710');">WOR Talk Radio 710</button>
+  <button class="stations" onclick="tuneSDR('730');">CKAC Montreal 730</button>
+  <button class="stations" onclick="tuneSDR('770');">WABC Talk Radio 770</button>
+  <button class="stations" onclick="tuneSDR('810');">WGY Schenectady 810</button>
+  <button class="stations" onclick="tuneSDR('820');">WNYC Public Radio 820</button>
+  <button class="stations" onclick="tuneSDR('880');">WHSQ Sports Radio 880</button>
+  <button class="stations" onclick="tuneSDR('1010');">WINS News 1010</button>
+  <button class="stations" onclick="tuneSDR('1050');">WEPN Sports Radio 1050</button>
+  <button class="stations" onclick="tuneSDR('1060');">KYW News Radio 1060</button>
+  <button class="stations" onclick="tuneSDR('1090');">WBAL News Radio 1090</button>
+  <button class="stations" onclick="tuneSDR('1130');">WBBR Bloomberg Radio 1130</button>
+  <button class="stations" onclick="tuneSDR('1210');">WPHT Talk Radio 1210</button>
+  <button class="stations" onclick="tuneSDR('1280');">WADO Noticias 1280</button>
+  <button class="stations" onclick="tuneSDR('1560');">WFME Family Radio 1560</button>
+  <button class="stations" onclick="tuneSDR('1600');">WWRL News Radio 1600</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://kiwisdr.k3fef.com:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Milford, PA USA</a><br>
+  <a href="http://bucks.hopto.org:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Buckingham, PA USA</a><br>
+  <a href="https://k1ax.tunnel.ubersdr.org/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0" target="_blank">UberSDR, White Plains, NY, USA</a><br>
+  <a href="http://ubersdr.k3fef.com/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0" target="_blank">UberSDR, Milford, PA, USA</a><br>
+  <a href="https://ubersdr.k3gmq.com/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0" target="_blank">UberSDR, Buckingham, PA, USA</a><br>
+  <a href="http://21606.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Port Jervis, New York</a><br>
+
+
+</div>
+
+
+<div id="WASHDC" class="region">
+  <h2>Washington, District of Columbia, USA <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('630');">WSBN Sports Capitol 630</button>
+  <button class="stations" onclick="tuneSDR('700');">WLW News Radio 700</button>
+  <button class="stations" onclick="tuneSDR('780');">WAVA Religious Talk 780</button>
+  <button class="stations" onclick="tuneSDR('840');">WHAS Talk Radio 840</button>
+  <button class="stations" onclick="tuneSDR('920');">WURA Radio Unida 920</button>
+  <button class="stations" onclick="tuneSDR('980');">WTEM The Team 980</button>
+  <button class="stations" onclick="tuneSDR('1020');">KDKA News Radio 1020</button>
+  <button class="stations" onclick="tuneSDR('1090');">WBAL News Radio 1090</button>
+  <button class="stations" onclick="tuneSDR('1120');">WUST Black Info network 1120</button>
+  <button class="stations" onclick="tuneSDR('1170');">WWVA News Radio 1170</button>
+  <button class="stations" onclick="tuneSDR('1220');">WFAX News La Pantera 1220</button>
+  <button class="stations" onclick="tuneSDR('1500');">WFED News 1500</button>
+  <button class="stations" onclick="tuneSDR('1600');">WXLE Que Buena 1600</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://na5b.com:8080/?freq=1120000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1120000&zoom_bw=100.0/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0" target="_blank">UberSDR, Washington DC, USA</a><br>
+  <a href="http://www.na5b.com:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Washington DC Area USA</a><br>
+  <a href="http://21337.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Chesapeake Beach, MD</a><br>
+  <a href="http://na5b.com:8901/?tune=1120am/?tune=1000am?zoom=4" target="_blank">WebSDR, Washington DC, USA</a><br>
+  <a href="http://na5b.com:8902/?tune=119100am/?tune=1000am?zoom=4" target="_blank">WebSDR, Washington DC, USA</a><br>
+  <a href="http://kiwisdr.n2yo.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Chantilly VA, USA</a><br>
+  <a href="http://21326.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Stafford, VA</a><br>
+
+
+</div>
+
+
+<div id="ATLGA" class="region">
+  <h2>Atlanta, Georgia, USA <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('550');">WDUN News Talk 550</button>
+  <button class="stations" onclick="tuneSDR('590');">WDWD Faith Talk 590</button>
+  <button class="stations" onclick="tuneSDR('610');">WPLO La Bonita 610</button>
+  <button class="stations" onclick="tuneSDR('640');">WBIN Black Info Netw. 640</button>
+  <button class="stations" onclick="tuneSDR('680');">WCNN The Fan 680</button>
+  <button class="stations" onclick="tuneSDR('720');">WGST The Voice 720</button>
+  <button class="stations" onclick="tuneSDR('750');">WSB News Talk 750</button>
+  <button class="stations" onclick="tuneSDR('790');">WQXI Radio Korea 790</button>
+  <button class="stations" onclick="tuneSDR('840');">WHAS Talk Radio 840</button>
+  <button class="stations" onclick="tuneSDR('920');">WGKA The Answer 920</button>
+  <button class="stations" onclick="tuneSDR('970');">WNIV Faith Talk 970</button>
+  <button class="stations" onclick="tuneSDR('1100');">WJZA Smooth Jazz 1100</button>
+  <button class="stations" onclick="tuneSDR('1160');">WCFO The Quest 1160</button>
+  <button class="stations" onclick="tuneSDR('1190');">WAFS Relevant Radio 1190</button>
+  <button class="stations" onclick="tuneSDR('1260');">WMDG Fox Radio 1260</button>
+  <button class="stations" onclick="tuneSDR('1300');">WNEA Christian Talk 1300</button>
+  <button class="stations" onclick="tuneSDR('1310');">WWWE La Mega 1310</button>
+  <button class="stations" onclick="tuneSDR('1380');">WAOK News Talk 1380</button>
+  <button class="stations" onclick="tuneSDR('1420');">WWSZ Streetz 1420</button>
+  <button class="stations" onclick="tuneSDR('1480');">WYZE Gospel Voice 1480</button>
+  <button class="stations" onclick="tuneSDR('1600');">WAOS La Mejor 1600</button>
+  <button class="stations" onclick="tuneSDR('1690');">WMLB MAGA Radio 1690</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://kx4az1.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Athens, Georgia (USA)</a><br>
+  <a href="https://ny4q.tunnel.ubersdr.org/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0" target="_blank">UberSDR, Dahlonega, GA, USA</a><br>
+  <a href="http://99.102.143.126:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Athens, GA USA</a><br>
+  <a href="http://22018.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Fayetteville, GA</a><br>
+  <a href="http://22017.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Fayetteville, GA</a><br>
+  <a href="http://22765.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Bishop, GA</a><br>
+  <a href="http://mansfieldga.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Mansfield Georgia USA</a><br>
+
+
+</div>
+
+
+<div id="CHIC" class="region">
+  <h2>Chicago, Illinois, USA <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('560');">WIND Religious Talk 560</button>
+  <button class="stations" onclick="tuneSDR('580');">WILL Illinois Public Media 580</button>
+  <button class="stations" onclick="tuneSDR('670');">WSCR The Score 670</button>
+  <button class="stations" onclick="tuneSDR('700');">WLW News Talk Cincinnati 700</button>
+  <button class="stations" onclick="tuneSDR('720');">WGN Radio 720</button>
+  <button class="stations" onclick="tuneSDR('760');">WJR News Tald Detroit 760</button>
+  <button class="stations" onclick="tuneSDR('780');">WBBM Newsradio 780</button>
+  <button class="stations" onclick="tuneSDR('820');">WCPT Progressive Talk 820</button>
+  <button class="stations" onclick="tuneSDR('890');">WLS Talk Radio 890</button>
+  <button class="stations" onclick="tuneSDR('950');">WNTD Relevant Radio 950</button>
+  <button class="stations" onclick="tuneSDR('1240');">WSBC Access Radio 1240</button>
+  <button class="stations" onclick="tuneSDR('1390');">WGRB Inspiration Radio 1390</button>
+  <button class="stations" onclick="tuneSDR('1590');">WCGO Smart Talk 1590</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://ab9mq.hopto.org:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Carlock, Illinois</a><br>
+  <a href="http://radio.ofadam.com:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Peoria, Illinois</a><br>
+  <a href="http://21128.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Edinburgh, Indiana USA</a><br>
+  <a href="http://21128.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Edinburgh, Indiana USA</a><br>
+  <a href="http://sdr.k9mq.com:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Saint John, IN</a><br>
+  <a href="http://kiwisdr.moxley.us:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Champaign, Illinois USA</a><br>
+  <a href="http://w9adkiwi.hopto.org:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Barrington Hills, Il USA</a><br>
+
+
+</div>
+
+
+<div id="MPLS" class="region">
+  <h2>Minneapolis, Minnesota, USA <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('630');">WREY El Rey 630</button>
+  <button class="stations" onclick="tuneSDR('690');">KFXN Hmong Radio 690</button>
+  <button class="stations" onclick="tuneSDR('770');">KUOM Radio K 770</button>
+  <button class="stations" onclick="tuneSDR('830');">WCCO News Talk 830</button>
+  <button class="stations" onclick="tuneSDR('900');">KTIS Faith Radio 900</button>
+  <button class="stations" onclick="tuneSDR('950');">KTNF Progressive Radio 950</button>
+  <button class="stations" onclick="tuneSDR('980');">KKMS The Mission 980</button>
+  <button class="stations" onclick="tuneSDR('1130');">KTLK News Talk 1130</button>
+  <button class="stations" onclick="tuneSDR('1280');">WWTC MAGA Talk 1280</button>
+  <button class="stations" onclick="tuneSDR('1330');">WLOL Relevant Radio 1330</button>
+  <button class="stations" onclick="tuneSDR('1400');">KMNV La Raza 1400</button>
+  <button class="stations" onclick="tuneSDR('1440');">KYCR The Biz 1440</button>
+  <button class="stations" onclick="tuneSDR('1470');">KMNQ Amor Radio 1470</button>
+  <button class="stations" onclick="tuneSDR('1500');">KSTP Sports Radio 1500</button>
+  <button class="stations" onclick="tuneSDR('1570');">KDIZ MAGA Talk 1570</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://becker.proxy.rx-888.com:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">Web-888, Becker, Minnesota, USA</a><br>
+  <a href="http://22303.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Chetek Wisconsin USA</a><br>
+  <a href="http://croton.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Plymouth, MN</a><br>
+  <a href="http://bikedork.myddns.me:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Minneapolis USA</a><br>
+
+
+</div>
+
+
+<div id="CFLA" class="region">
+  <h2>Orlando, Florida, USA <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('740');">WYGM The Game 740</button>
+  <button class="stations" onclick="tuneSDR('810');">WRSO Acción Radio 810</button>
+  <button class="stations" onclick="tuneSDR('950');">WORL The Answer 950</button>
+  <button class="stations" onclick="tuneSDR('990');">WTLN The Word 990</button>
+  <button class="stations" onclick="tuneSDR('1270');">WIWA The Shepherd 1270</button>
+  <button class="stations" onclick="tuneSDR('1440');">WPRD La Voz 1440</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://21470.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Melbourne, FL USA</a><br>
+
+
+</div>
+
+
+<div id="DENV" class="region">
+  <h2>Denver, Colorado, USA <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('560');">KLZ The Source 560</button>
+  <button class="stations" onclick="tuneSDR('630');">KHOW Talk Radio 630</button>
+  <button class="stations" onclick="tuneSDR('670');">KLTT Christian Talk 670</button>
+  <button class="stations" onclick="tuneSDR('710');">KNUS NewsTalk 710</button>
+  <button class="stations" onclick="tuneSDR('760');">KDFD Freedom 760</button>
+  <button class="stations" onclick="tuneSDR('810');">KLVZ Legends 810</button>
+  <button class="stations" onclick="tuneSDR('850');">KOA NewsRadio 850</button>
+  <button class="stations" onclick="tuneSDR('910');">KPOF Point of Faith 910</button>
+  <button class="stations" onclick="tuneSDR('990');">KRKS The Word 990</button>
+  <button class="stations" onclick="tuneSDR('1090');">KMXA KUDN Radio 1090</button>
+  <button class="stations" onclick="tuneSDR('1150');">KNRV Onda 1150</button>
+  <button class="stations" onclick="tuneSDR('1360');">KHNC The Lion 1360</button>
+  <button class="stations" onclick="tuneSDR('1390');">KLVZ KGNU Community 1390</button>
+  <button class="stations" onclick="tuneSDR('1570');">KXJJ La Jota Mexicana 1570</button>
+  <button class="stations" onclick="tuneSDR('1600');">KEPN ESPN Radio 1600</button>
+  <button class="stations" onclick="tuneSDR('1690');">KDMD Relevant Radio 1690</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://73.181.41.12:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Berthoud, Colorado USA</a><br>
+  <a href="http://kw5usa.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Loveland, Colorado</a><br>
+  <a href="http://jpvm54.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Lakewood, Colorado</a><br>
+
+
+</div>
+
+
+<div id="LAUS" class="region">
+  <h2>Southern California, USA <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('570');">LKAC Sports Radio 570</button>
+  <button class="stations" onclick="tuneSDR('640');">KFI Talk Radio 640</button>
+  <button class="stations" onclick="tuneSDR('670');">KIRN 670</button>
+  <button class="stations" onclick="tuneSDR('690');">XEWW Tijuana 690</button>
+  <button class="stations" onclick="tuneSDR('760');">KGB Sports 760</button>
+  <button class="stations" onclick="tuneSDR('790');">KABC 790</button>
+  <button class="stations" onclick="tuneSDR('810');">KGO The Spread 810</button>
+  <button class="stations" onclick="tuneSDR('980');">KFWB La Mera Mera 980</button>
+  <button class="stations" onclick="tuneSDR('1020');">KTNQ Noticias 1020</button>
+  <button class="stations" onclick="tuneSDR('1070');">KNX News 1070</button>
+  <button class="stations" onclick="tuneSDR('1150');">KEIB Patriot Talk 1150</button>
+  <button class="stations" onclick="tuneSDR('1220');">KHTS Hometown Station 1220</button>
+  <button class="stations" onclick="tuneSDR('1260');">KMZT K-Mozart 1260</button>
+  <button class="stations" onclick="tuneSDR('1350');">KSRO News Talk 1350</button>
+  <button class="stations" onclick="tuneSDR('1540');">KPMC Korean Radio 1540</button>
+  <button class="stations" onclick="tuneSDR('1580');">KBLA Talk Radio 1580</button>
+  <button class="stations" onclick="tuneSDR('1670');">KHPY Radio Catolica 1670</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://kb6c.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Stauffer, CA</a><br>
+  <a href="http://kj6eo.com:8901/?tune=640am/?tune=1000am?zoom=4" target="_blank">WebSDR, Santa Clarita CA, USA</a><br>
+  <a href="http://socalmtns.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Big Bear City, CA</a><br>
+  <a href="http://22161.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Irvine, California, USA</a><br>
+  <a href="http://22544.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, San Diego, California</a><br>
+
+
+</div>
+
+
+<div id="SANF" class="region">
+  <h2>Northern California, USA <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('650');">KSTE Talk Radio 650</button>
+  <button class="stations" onclick="tuneSDR('680');">KNBR Sports Radio 680</button>
+  <button class="stations" onclick="tuneSDR('710');">KFIA The Word 710</button>
+  <button class="stations" onclick="tuneSDR('740');">KCBS All News 740</button>
+  <button class="stations" onclick="tuneSDR('810');">KGO The Spread 810</button>
+  <button class="stations" onclick="tuneSDR('830');">KNCO News Talk 830</button>
+  <button class="stations" onclick="tuneSDR('890');">KVMX La Ranchera 890</button>
+  <button class="stations" onclick="tuneSDR('990');">KATD KIQI Relay 990</button>
+  <button class="stations" onclick="tuneSDR('1050');">KTCT ESPN Sports 1050</button>
+  <button class="stations" onclick="tuneSDR('1100');">KFAX Christian Radio 1100</button>
+  <button class="stations" onclick="tuneSDR('1140');">KHTK Sactown Sports 1140</button>
+  <button class="stations" onclick="tuneSDR('1170');">KLOK Radio Mirchi 1170</button>
+  <button class="stations" onclick="tuneSDR('1310');">KMKY Radio Mirchi 1310</button>
+  <button class="stations" onclick="tuneSDR('1350');">KSRO News Talk 1350</button>
+  <button class="stations" onclick="tuneSDR('1360');">KFIV Power Talk 1360</button>
+  <button class="stations" onclick="tuneSDR('1530');">KFBK NewsRadio 1530</button>
+  <button class="stations" onclick="tuneSDR('1550');">KZDG Radio Zindagi 1550</button>
+  <button class="stations" onclick="tuneSDR('1640');">KDIA Christian Talk 1640</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://22085.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Rio Vista, Ca</a><br>
+  <a href="http://kiwisdr.kfsdr.com:8076/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Half Moon Bay, California</a><br>
+  <a href="http://sybil.yak.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, San Jose, California, USA (south of San Francisco)</a><br>
+  <a href="http://kphsdr.com:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Point Reyes, California</a><br>
+  <a href="http://kr6la.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Whitmore, California</a><br>
+  <a href="http://73.66.163.172:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Mountain House, CA</a><br>
+  <a href="http://21331.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Sunnyvale, California USA</a><br>
+  <a href="http://kiwisdr.kfsdr.com:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Half Moon Bay, California</a><br>
+
+
+</div>
+
+
+<div id="CUUS" class="region">
+  <h2>Northern Utah, USA <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('570');">KNRS Talk Radio 570</button>
+  <button class="stations" onclick="tuneSDR('610');">KVNU News Talk 610</button>
+  <button class="stations" onclick="tuneSDR('660');">KTNN Navaho Nation 660</button>
+  <button class="stations" onclick="tuneSDR('730');">KSVN KePAdre Radio 730</button>
+  <button class="stations" onclick="tuneSDR('820');">KUTR The Truth 820</button>
+  <button class="stations" onclick="tuneSDR('840');">KXNT Las Vegas 840</button>
+  <button class="stations" onclick="tuneSDR('860');">KKAT Salt Lake City 860</button>
+  <button class="stations" onclick="tuneSDR('1120');">KANN SOS Radio 1120</button>
+  <button class="stations" onclick="tuneSDR('1160');">KSL News and Talk 1160</button>
+  <button class="stations" onclick="tuneSDR('1430');">KMES Radio Catolica 1430</button>
+  <button class="stations" onclick="tuneSDR('1640');">KBJA K-Talk Radio 1640</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://kiwisdr2.sdrutah.org:8074/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, near Corinne, Utah</a><br>
+  <a href="https://n7qxb.tunnel.ubersdr.org/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0" target="_blank">UberSDR, Holladay, UT, USA</a><br>
+  <a href="http://kiwi.kf7k.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Orem Utah USA</a><br>
+  <a href="http://ka7oeikiwi.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, West Jordan, UT, U.S.A.</a><br>
+  <a href="http://websdr1.sdrutah.org:8901/index1a.html?tune=1160sam-u/?tune=1000am?zoom=4" target="_blank">WebSDR, Corinne, UT, USA</a><br>
+  <a href="http://websdr2.sdrutah.org:8902/index1a.html?tune=10000sam-u/?tune=1000am?zoom=4" target="_blank">WebSDR, Corinne, UT, USA</a><br>
+  <a href="http://websdr3.sdrutah.org:8903/index1a.html?tune=8992usb/?tune=1000am?zoom=4" target="_blank">WebSDR, Corinne, UT, USA</a><br>
+  <a href="http://websdr4.sdrutah.org:8904/index1a.html?tune=14300usb/?tune=1000am?zoom=4" target="_blank">WebSDR, Corinne, UT, USA</a><br>
+
+
+</div>
+
+
+<div id="TXUS" class="region">
+  <h2>Eastern Texas, USA <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('570');">KLIF News Radio 570</button>
+  <button class="stations" onclick="tuneSDR('590');">KLBJ News Radio 590</button>
+  <button class="stations" onclick="tuneSDR('620');">KTNO Radio Luz 620</button>
+  <button class="stations" onclick="tuneSDR('660');">KSKY The Answer 660</button>
+  <button class="stations" onclick="tuneSDR('740');">KTRH News Radio 740</button>
+  <button class="stations" onclick="tuneSDR('820');">WBAP News Talk 820</button>
+  <button class="stations" onclick="tuneSDR('940');">XEQ Ke Buena 940</button>
+  <button class="stations" onclick="tuneSDR('970');">KXIL Relevant 970</button>
+  <button class="stations" onclick="tuneSDR('1080');">KRLD NewsRadio 1080</button>
+  <button class="stations" onclick="tuneSDR('1120');">KTXW The Bridge 1120</button>
+  <button class="stations" onclick="tuneSDR('1300');">KVET The Zone 1300</button>
+  <button class="stations" onclick="tuneSDR('1370');">KJCE Talk Radio 1370</button>
+  <button class="stations" onclick="tuneSDR('1440');">KELG La Palabra 1440</button>
+  <button class="stations" onclick="tuneSDR('1560');">KTXZ Radio Católica 1560</button>
+  <button class="stations" onclick="tuneSDR('1600');">KOKE Puro Norteño 1600</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://sdr.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Crowley, TX EM12ho</a><br>
+  <a href="http://21738.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Rio Grande Valley</a><br>
+  <a href="https://k5jbt.tunnel.ubersdr.org/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0" target="_blank">UberSDR, Houston, TX, USA</a><br>
+  <a href="http://cbaum.proxy.rx-888.com:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">Web-888, McKinney, Texas, USA</a><br>
+  <a href="http://atxsdr.zapto.org:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Austin, Texas USA</a><br>
+  <a href="http://sdr.kf5jmd.com:8901/?tune=900am/?tune=1000am?zoom=4" target="_blank">WebSDR, Gatesville, TX, USA</a><br>
+  <a href="http://204.235.44.74:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Anna, Texas, USA</a><br>
+  <a href="http://21766.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, DALLAS,TX,USA</a><br>
+
+
+</div>
+
+</div>
+<!-- second tab complete -->
+
+<!-- content for third region tab -->
+<div id="Canada" class="tabcontent">
+<p style="font-family:monospace;font-size:18px;font-weight:700;text-align:left;">Receiver Locations (Click for Stations):</p>
+
+<div class="tabs">
+<button class="places" onclick="openCity(event, 'HMNS')">Halifax - Moncton Area</button>
+<button class="places" onclick="openCity(event, 'MOQC')">Montreal</button>
+<button class="places" onclick="openCity(event, 'OTON')">Ottawa</button>
+<button class="places" onclick="openCity(event, 'TOON')">Toronto</button>
+<button class="places" onclick="openCity(event, 'WIMC')">Winnipeg</button>
+<button class="places" onclick="openCity(event, 'RSSK')">Regina and Saskatoon</button>
+<button class="places" onclick="openCity(event, 'EDAB')">Edmonton</button>
+<button class="places" onclick="openCity(event, 'CAAB')">Calgary</button>
+<button class="places" onclick="openCity(event, 'VABC')">Vancouver</button>
+</div>
+
+<div id="HMNS" class="region">
+  <h2>Halifax - Moncton Area <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('640');">CBN 640</button>
+  <button class="stations" onclick="tuneSDR('930');">CFBC 930</button>
+  <button class="stations" onclick="tuneSDR('990');">CBY 990</button>
+  <button class="stations" onclick="tuneSDR('1400');">CBG 1400</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://vy2hf.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Stratford, Prince Edward Island, Canada</a><br>
+
+
+</div>
+
+<div id="MOQC" class="region">
+  <h2>Montreal <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('690');">CKGM 690</button>
+  <button class="stations" onclick="tuneSDR('730');">CKAC 730</button>
+  <button class="stations" onclick="tuneSDR('800');">CJAD 800</button>
+  <button class="stations" onclick="tuneSDR('940');">CFNV 940</button>
+  <button class="stations" onclick="tuneSDR('1450');">CHOU 1450</button>
+  <button class="stations" onclick="tuneSDR('1650');">CKZW 1650</button>
+  <div class="clear"></div>
+  <br>
+  <a href="https://ve2sus.tunnel.ubersdr.org/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0" target="_blank">UberSDR, Montreal, QC, Canada</a><br>
+  <a href="http://21383.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Sainte Marcelline de Kildare , Quebec , Canada</a><br>
+  <a href="http://209.91.186.16:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Montreal, Canada</a><br>
+
+
+</div>
+
+<div id="OTON" class="region">
+  <h2>Ottawa <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('580');">CFRA 580</button>
+  <button class="stations" onclick="tuneSDR('1200');">CFGO 1200</button>
+  <button class="stations" onclick="tuneSDR('1310');">CIWW 1310</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://21263.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Ottawa, Canada</a><br>
+  <a href="http://22920.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Ottawa, Canada</a><br>
+
+
+</div>
+
+<div id="TOON" class="region">
+  <h2>Toronto <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('530');">CHLO 530</button>
+  <button class="stations" onclick="tuneSDR('740');">CFZM 740</button>
+  <button class="stations" onclick="tuneSDR('800');">CJBQ 800</button>
+  <button class="stations" onclick="tuneSDR('860');">CJBC 860</button>
+  <button class="stations" onclick="tuneSDR('1010');">CFRB 1010</button>
+  <button class="stations" onclick="tuneSDR('1580');">CKDO 1580</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://22687.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Kitchener, Ontario</a><br>
+  <a href="http://22500.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Hamilton, Ontario, Canada - West end of Lake Ontario</a><br>
+  <a href="http://jimlill.com:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Rochester, New York</a><br>
+  <a href="http://k2zn.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Rochester, NY</a><br>
+  <a href="http://bachner.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, London, Ontario (Canada)</a><br>
+  <a href="http://kiwi.hobiecat.cc:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Milton ON, CANADA</a><br>
+
+
+</div>
+
+<div id="WIMC" class="region">
+  <h2>Winnipeg <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('680');">CJOB 680</button>
+  <button class="stations" onclick="tuneSDR('920');">CFRY 920</button>
+  <button class="stations" onclick="tuneSDR('990');">CBW 990</button>
+  <button class="stations" onclick="tuneSDR('1250');">CHSM 1250</button>
+  <button class="stations" onclick="tuneSDR('1290');">CFRW 1290</button>
+  <div class="clear"></div>
+  <br>
+  <a href="https://ve4ev.tunnel.ubersdr.org/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0" target="_blank">UberSDR, Winnipeg, MB, Canada</a><br>
+  <a href="https://ve4drk.tunnel.ubersdr.org/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0" target="_blank">UberSDR, Winnipeg, MB, Canada</a><br>
+  <a href="http://24.78.154.153:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Winnipeg, Canada</a><br>
+
+
+</div>
+
+<div id="RSSK" class="region">
+  <h2>Regina and Saskatoon <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('540');">CBK 540</button>
+  <button class="stations" onclick="tuneSDR('600');">CJWW 600</button>
+  <button class="stations" onclick="tuneSDR('800');">CHAB 800</button>
+  <button class="stations" onclick="tuneSDR('860');">CBKF 860</button>
+  <button class="stations" onclick="tuneSDR('980');">CJME 980</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://21307.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Dauphin, Manitoba, Canada</a><br>
+  <a href="http://va6ok.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Coronation, Alberta, Canada</a><br>
+  <a href="http://ve5sar-kiwisdr.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Regina, Saskatchewan, Canada</a><br>
+
+
+</div>
+
+<div id="EDAB" class="region">
+  <h2>Edmonton <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('540');">CBK 540</button>
+  <button class="stations" onclick="tuneSDR('580');">CKUA 580</button>
+  <button class="stations" onclick="tuneSDR('630');">CHED 630</button>
+  <button class="stations" onclick="tuneSDR('740');">CBX 740</button>
+  <button class="stations" onclick="tuneSDR('880');">CHQT 880</button>
+  <button class="stations" onclick="tuneSDR('1010');">CBR 1010</button>
+  <button class="stations" onclick="tuneSDR('1440');">CKJR 1440</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://ciw321.cfars.ca:8174/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Alberta CANADA</a><br>
+  <a href="http://ciw321.cfars.ca:8173/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Lamont, ALberta</a><br>
+  <a href="http://ciw321.cfars.ca:8175/?f=1000/-5000,5000amz9&1hz" target="_blank">Web-888, Lamont, Alberta CANADA</a><br>
+  <a href="http://va6ok.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Coronation, Alberta, Canada</a><br>
+  <a href="http://ve6ddd.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Rocky Mountain House,Alberta</a><br>
+  <a href="http://162.248.34.28:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Sundre, AB</a><br>
+
+
+</div>
+
+<div id="CAAB" class="region">
+  <h2>Calgary <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('540');">CBK 540</button>
+  <button class="stations" onclick="tuneSDR('660');">CFFR 660</button>
+  <button class="stations" onclick="tuneSDR('740');">CBX 740</button>
+  <button class="stations" onclick="tuneSDR('1010');">CBR 1010</button>
+  <button class="stations" onclick="tuneSDR('1060');">CKMX 1060</button>
+  <button class="stations" onclick="tuneSDR('1140');">CHRB 1140</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://208.38.9.135:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Southern Alberta 1</a><br>
+  <a href="http://208.38.9.135:8074/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Southern Alberta 2</a><br>
+  <a href="http://ve6hfd.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Hanna Alberta</a><br>
+  <a href="http://va6ok.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Coronation, Alberta, Canada</a><br>
+  <a href="http://162.248.34.28:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Sundre, AB</a><br>
+
+
+</div>
+
+<div id="VABC" class="region">
+  <h2>Vancouver <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('690');">CBU 690</button>
+  <button class="stations" onclick="tuneSDR('730');">CKNW 730</button>
+  <button class="stations" onclick="tuneSDR('1130');">CKWX 1130</button>
+  <button class="stations" onclick="tuneSDR('1200');">CJRJ 1200</button>
+  <button class="stations" onclick="tuneSDR('1320');">CHMB 1320</button>
+  <button class="stations" onclick="tuneSDR('1470');">CJVB 1470</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://kiwisdr.gadallah.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Deer Harbor, Washington</a><br>
+  <a href="http://oss706.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Oak Harbor, WA, USA</a><br>
+
+
+</div>
+
+</div>
+<!-- third tab complete -->
+
+<!-- content for fourth region tab -->
+<div id="AusNz" class="tabcontent">
+<p style="font-family:monospace;font-size:18px;font-weight:700;text-align:left;">Receiver Locations (Click for Stations):</p>
+
+<div class="tabs">
+<button class="places" onclick="openCity(event, 'ADLA')">Adelaide, SA, AUS</button>
+<button class="places" onclick="openCity(event, 'AUCK')">Auckland, AUK, NZ</button>
+<button class="places" onclick="openCity(event, 'BRIS')">Brisbane, QLD, AUS</button>
+<button class="places" onclick="openCity(event, 'CANB')">Canberra, NSW, AUS</button>
+<button class="places" onclick="openCity(event, 'CHRI')">Christchurch, CAN, NZ</button>
+<button class="places" onclick="openCity(event, 'DARW')">Darwin, NT, AUS</button>
+<button class="places" onclick="openCity(event, 'MELB')">Melbourne, VIC, AUS</button>
+<button class="places" onclick="openCity(event, 'NEWC')">Newcastle, NSW, AUS</button>
+<button class="places" onclick="openCity(event, 'PERT')">Perth, WA, AUS</button>
+<button class="places" onclick="openCity(event, 'SYDN')">Sydney, NSW, AUS</button>
+<button class="places" onclick="openCity(event, 'TASM')">Tasmania, AUS</button>
+<button class="places" onclick="openCity(event, 'WELL')">Wellington, WGN, NZ</button>
+</div>
+
+<div id="ADLA" class="region">
+  <h2>Adelaide, SA, AUS <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('531');">5RTI 531</button>
+  <button class="stations" onclick="tuneSDR('729');">5RN 729</button>
+  <button class="stations" onclick="tuneSDR('891');">5AN 891</button>
+  <button class="stations" onclick="tuneSDR('972');">5PB 972</button>
+  <button class="stations" onclick="tuneSDR('1197');">5RPH 1197</button>
+  <button class="stations" onclick="tuneSDR('1323');">5DN 1323</button>
+  <button class="stations" onclick="tuneSDR('1395');">5AA 1395</button>
+  <button class="stations" onclick="tuneSDR('1539');">5TAB 1539</button>
+  <button class="stations" onclick="tuneSDR('1611');">3ABN 1611</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://barossa.servebeer.com:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Angaston, South Australia</a><br>
+  <a href="http://kiwisdr.areg.org.au:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Near Tarlee, South Australia</a><br>
+  <a href="http://kiwisdr.areg.org.au:8075/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Near Tarlee, South Australia</a><br>
+  <a href="http://kiwisdr.areg.org.au:8074/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Near Tarlee, South Australia</a><br>
+
+
+</div>
+
+<div id="BRIS" class="region">
+  <h2>Brisbane, QLD, AUS <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('612');">ABCRadio 612</button>
+  <button class="stations" onclick="tuneSDR('693');">SENQ 693</button>
+  <button class="stations" onclick="tuneSDR('793');">RadioNational 793</button>
+  <button class="stations" onclick="tuneSDR('882');">NewsTalk 882</button>
+  <button class="stations" onclick="tuneSDR('936');">ABCNews 936</button>
+  <button class="stations" onclick="tuneSDR('1008');">RadioTab 1008</button>
+  <button class="stations" onclick="tuneSDR('1116');">EasyNusic 1116</button>
+  <button class="stations" onclick="tuneSDR('1296');">PrintRadio 1296</button>
+  <button class="stations" onclick="tuneSDR('1701');">BrisVaani 1701</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://sdr1.vk4tjz.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">Web-888, Brisbane, Australia</a><br>
+  <a href="http://vk4een.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Godwin beach, Brisbane</a><br>
+
+
+</div>
+
+<div id="CANB" class="region">
+  <h2>Canberra, NSW, AUS <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('666');">ABCRadio 666</button>
+  <button class="stations" onclick="tuneSDR('846');">RadioNational 846</button>
+  <button class="stations" onclick="tuneSDR('1008');">SkySports 1008</button>
+  <button class="stations" onclick="tuneSDR('1053');">ForeverClassic 1053</button>
+  <button class="stations" onclick="tuneSDR('1125');">1RPH 1125</button>
+  <button class="stations" onclick="tuneSDR('1323');">SENTrack 1323</button>
+  <button class="stations" onclick="tuneSDR('1440');">SBSRadio-1 1440</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://vk1cm.ddns.net:8074/?f=1000/-5000,5000amz9&1hz" target="_blank">Web-888, Canberra, Australia</a><br>
+  <a href="http://snowlinesdr.vk1hf.com:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Dry Plains, New South Wales, Australia</a><br>
+  <a href="http://kiwisdr.tecsunradios.com.au:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Araluen, NSW, Australia</a><br>
+  <a href="http://22678.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Gundaroo NSW, Australia</a><br>
+  <a href="http://203.214.142.135:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Nowra, NSW, Australia</a><br>
+
+
+</div>
+
+<div id="DARW" class="region">
+  <h2>Darwin, NT, AUS <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('657');">RadioNational 657</button>
+  <button class="stations" onclick="tuneSDR('1242');">RadioTab 1242</button>
+  <button class="stations" onclick="tuneSDR('1530');">YolnuRadio 1530</button>
+  <button class="stations" onclick="tuneSDR('1611');">SEN-TopEnd 1611</button>
+  <button class="stations" onclick="tuneSDR('1638');">2ME-Radio 1638</button>
+  <button class="stations" onclick="tuneSDR('1656');">VLD794 1656</button>
+  <button class="stations" onclick="tuneSDR('1701');">3CW 1701</button>
+  <div class="clear"></div>
+  <br>
+<p>No receivers found for --Darwin--</p>
+
+</div>
+
+<div id="MELB" class="region">
+  <h2>Melbourne, VIC, AUS <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('594');">ABC-Wimmera 594</button>
+  <button class="stations" onclick="tuneSDR('621');">RadioNational 621</button>
+  <button class="stations" onclick="tuneSDR('693');">NewsTalk 693</button>
+  <button class="stations" onclick="tuneSDR('774');">ABC-Melbourne 774</button>
+  <button class="stations" onclick="tuneSDR('927');">RSN-Sport 927</button>
+  <button class="stations" onclick="tuneSDR('1071');">Gold 1071</button>
+  <button class="stations" onclick="tuneSDR('1170');">SEN-Sports 1170</button>
+  <button class="stations" onclick="tuneSDR('1314');">RSN-Sport 1314</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://sdr-amradioantennas.com:8074/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Victoria, Australia</a><br>
+  <a href="http://sdr-amradioantennas.com:8072/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Victoria, Australia</a><br>
+  <a href="http://sdr-amradioantennas.com:8071/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Victoria, Australia</a><br>
+  <a href="http://sdr-amradioantennas.com:8076/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Victoria, Australia</a><br>
+  <a href="http://sdr-amradioantennas.com:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Victoria, Australia</a><br>
+  <a href="http://sdr-amradioantennas.com:8075/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Victoria, Australia</a><br>
+  <a href="http://22568.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Strathbogie, Victoria, Australia</a><br>
+  <a href="http://22545.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Strathbogie, Victoria, Australia</a><br>
+
+
+</div>
+
+<div id="NEWC" class="region">
+  <h2>Newcastle, NSW, AUS <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('585');">2WEB-OutbackRadio 585</button>
+  <button class="stations" onclick="tuneSDR('738');">ABC-NorthCoast 738</button>
+  <button class="stations" onclick="tuneSDR('1143');">2HD 1143</button>
+  <button class="stations" onclick="tuneSDR('1233');">ABC-Newcastle 1233</button>
+  <button class="stations" onclick="tuneSDR('1341');">SkySports 1341</button>
+  <button class="stations" onclick="tuneSDR('1413');">SBSRadio 1413</button>
+  <button class="stations" onclick="tuneSDR('1458');">NewsRadio 1458</button>
+  <button class="stations" onclick="tuneSDR('1512');">RadioNational 1512</button>
+  <button class="stations" onclick="tuneSDR('1629');">Radio1629 1629</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://175.111.177.234:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Fennell Bay, NSW</a><br>
+  <a href="http://vk2ggc.ddns.net:8074/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Hunter Valley NSW Australia</a><br>
+  <a href="http://vk2atz.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Teralba, New South Wales. AUSTRALIA.</a><br>
+
+
+</div>
+
+<div id="PERT" class="region">
+  <h2>Perth, WA, AUS <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('585');">NewsRadio 585</button>
+  <button class="stations" onclick="tuneSDR('657');">SEN-Track 657</button>
+  <button class="stations" onclick="tuneSDR('720');">ABC-Perth 720</button>
+  <button class="stations" onclick="tuneSDR('810');">RadioNational 810</button>
+  <button class="stations" onclick="tuneSDR('882');">6PR-LiveTalk 882</button>
+  <button class="stations" onclick="tuneSDR('990');">VisionAustralia 990</button>
+  <button class="stations" onclick="tuneSDR('1080');">6IX-Music 1080</button>
+  <button class="stations" onclick="tuneSDR('1206');">TabRadio 1206</button>
+  <div class="clear"></div>
+  <br>
+<p>No receivers found for --Perth--</p>
+
+</div>
+
+<div id="SYDN" class="region">
+  <h2>Sydney, NSW, AUS <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('576');">RadioNational 576</button>
+  <button class="stations" onclick="tuneSDR('630');">NewsRadio 630</button>
+  <button class="stations" onclick="tuneSDR('702');">ABC-Sydney 702</button>
+  <button class="stations" onclick="tuneSDR('873');">2GB 873</button>
+  <button class="stations" onclick="tuneSDR('954');">EasyMusic 954</button>
+  <button class="stations" onclick="tuneSDR('1017');">SkySports 1017</button>
+  <button class="stations" onclick="tuneSDR('1107');">SBS-Radio 1107</button>
+  <button class="stations" onclick="tuneSDR('1170');">SEN-Sports 1170</button>
+  <button class="stations" onclick="tuneSDR('1224');">Radio-Reading 1224</button>
+  <button class="stations" onclick="tuneSDR('1269');">SuperNetwork 1269</button>
+  <button class="stations" onclick="tuneSDR('1539');">SEN-Track 1539</button>
+  <button class="stations" onclick="tuneSDR('1611');">VisionChristianRadio 1611</button>
+  <button class="stations" onclick="tuneSDR('1701');">VoiceOfCharity 1701</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://175.111.177.234:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Fennell Bay, NSW</a><br>
+  <a href="http://vk2ggc.ddns.net:8074/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Hunter Valley NSW Australia</a><br>
+  <a href="http://21117.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Inner-West Sydney | K180WLA 0.1-180MHz Active Loop 2024 version</a><br>
+  <a href="http://vk2atz.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Teralba, New South Wales. AUSTRALIA.</a><br>
+  <a href="http://websdr.mwrs.org.au:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Sydney, New South Wales, Australia</a><br>
+  <a href="http://203.214.142.135:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Nowra, NSW, Australia</a><br>
+
+
+</div>
+
+<div id="TASM" class="region">
+  <h2>Tasmania, AUS <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('576');">RadioNational-SYD 576</button>
+  <button class="stations" onclick="tuneSDR('621');">RadioNational-MLB 621</button>
+  <button class="stations" onclick="tuneSDR('729');">RadioNational-ADL 729</button>
+  <button class="stations" onclick="tuneSDR('747');">7PB-Hobart 747</button>
+  <button class="stations" onclick="tuneSDR('774');">ABC-Melbourne 774</button>
+  <button class="stations" onclick="tuneSDR('810');">ABC-Southeast 810</button>
+  <button class="stations" onclick="tuneSDR('936');">7ZR-Hobart 936</button>
+  <button class="stations" onclick="tuneSDR('963');">MMM-Rivernia 963</button>
+  <button class="stations" onclick="tuneSDR('1107');">SBS-Radio 1107</button>
+  <button class="stations" onclick="tuneSDR('1224');">3EA-Melbourne 1224</button>
+  <button class="stations" onclick="tuneSDR('1242');">3GV-Gold 1242</button>
+  <button class="stations" onclick="tuneSDR('1566');">3NE-Wangratta 1566</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://hobart.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Hobart, Tasmania, Australia</a><br>
+
+
+</div>
+
+<div id="AUCK" class="region">
+  <h2>Auckland, AUK, NZ <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('531');">531Pi 531</button>
+  <button class="stations" onclick="tuneSDR('603');">Waatea 603</button>
+  <button class="stations" onclick="tuneSDR('702');">Today 702</button>
+  <button class="stations" onclick="tuneSDR('756');">Radio-NZ 756</button>
+  <button class="stations" onclick="tuneSDR('810');">BBC-World 810</button>
+  <button class="stations" onclick="tuneSDR('882');">Star 882</button>
+  <button class="stations" onclick="tuneSDR('936');">NZ936 936</button>
+  <button class="stations" onclick="tuneSDR('990');">Radio-Apna 990</button>
+  <button class="stations" onclick="tuneSDR('1080');">Newstalk-ZB 1080</button>
+  <button class="stations" onclick="tuneSDR('1179');">Ake 1179</button>
+  <button class="stations" onclick="tuneSDR('1251');">Rhema 1251</button>
+  <button class="stations" onclick="tuneSDR('1332');">GoldSport 1332</button>
+  <button class="stations" onclick="tuneSDR('1386');">Radio-Tarana 1386</button>
+  <button class="stations" onclick="tuneSDR('1476');">SENZSport 1476</button>
+  <button class="stations" onclick="tuneSDR('1593');">Radio-Samoa 1593</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://22282.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Auckland, New Zealand</a><br>
+  <a href="http://kiwisdr.zl1hex.com:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Onewhero, New Zealand</a><br>
+  <a href="http://kiwisdrzl1kfm.ddns.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Te Kauwhata, New Zealand</a><br>
+  <a href="http://22337.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, New Zealand, Auckland</a><br>
+
+
+</div>
+
+<div id="CHRI" class="region">
+  <h2>Christchurch, CAN, NZ <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('540');">Rhema 540</button>
+  <button class="stations" onclick="tuneSDR('612');">Star 612</button>
+  <button class="stations" onclick="tuneSDR('675');">RadioNewZealand 675</button>
+  <button class="stations" onclick="tuneSDR('738');">Today 738</button>
+  <button class="stations" onclick="tuneSDR('1017');">NewsTalk-ZB 1017</button>
+  <button class="stations" onclick="tuneSDR('1098');">NewsTalk-ZB 1098</button>
+  <button class="stations" onclick="tuneSDR('1260');">SENZ-Sport 1260</button>
+  <button class="stations" onclick="tuneSDR('1413');">Radio-FerryMead 1413</button>
+  <button class="stations" onclick="tuneSDR('1503');">GoldSport 1503</button>
+  <button class="stations" onclick="tuneSDR('1593');">Coast 1593</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://zl3rck.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, ZL3RCK QTH: White Rock, North Canterbury, New Zealand</a><br>
+
+
+</div>
+
+<div id="WELL" class="region">
+  <h2>Wellington, WGN, NZ <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('567');">RadioNewZealand 567</button>
+  <button class="stations" onclick="tuneSDR('657');">Star 657</button>
+  <button class="stations" onclick="tuneSDR('711');">SENZ-Sport 711</button>
+  <button class="stations" onclick="tuneSDR('792');">Gold 792</button>
+  <button class="stations" onclick="tuneSDR('891');">Magic 891</button>
+  <button class="stations" onclick="tuneSDR('972');">Rhema 972</button>
+  <button class="stations" onclick="tuneSDR('1035');">NewsTalk-ZB 1035</button>
+  <button class="stations" onclick="tuneSDR('1161');">Te-Upoko 1161</button>
+  <button class="stations" onclick="tuneSDR('1233');">Today 1233</button>
+  <button class="stations" onclick="tuneSDR('1503');">Gold 1503</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://zl2p.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, ZL2P, Masterton, New Zealand</a><br>
+  <a href="http://kiwisdr.tko.zlwan.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Palmerston North, New Zealand</a><br>
+  <a href="http://h2.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Masterton, New Zealand</a><br>
+  <a href="http://h4.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, ZL2P, Masterton, New Zealand</a><br>
+  <a href="http://h9.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, ZL2P, Masterton, New Zealand</a><br>
+  <a href="http://20200.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Hutt Valley, New Zealand</a><br>
+  <a href="http://21779.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Hastings, New Zealand</a><br>
+  <a href="http://21198.proxy.kiwisdr.com/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, Wellington CBD, New Zealand</a><br>
+
+
+</div>
+
+</div>
+<!-- fourth tab complete -->
+
+<!-- content for fifth region tab -->
+<div id="India" class="tabcontent">
+<p style="font-family:monospace;font-size:18px;font-weight:700;text-align:left;">Receiver Locations (Click for Stations):</p>
+
+<div class="tabs">
+<button class="places" onclick="openCity(event, 'MUMB')">Mumbai, MH, IN</button>
+<button class="places" onclick="openCity(event, 'NEWD')">New Delhi, NCT, IN</button>
+<button class="places" onclick="openCity(event, 'AHME')">Ahmedabad, GJ, IN</button>
+<button class="places" onclick="openCity(event, 'BENG')">Bengaluru, KA, IN</button>
+<button class="places" onclick="openCity(event, 'COIM')">Coimbatore, TN, IN</button>
+<button class="places" onclick="openCity(event, 'SILI')">Siliguri, WB, IN</button>
+<button class="places" onclick="openCity(event, 'DIMA')">Dimapur, NL, IN</button>
+<button class="places" onclick="openCity(event, 'HYDR')">Hyderabad, TG, IN</button>
+</div>
+
+<div id="MUMB" class="region">
+  <h2>Mumbai, MH, IN <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('558');">AIR Mumbai 558</button>
+  <button class="stations" onclick="tuneSDR('792');">AIR Pune 792</button>
+  <button class="stations" onclick="tuneSDR('1287');">AIR Panaji 1287</button>
+  <div class="clear"></div>
+  <br>
+<p>No receivers found for --Mumbai--</p>
+
+</div>
+
+<div id="NEWD" class="region">
+  <h2>New Delhi, NCT, IN <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('819');">AIR Indraprastha 819</button>
+  <button class="stations" onclick="tuneSDR('1143');">AIR Ratnagiri 1143</button>
+  <button class="stations" onclick="tuneSDR('1638');">AIR New Delhi 1638</button>
+  <div class="clear"></div>
+  <br>
+  <a href="https://websdr.vu2tum.com/#freq=846000,mod=am,sql=-150/#freq=1000000,mod=sam,sql=-150" target="_blank">OpenWebRX, Gugaron, India</a><br>
+
+
+</div>
+
+<div id="AHME" class="region">
+  <h2>Ahmedabad, GJ, IN <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('846');">AIR Ahmedabad 846</button>
+  <div class="clear"></div>
+  <br>
+<p>No receivers found for --Ahmedabad--</p>
+
+</div>
+
+<div id="BENG" class="region">
+  <h2>Bengaluru, KA, IN <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('612');">AIR Bengaluru 612</button>
+  <button class="stations" onclick="tuneSDR('720');">AIR Chennai 720</button>
+  <button class="stations" onclick="tuneSDR('765');">AIR Dharwad 765</button>
+  <button class="stations" onclick="tuneSDR('882');">TWR India 882</button>
+  <button class="stations" onclick="tuneSDR('1224');">AIR 1224</button>
+  <button class="stations" onclick="tuneSDR('1287');">AIR Panaji 1287</button>
+  <button class="stations" onclick="tuneSDR('1467');">AIR Jeypore 1467</button>
+  <div class="clear"></div>
+  <br>
+  <a href="https://vu2cpl.tunnel.ubersdr.org/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0/?freq=1000000&mode=am&bwl=-5000&bwh=5000&zoom_freq=1000000&zoom_bw=100.0" target="_blank">UberSDR, Bangalore, India</a><br>
+  <a href="https://rf.siritech.net/#freq=612000,mod=am,sql=-150/#freq=1000000,mod=sam,sql=-150" target="_blank">OpenWebRX, Bangalore, India</a><br>
+
+
+</div>
+
+<div id="COIM" class="region">
+  <h2>Coimbatore, TN, IN <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('612');">AIR Bengaluru 612</button>
+  <button class="stations" onclick="tuneSDR('648');">AIR Indore 648</button>
+  <button class="stations" onclick="tuneSDR('792');">AIR Pune 792</button>
+  <button class="stations" onclick="tuneSDR('999');">AIR Coimbatore 999</button>
+  <div class="clear"></div>
+  <br>
+<p>No receivers found for --Coimbatore--</p>
+
+</div>
+
+<div id="SILI" class="region">
+  <h2>Siliguri, WB, IN <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('585');">AIR Nagpur 585</button>
+  <button class="stations" onclick="tuneSDR('657');">AIR Kolkata 657</button>
+  <button class="stations" onclick="tuneSDR('711');">AIR Siliguri 711</button>
+  <button class="stations" onclick="tuneSDR('1008');">AIR Kolkata 1008</button>
+  <div class="clear"></div>
+  <br>
+<p>No receivers found for --Siliguri--</p>
+
+</div>
+
+<div id="DIMA" class="region">
+  <h2>Dimapur, NL, IN <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('567');">AIR Dibrugarh 567</button>
+  <button class="stations" onclick="tuneSDR('594');">AIR Chinsurah 594</button>
+  <button class="stations" onclick="tuneSDR('621');">AIR Patna 621</button>
+  <button class="stations" onclick="tuneSDR('657');">AIR Kolkata 657</button>
+  <button class="stations" onclick="tuneSDR('675');">AIR Itanagar 675</button>
+  <button class="stations" onclick="tuneSDR('747');">AIR Lucknow 747</button>
+  <button class="stations" onclick="tuneSDR('819');">AIR New Delhi 819</button>
+  <button class="stations" onclick="tuneSDR('882');">AIR Imphal 882</button>
+  <button class="stations" onclick="tuneSDR('1134');">AIR Chinsurah 1134</button>
+  <button class="stations" onclick="tuneSDR('1008');">AIR Kolkata 1008</button>
+  <div class="clear"></div>
+  <br>
+<p>No receivers found for --Dimapur--</p>
+
+</div>
+
+<div id="HYDR" class="region">
+  <h2>Hyderabad, TG, IN <span class="highlight">(Tuned: 1000 kHz)</span></h2>
+  <button class="stations" onclick="tuneSDR('738');">AIR Radio South 738</button>
+  <button class="stations" onclick="tuneSDR('837');">AIR Akashvani Vijayawada 837</button>
+  <div class="clear"></div>
+  <br>
+  <a href="http://hyd.twrmon.net:8073/?f=1000/-5000,5000amz9&1hz" target="_blank">KiwiSDR, HYDERABAD</a><br>
+
+
+</div>
+
+</div>
+<!-- fifth tab complete -->
+
+<!-- content for sixth region tab -->
+<div id="About" class="tabcontent">
+<div style="text-align:left;">
+<p>
+Use this list to quickly open a browser tab, streaming your favorite station
+from an internet-connected software defined radio receiver (SDR). If signals are
+weak or noisy, try another station or switch to a different receiver location. You
+can tune around and find more stations on any of the SDRs. They not only receive AM /
+mediumwave, but also work fabulously on shortwave.
+</p>
+
+<p><strong>Real over-the-air reception; no geoblocking by the broadcasters!</strong>
+</p>
+
+<p style="margin:0; buffer:0;">How to use:</p>
+<ol>
+    <li>Click on a city or region.</li>
+    <li>Click the button for a station.</li>
+    <li>Click on a receiver location to listen.</li>
+    <li>The radio opens in a new browser tab.</li>
+    <li>When necessary, click captchas for access to radio controls.</li>
+    <li>On certain browsers you may need to enable sound.</li>
+    <li>Listings are manually curated, updated as necessary.</li>
+</ol>
+
+<p>Night is best for mediumwave, and it is always night time <i>somewhere</i>.
+If you are not sure if it is day or night in the place you want to listen from,
+have a look at a <a href="https://www.timeanddate.com/worldclock/sunearth.html"
+target="_blank">day and night map</a> to see where the light and dark areas are.
+</p>
+
+<p>Reception range is limited during local daylight hours due to ionospheric
+absorbtion; night time range is very long - at least hundreds and sometimes
+a thousand kilometers or more. WebSDRs can accommodate plenty of users and
+site operators typically do not limit your time on the server. KiwiSDR and
+Web-888 receivers have excellent features, such as AM stereo modes and
+synchronous demodulation. NovaSDRs are a new type, with excellent audio quality,
+advanced features, and can handle hundreds of listeners at once. Have fun and
+enjoy the ease of AM / mediumwave listening on internet SDRs!
+</p>
+
+<p>Please be a fair listener on the KiwiSDR radio servers, as
+they have limited slots for visitors.  Excessive time on one frequency or opening
+multiple SDR tabs from the same site at once may cause site operators to block
+<strong>users</strong> or <strong>frequencies</strong> who draw too much bandwidth.
+</p>
+
+<p>SDR sites are operated by volunteer radio enthusiasts. Some of them will accept
+donations from listeners, so consider helping to support the sites if you find them
+to be useful.
+</p>
+
+<p>As new radios go online and others drop off, this application will be updated
+periodically. Check for updates!
+</p>
+
+</div>
+</div>
+<!-- fifth tab complete -->
+
+<!-- page footer -->
+<div class="clear"></div>
+<br>
+<hr>
+<p style="text-align:center;">AM-Streamer version 2.0 &copy; 2025 Philip G. Collier. All rights reserved.</p>
+
+<!-- javascript for tabs and sdr handling -->
+<script type="text/javascript">
+  // Top level tabs
+  // Get the element with id="defaultOpen" and click on it (first set of tabs)
+  document.getElementById("defaultOpen").click();
+
+function openRegion(evt, regionName) {
+  // Declare all variables
+  var i, tabcontent, talltabs;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  talltabs = document.getElementsByClassName("talltabs");
+  for (i = 0; i < talltabs.length; i++) {
+    talltabs[i].className = talltabs[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(regionName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+  // Second level tabs
+  // Get the element with id="defaultSelect" and click on it (second set of tabs)
+  document.getElementById("defaultSelect").click();
+
+function openCity(evt, cityName) {
+  // Declare all variables
+  var j, region, places;
+
+  // Get all elements with class="region" and hide them
+  region = document.getElementsByClassName("region");
+  for (j = 0; j < region.length; j++) {
+    region[j].style.display = "none";
+  }
+
+  // Get all elements with class="places" and remove the class "active"
+  places = document.getElementsByClassName("places");
+  for (j = 0; j < places.length; j++) {
+    places[j].className = places[j].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+var webMode = 'am';  // basic envelope detector for classic websdrs
+var kiwiMode = 'sam'; // use sam for any sdrs capable of it
+var currentFreq = '1000';
+var lowcut = '-5000'
+var highcut = '5000'
+var kiwiZoom = 'z9';
+var kiwiRez = '&1hz';
+var webZoom = '?zoom=4';
+
+window.onload = tuneSDR(currentFreq);
+
+function tuneSDR(varval) {
+  currentFreq = varval;
+  document.body.innerHTML = document.body.innerHTML.replaceAll(/\?f=.*" /g, "?f=" + currentFreq + "/" + lowcut + "," + highcut + kiwiMode + kiwiZoom + kiwiRez + '" ');
+  document.body.innerHTML = document.body.innerHTML.replaceAll(/\?tune=.*" /g, "?tune=" + currentFreq + webMode + webZoom + '" ');
+  document.body.innerHTML = document.body.innerHTML.replaceAll(/\?frequency=.*" /g, "?frequency=" + currentFreq + "000&modulation=" + kiwiMode + '" ');
+  document.body.innerHTML = document.body.innerHTML.replaceAll(/#freq=.*" /g, "#freq=" + currentFreq + "000,mod=" + kiwiMode + ',sql=-150" ');
+  document.body.innerHTML = document.body.innerHTML.replaceAll(/\?freq=.*" /g, "?freq=" + currentFreq + "000&mode=" + kiwiMode + "&bwl=" + lowcut + "&bwh=" + highcut + "&zoom_freq=" + currentFreq + "000" + '&zoom_bw=100.0" ');
+  document.body.innerHTML = document.body.innerHTML.replaceAll(/Tuned\: .*kHz/g, "Tuned: " + currentFreq + " kHz");
+}
+
+</script>
+</body>
+</html>

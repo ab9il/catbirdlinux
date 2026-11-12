@@ -1,0 +1,4 @@
+pool 0.pool.ntp.org iburst minpoll 4 maxpoll 10 maxsources 3 xleave extfield F323 extfield F324
+pool 1.pool.ntp.org iburst minpoll 4 maxpoll 10 maxsources 3 xleave extfield F323 extfield F324
+pool 2.pool.ntp.org iburst minpoll 4 maxpoll 10 maxsources 3 xleave extfield F323 extfield F324
+pool 3.pool.ntp.org iburst minpoll 4 maxpoll 10 maxsources 3 xleave extfield F323 extfield F324

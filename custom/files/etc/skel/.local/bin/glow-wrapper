@@ -1,0 +1,4 @@
+#!/bin/bash
+
+ptyxis -e glow -p "$1"
+read line

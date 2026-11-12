@@ -1,0 +1,4 @@
+# HackRF One & Pro:
+
+ATTR{idVendor}=="1fc9", ATTR{idProduct}=="000c", MODE="0666", GROUP="dialout"
+ATTR{idVendor}=="1fc9", ATTR{idProduct}=="00dd", MODE="0666", GROUP="dialout"
