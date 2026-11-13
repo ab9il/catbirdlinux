@@ -288,11 +288,16 @@ host_has_ovmf() {
 }
 
 @test "run-vm-qcow2: a missing artifact is built first with the default image and tag" {
-    rm -rf "${SANDBOX}/output"
+	rm -rf "${SANDBOX}/output"
 	unstub qemu-system-x86_64
 	run_recipe run-vm-qcow2
 	[ "$status" -eq 0 ]
-	[ "$(cat "${LOGS}/build.log")" = "build-qcow2 localhost/finpilot stable" ]
+
+	image="$(sed -nE 's/^export image_name := env\("IMAGE_NAME", "([^"]+)"\)$/\1/p' "${SANDBOX}/Justfile")"
+	tag="$(sed -nE 's/^export default_tag := env\("DEFAULT_TAG", "([^"]+)"\)$/\1/p' "${SANDBOX}/Justfile")"
+	[ -n "${image}" ] && [ -n "${tag}" ]
+
+	[ "$(cat "${LOGS}/build.log")" = "build-qcow2 localhost/${image} ${tag}" ]
 	grep -Fxq "${SANDBOX}/output/qcow2/disk.qcow2:/boot.qcow2" "${LOGS}/podman.args"
 }
 
