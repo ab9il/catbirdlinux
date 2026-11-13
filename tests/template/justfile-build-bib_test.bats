@@ -177,14 +177,14 @@ bib_run_args() {
     run_just build-iso
     [ "$status" -eq 0 ]
     args="$(bib_run_args)"
-    [[ "${args}" == *"ghcr.io/projectbluefin/finpilot:stable"* ]]
-    [[ "${args}" != *"localhost/finpilot:stable"* ]]
+    [[ "${args}" == *"ghcr.io/ab9il/catbirdlinux:stable"* ]]
+    [[ "${args}" != *"localhost/catbirdlinux:stable"* ]]
 }
 
 @test "build-iso strips the ostree transport prefix from image-ref" {
     # image-ref is an ostree source URI; BIB wants a bare registry reference.
     export STUB_IMAGE_INFO='{"image-ref":"ostree-image-signed:docker://ghcr.io/example/img","image-tag":"stable-testing"}'
-    run_just build-iso localhost/finpilot testing
+    run_just build-iso localhost/catbirdlinux testing
     [ "$status" -eq 0 ]
     args="$(bib_run_args)"
     [[ "${args}" == *"ghcr.io/example/img:testing"* ]]
@@ -197,7 +197,7 @@ bib_run_args() {
     # image-tag says stable-testing. An ISO built from :stable must still give
     # installed machines a :stable origin.
     export STUB_IMAGE_INFO='{"image-ref":"ostree-image-signed:docker://ghcr.io/ab9il/catbirdlinux","image-tag":"stable-testing"}'
-    run_just build-iso ghcr.io/projectbluefin/finpilot stable
+    run_just build-iso ghcr.io/ab9il/catbirdlinux stable
     [ "$status" -eq 0 ]
     args="$(bib_run_args)"
     [[ "${args}" == *"ghcr.io/ab9il/catbirdlinux:stable" ]]
@@ -208,7 +208,7 @@ bib_run_args() {
 
 @test "build-iso targets stable-testing when the caller asks for it" {
     export STUB_IMAGE_INFO='{"image-ref":"ostree-image-signed:docker://ghcr.io/ab9il/catbirdlinux","image-tag":"stable"}'
-    run_just build-iso ghcr.io/projectbluefin/finpilot stable-testing
+    run_just build-iso ghcr.io/ab9il/catbirdlinux stable-testing
     [ "$status" -eq 0 ]
     [[ "$(bib_run_args)" == *"ghcr.io/ab9il/catbirdlinux:stable-testing" ]]
 }
@@ -217,7 +217,7 @@ bib_run_args() {
     # BIB is given a reference that must resolve in local storage.
     run_just build-iso
     [ "$status" -eq 0 ]
-    grep -qF "tag localhost/finpilot:stable ghcr.io/ab9il/catbirdlinux:stable" "${PODMAN_LOG}"
+    grep -qF "tag localhost/catbirdlinux:stable ghcr.io/ab9il/catbirdlinux:stable" "${PODMAN_LOG}"
 }
 
 @test "build-qcow2 never reads image-info.json and never re-tags" {
