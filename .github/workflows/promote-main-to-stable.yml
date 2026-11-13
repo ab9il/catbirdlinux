@@ -262,8 +262,8 @@ jobs:
       cosign_identity_regexp: >-
         ^https://github\.com/${{ github.repository }}/\.github/workflows/
       target_tag: testing
-      # head_sha and the e2e_* inputs are deliberately omitted: they feed only
-      # the commit-bound E2E check, which run_e2e: false disables. Add them if
-      # e2e is ever enabled for this image.
-      run_e2e: false
+      run_e2e: true
+      head_sha: ${{ github.sha }}
+      e2e_image: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:testing
+      e2e_suites: smoke
     secrets: inherit
