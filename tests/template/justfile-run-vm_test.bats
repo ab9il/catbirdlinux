@@ -288,7 +288,7 @@ host_has_ovmf() {
 }
 
 @test "run-vm-qcow2: a missing artifact is built first with the default image and tag" {
-    rm -rf output
+    rm -rf "${SANDBOX}/output"
 	unstub qemu-system-x86_64
 	run_recipe run-vm-qcow2
 	[ "$status" -eq 0 ]
