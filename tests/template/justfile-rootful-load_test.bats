@@ -116,7 +116,7 @@ refute_logged() {
 
 	grep -qx 'user: inspect -t image localhost/catbirdlinux:stable' "${PODMAN_LOG}"
 	grep -qx 'root: images -q --filter reference=localhost/catbirdlinux:stable' "${PODMAN_LOG}"
-	grep -qx "root: image scp ${UID}@localhost::localhost/catbirdlinux:stable root@localhost::localhost/finpilot:stable" "${PODMAN_LOG}"
+	grep -qx "root: image scp ${UID}@localhost::localhost/catbirdlinux:stable root@localhost::localhost/catbirdlinux:stable" "${PODMAN_LOG}"
 	refute_logged ' pull ' "${PODMAN_LOG}"
 }
 
