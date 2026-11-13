@@ -1,9 +1,8 @@
-# .github/workflows/post-merge-e2e.yml
 name: Post-Merge E2E
 
 on:
   workflow_run:
-    workflows: ["Build Image"]        # must exactly match `name:` in build-image.yml
+    workflows: [""Build and Push Image"]        # must exactly match `name:` in build-image.yml
     branches: [main]                  # filter here, not in job `if` — see bluefin #545 lesson
     types: [completed]
   workflow_dispatch:
@@ -37,7 +36,7 @@ jobs:
         run: |
           set -euo pipefail
           digest=$(skopeo inspect --format '{{.Digest}}' \
-            docker://ghcr.io/${{ github.repository_owner }}/catbirdlinux:testing)
+            docker://ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:testing)
           echo "digest=${digest}" >> "${GITHUB_OUTPUT}"
           expected="${{ inputs.expected_digest }}"
           if [ -n "${expected}" ] && [ "${digest}" != "${expected}" ]; then
@@ -54,7 +53,7 @@ jobs:
       - name: Run testsuite against :testing
         uses: projectbluefin/testsuite/.github/workflows/run-testsuite.yml@v1
         with:
-          image: ghcr.io/${{ github.repository_owner }}/catbirdlinux:testing@${{ needs.verify-manifest.outputs.digest }}
+          image: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:testing@${{ needs.verify-manifest.outputs.digest }}
           suites: smoke
 
   publish-status:
