@@ -51,7 +51,7 @@ jobs:
     timeout-minutes: 120              # QEMU boots are slow; do NOT put this on a `uses:` job
     steps:
       - name: Run testsuite against :testing
-        uses: projectbluefin/testsuite/.github/workflows/run-testsuite.yml@v1
+        uses: projectbluefin/testsuite/.github/workflows/run-testsuite.yml@b99ea284110b595b62d6e5b65fd2102afd271cf2 # v1
         with:
           image: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:testing@${{ needs.verify-manifest.outputs.digest }}
           suites: smoke
