@@ -75,4 +75,5 @@ jobs:
             -f state="${state}" \
             -f context="release/e2e" \
             -f description="Post-merge E2E: ${RESULT}" \
-            -f target_url="${{ github.server
+            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
