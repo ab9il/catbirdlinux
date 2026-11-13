@@ -311,7 +311,7 @@ _rootful_load_image $target_image=IMAGE_NAME $tag=DEFAULT_TAG:
     set -eoux pipefail
 
     # Check if already running as root or under sudo
-    if [[ "${UID}" -eq "0" || -n "${SUDO_USER:-}" ]] && [[ -z "${BATS_TEST_NAME:-}" ]]; then
+    if [[ -n "${SUDO_USER:-}" ]] || { [[ "${UID}" -eq "0" ]] && [[ -z "${BATS_TEST_NAME:-}" ]]; }; then
         echo "Already root or running under sudo, no need to load image from user podman."
         exit 0
     fi
