@@ -58,7 +58,7 @@ setup() {
     # reports. The ISO path reads the published repository out of this.
     # CI only ever builds on main as stable-testing and promotes that digest to
     # :stable, so the baked image-tag is stable-testing even in a stable image.
-    export STUB_IMAGE_INFO='{"image-ref":"ostree-image-signed:docker://ghcr.io/projectbluefin/finpilot","image-tag":"stable-testing"}'
+    export STUB_IMAGE_INFO='{"image-ref":"ostree-image-signed:docker://ghcr.io/ab9il/catbirdlinux","image-tag":"stable-testing"}'
     # Exit status for the BIB `podman run`; non-zero drives the cleanup trap.
     export STUB_BIB_STATUS=0
 
@@ -196,28 +196,28 @@ bib_run_args() {
     # :stable is a digest copy of the :stable-testing build, so its baked
     # image-tag says stable-testing. An ISO built from :stable must still give
     # installed machines a :stable origin.
-    export STUB_IMAGE_INFO='{"image-ref":"ostree-image-signed:docker://ghcr.io/projectbluefin/finpilot","image-tag":"stable-testing"}'
+    export STUB_IMAGE_INFO='{"image-ref":"ostree-image-signed:docker://ghcr.io/ab9il/catbirdlinux","image-tag":"stable-testing"}'
     run_just build-iso ghcr.io/projectbluefin/finpilot stable
     [ "$status" -eq 0 ]
     args="$(bib_run_args)"
-    [[ "${args}" == *"ghcr.io/projectbluefin/finpilot:stable" ]]
+    [[ "${args}" == *"ghcr.io/ab9il/catbirdlinux:stable" ]]
     [[ "${args}" != *":stable-testing"* ]]
     run grep -q ':stable-testing' "${PODMAN_LOG}"
     [ "$status" -ne 0 ]
 }
 
 @test "build-iso targets stable-testing when the caller asks for it" {
-    export STUB_IMAGE_INFO='{"image-ref":"ostree-image-signed:docker://ghcr.io/projectbluefin/finpilot","image-tag":"stable"}'
+    export STUB_IMAGE_INFO='{"image-ref":"ostree-image-signed:docker://ghcr.io/ab9il/catbirdlinux","image-tag":"stable"}'
     run_just build-iso ghcr.io/projectbluefin/finpilot stable-testing
     [ "$status" -eq 0 ]
-    [[ "$(bib_run_args)" == *"ghcr.io/projectbluefin/finpilot:stable-testing" ]]
+    [[ "$(bib_run_args)" == *"ghcr.io/ab9il/catbirdlinux:stable-testing" ]]
 }
 
 @test "build-iso tags the local image with the published reference first" {
     # BIB is given a reference that must resolve in local storage.
     run_just build-iso
     [ "$status" -eq 0 ]
-    grep -qF "tag localhost/finpilot:stable ghcr.io/projectbluefin/finpilot:stable" "${PODMAN_LOG}"
+    grep -qF "tag localhost/finpilot:stable ghcr.io/ab9il/catbirdlinux:stable" "${PODMAN_LOG}"
 }
 
 @test "build-qcow2 never reads image-info.json and never re-tags" {
@@ -229,7 +229,7 @@ bib_run_args() {
     [ "$status" -ne 0 ]
     run grep -q '^tag ' "${PODMAN_LOG}"
     [ "$status" -ne 0 ]
-    [[ "$(bib_run_args)" == *"localhost/finpilot:stable"* ]]
+    [[ "$(bib_run_args)" == *"localhost/catbirdlinux:stable"* ]]
 }
 
 @test "build-qcow2 honours an explicit target image and tag" {
