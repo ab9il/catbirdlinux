@@ -155,11 +155,11 @@ refute_logged() {
 @test "_rootful_load_image: pulls into root when the image is not in the user store" {
 	export STUB_INSPECT_STATUS=125
 	run_recipe just --justfile "${SANDBOX}/Justfile" --working-directory "${SANDBOX}" \
-		_rootful_load_image ghcr.io/projectbluefin/finpilot stable
+		_rootful_load_image ghcr.io/ab9il/catbirdlinux stable
 	[ "$status" -eq 0 ]
 
-	grep -qx 'root: pull ghcr.io/projectbluefin/finpilot:stable' "${PODMAN_LOG}"
-	grep -qx 'podman pull ghcr.io/projectbluefin/finpilot:stable' "${SUDO_LOG}"
+	grep -qx 'root: pull ghcr.io/ab9il/catbirdlinux:stable' "${PODMAN_LOG}"
+	grep -qx 'podman pull ghcr.io/ab9il/catbirdlinux:stable' "${SUDO_LOG}"
 	refute_logged 'image scp' "${PODMAN_LOG}"
 	refute_logged '^root: images' "${PODMAN_LOG}"
 }
