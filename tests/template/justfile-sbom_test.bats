@@ -92,21 +92,29 @@ run_sbom() {
 	[ "$status" -ne 0 ]
 }
 
-@test "sbom: runs the binary named by SYFT" {
-	cp "${STUB_BIN}/syft" "${SANDBOX}/my-syft"
-	sed -i 's/^printf .syft /printf '"'"'my-syft /' "${SANDBOX}/my-syft"
-	SYFT="${SANDBOX}/my-syft" run_sbom finpilot stable out
+@test "sbom: mounts the localhost image, scans the mount as a directory, unmounts" {
+	run_sbom catbirdlinux stable out
 	[ "$status" -eq 0 ]
-	grep -q '^my-syft dir:' "${CALL_LOG}"
-	run grep -q '^syft ' "${CALL_LOG}"
-	[ "$status" -ne 0 ]
+
+	grep -Fxq 'podman image mount localhost/catbirdlinux:stable' "${CALL_LOG}"
+	grep -Fxq "syft dir:/var/lib/containers/storage/overlay/abc/merged --source-name catbirdlinux --source-version stable --parallelism 1 --override-default-catalogers rpm-db-cataloger -o spdx-json=out/catbirdlinux.sbom.json" "${CALL_LOG}"
+	grep -Fxq 'podman image unmount localhost/catbirdlinux:stable' "${CALL_LOG}"
+	[ -s "${SANDBOX}/out/catbirdlinux.sbom.json" ]
 }
 
 @test "sbom: defaults to IMAGE_NAME, DEFAULT_TAG and sbom-current" {
 	run_sbom
 	[ "$status" -eq 0 ]
-	grep -Fxq 'podman image mount localhost/catbirdlinux:stable' "${CALL_LOG}"
-	[ -s "${SANDBOX}/sbom-current/catbirdlinux.sbom.json" ]
+
+	image="$(sed -nE 's/^export image_name := env\("IMAGE_NAME", "([^"]+)"\)$/\1/p' "${SANDBOX}/Justfile")"
+	tag="$(sed -nE 's/^export default_tag := env\("DEFAULT_TAG", "([^"]+)"\)$/\1/p' "${SANDBOX}/Justfile")"
+
+	if [ -z "${image}" ] || [ -z "${tag}" ]; then
+		skip "Justfile does not expose image_name/default_tag defaults"
+	fi
+
+	grep -Fxq "podman image mount localhost/${image}:${tag}" "${CALL_LOG}"
+	[ -s "${SANDBOX}/sbom-current/${image}.sbom.json" ]
 }
 
 @test "wiring: build-image.yml and pr-build.yml both scan through the sbom recipe" {
