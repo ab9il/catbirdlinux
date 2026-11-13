@@ -105,8 +105,8 @@ run_sbom() {
 @test "sbom: defaults to IMAGE_NAME, DEFAULT_TAG and sbom-current" {
 	run_sbom
 	[ "$status" -eq 0 ]
-	grep -Fxq 'podman image mount localhost/finpilot:stable' "${CALL_LOG}"
-	[ -s "${SANDBOX}/sbom-current/finpilot.sbom.json" ]
+	grep -Fxq 'podman image mount localhost/catbirdlinux:stable' "${CALL_LOG}"
+	[ -s "${SANDBOX}/sbom-current/catbirdlinux.sbom.json" ]
 }
 
 @test "wiring: build-image.yml and pr-build.yml both scan through the sbom recipe" {
