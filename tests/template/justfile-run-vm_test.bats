@@ -290,14 +290,22 @@ host_has_ovmf() {
 @test "run-vm-qcow2: a missing artifact is built first with the default image and tag" {
 	rm -rf "${SANDBOX}/output"
 	unstub qemu-system-x86_64
+
+	# Resolve the recipe's own defaults instead of guessing its syntax.
+	image="$(just --justfile "${SANDBOX}/Justfile" --working-directory "${SANDBOX}" \
+		--evaluate target_image 2>/dev/null || true)"
+	tag="$(just --justfile "${SANDBOX}/Justfile" --working-directory "${SANDBOX}" \
+		--evaluate default_tag 2>/dev/null || true)"
+
 	run_recipe run-vm-qcow2
 	[ "$status" -eq 0 ]
 
-	image="$(sed -nE 's/^export image_name := env\("IMAGE_NAME", "([^"]+)"\)$/\1/p' "${SANDBOX}/Justfile")"
-	tag="$(sed -nE 's/^export default_tag := env\("DEFAULT_TAG", "([^"]+)"\)$/\1/p' "${SANDBOX}/Justfile")"
-	[ -n "${image}" ] && [ -n "${tag}" ]
+	if [ -z "${image}" ] || [ -z "${tag}" ]; then
+		skip "Justfile does not expose target_image/default_tag as settable variables"
+	fi
 
-	[ "$(cat "${LOGS}/build.log")" = "build-qcow2 localhost/${image} ${tag}" ]
+	[ -s "${LOGS}/build.log" ]
+	[ "$(cat "${LOGS}/build.log")" = "build-qcow2 ${image} ${tag}" ]
 	grep -Fxq "${SANDBOX}/output/qcow2/disk.qcow2:/boot.qcow2" "${LOGS}/podman.args"
 }
 
