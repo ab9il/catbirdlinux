@@ -176,8 +176,13 @@ jobs:
 
           for tag in "${generated_tags[@]}"; do
             if [[ "${TAG_STREAM}" == "testing" ]]; then
-              # Create the versioned stable-testing tag
-              add_tag "${tag/testing/stable-testing}"
+              if [[ "$tag" == "testing" ]]; then
+                # Keep the bare :testing tag (release gate resolves from it)
+                add_tag "$tag"
+                add_tag "${DEFAULT_TAG}"
+              else
+                add_tag "${tag/testing/stable-testing}"
+              fi
             else
               add_tag "${tag}"
             fi
