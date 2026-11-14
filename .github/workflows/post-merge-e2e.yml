@@ -1,25 +1,3 @@
-name: Post-Merge E2E
-
-on:
-  workflow_run:
-    workflows: ["Build and Push Image"]        # must exactly match `name:` in build-image.yml
-    branches: [main]                  # filter here, not in job `if` — see bluefin #545 lesson
-    types: [completed]
-  workflow_dispatch:
-    inputs:
-      expected_digest:
-        description: Digest :testing must resolve to (optional)
-        required: false
-
-permissions:
-  contents: read
-  statuses: write                     # publishes release/e2e commit status
-  packages: read
-
-concurrency:
-  group: post-merge-e2e
-  cancel-in-progress: false
-
 jobs:
   verify-manifest:
     name: Verify :testing manifest
@@ -47,6 +25,7 @@ jobs:
   testsuite:
     name: Run smoke suite
     needs: [verify-manifest]
+<<<<<<< Updated upstream
     runs-on: ubuntu-latest
     timeout-minutes: 120              # QEMU boots are slow; do NOT put this on a `uses:` job
     steps:
@@ -55,6 +34,12 @@ jobs:
         with:
           image: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:testing@${{ needs.verify-manifest.outputs.digest }}
           suites: smoke
+=======
+    uses: projectbluefin/testsuite/.github/workflows/run-testsuite.yml@b99ea284110b595b62d6e5b65fd2102afd271cf2
+    with:
+      image: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:testing@${{ needs.verify-manifest.outputs.digest }}
+      suites: smoke
+>>>>>>> Stashed changes
 
   publish-status:
     name: Publish E2E status on main HEAD
