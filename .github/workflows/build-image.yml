@@ -174,15 +174,6 @@ jobs:
             branch_tags+=("${candidate}")
           }
 
-          # --- FIX START ---
-          # Guarantee the default tag is present even when generate-tags omits it.
-          # This mirrors the production path's add_tag("${DEFAULT_TAG}") at the bottom
-          # and satisfies the contract that the mutable consumer tag is always published.
-          if [[ "${TAG_STREAM}" == "testing" ]]; then
-          add_tag "${DEFAULT_TAG}"   # "stable-testing"
-          fi
-          # --- FIX END ---
-
           for tag in "${generated_tags[@]}"; do
             if [[ "${TAG_STREAM}" == "testing" ]]; then
               # Create the versioned stable-testing tag
