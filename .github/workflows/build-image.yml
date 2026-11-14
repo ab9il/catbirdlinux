@@ -175,9 +175,11 @@ jobs:
           }
 
           # --- FIX START ---
-          # Always add the bare 'testing' tag for the promotion gate
+          # Guarantee the default tag is present even when generate-tags omits it.
+          # This mirrors the production path's add_tag("${DEFAULT_TAG}") at the bottom
+          # and satisfies the contract that the mutable consumer tag is always published.
           if [[ "${TAG_STREAM}" == "testing" ]]; then
-            add_tag "testing"
+          add_tag "${DEFAULT_TAG}"   # "stable-testing"
           fi
           # --- FIX END ---
 
