@@ -174,15 +174,23 @@ jobs:
             branch_tags+=("${candidate}")
           }
 
+          # --- FIX START ---
+          # Always add the bare 'testing' tag for the promotion gate
+          if [[ "${TAG_STREAM}" == "testing" ]]; then
+            add_tag "testing"
+          fi
+          # --- FIX END ---
+
           for tag in "${generated_tags[@]}"; do
             if [[ "${TAG_STREAM}" == "testing" ]]; then
-              # Bare :testing stays so the promotion release gate can resolve it.
-              [[ "${tag}" == "testing" ]] && add_tag "${tag}"
+              # Create the versioned stable-testing tag
               add_tag "${tag/testing/stable-testing}"
             else
               add_tag "${tag}"
             fi
           done
+
+          # Keep the default tag (e.g., :stable or :stable-testing)
           add_tag "${DEFAULT_TAG}"
 
           echo "tags=${branch_tags[*]}" >> "${GITHUB_OUTPUT}"
