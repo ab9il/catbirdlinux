@@ -30,6 +30,6 @@
     "core-js": "3.51.0",
     "gulp": "5.0.1",
     "rollup": "2.80.0",
-    "@rollup/plugin-terser": "0.1.0"
+    "@rollup/plugin-terser": "1.0.2"
   }
 }
