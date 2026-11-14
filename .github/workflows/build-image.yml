@@ -191,9 +191,6 @@ jobs:
           # Keep the default tag (e.g., :stable or :stable-testing)
           add_tag "${DEFAULT_TAG}"
 
-          # Keep the default tag (e.g., :stable or :stable-testing)
-          add_tag "${DEFAULT_TAG}"
-
           echo "tags=${branch_tags[*]}" >> "${GITHUB_OUTPUT}"
           echo "default-tag=${DEFAULT_TAG}" >> "${GITHUB_OUTPUT}"
 
