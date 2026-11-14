@@ -83,16 +83,6 @@ dnf5 install --setopt=install_weak_deps=False -y \
     "${FONTS[@]}" \
     "${ADDITIONAL_SYSTEM_APPS[@]}"
 
-# Remove excluded packages if they are installed
-if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
-    readarray -t INSTALLED_EXCLUDED < <(rpm -qa --queryformat='%{NAME}\n' "${EXCLUDED_PACKAGES[@]}" 2>/dev/null || true)
-    if [[ "${#INSTALLED_EXCLUDED[@]}" -gt 0 ]]; then
-        dnf5 -y remove "${INSTALLED_EXCLUDED[@]}"
-    else
-        echo "No excluded packages found to remove."
-    fi
-fi
-
 echo "::endgroup::"
 
 echo "::group:: Install niri and Noctalia"
