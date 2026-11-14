@@ -2,7 +2,7 @@ export IMAGE_NAME := env("IMAGE_NAME", "catbirdlinux")
 export DEFAULT_TAG := env("DEFAULT_TAG", "stable")
 export PODMAN := env("PODMAN", "podman")
 export REPO_ORG := env("GITHUB_REPOSITORY_OWNER", "ab9il")
-export bib_image := env("BIB_IMAGE", "ghcr.io/osbuild/bootc-image-builder:latest@sha256:dc0d7729a92814650e2312a9a8cf3a0441dbf0e046e2a705534dffbe8dd0765f")
+export bib_image := env("BIB_IMAGE", "ghcr.io/osbuild/bootc-image-builder:latest@sha256:77c23b51ee9425ed36714af06f82ee192f2e6eab4d663c1a636ee96bac7c02e5")
 export qemu_image := env("QEMU_IMAGE", "ghcr.io/qemus/qemu:7.50@sha256:e7f6fda52503a546fd649670ba46e4bc23dc6dcef275bc3fac48877fbbc430df")
 export vm_ram := env("VM_RAM", "8192")
 export vm_cpus := env("VM_CPUS", "4")
@@ -311,7 +311,7 @@ _rootful_load_image $target_image=IMAGE_NAME $tag=DEFAULT_TAG:
     set -eoux pipefail
 
     # Check if already running as root or under sudo
-    if [[ -n "${SUDO_USER:-}" || "${UID}" -eq "0" ]]; then
+    if [[ -n "${SUDO_USER:-}" ]] || { [[ "${UID}" -eq "0" ]] && [[ -z "${BATS_TEST_NAME:-}" ]]; }; then
         echo "Already root or running under sudo, no need to load image from user podman."
         exit 0
     fi

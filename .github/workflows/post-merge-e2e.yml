@@ -1,0 +1,51 @@
+jobs:
+  verify-manifest:
+    name: Verify :testing manifest
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    outputs:
+      digest: ${{ steps.resolve.outputs.digest }}
+    steps:
+      - name: Resolve :testing digest
+        id: resolve
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          digest=$(skopeo inspect --format '{{.Digest}}' \
+            docker://ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:testing)
+          echo "digest=${digest}" >> "${GITHUB_OUTPUT}"
+          expected="${{ inputs.expected_digest }}"
+          if [ -n "${expected}" ] && [ "${digest}" != "${expected}" ]; then
+            echo "::error:::testing serves ${digest}, expected ${expected}."
+            exit 1
+          fi
+
+  testsuite:
+    name: Run smoke suite
+    needs: [verify-manifest]
+    uses: projectbluefin/testsuite/.github/workflows/run-testsuite.yml@b99ea284110b595b62d6e5b65fd2102afd271cf2 # v1
+    with:
+      image: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:testing@${{ needs.verify-manifest.outputs.digest }}
+      suites: smoke
+
+  publish-status:
+    name: Publish E2E status on main HEAD
+    needs: [testsuite]
+    if: always() && needs.testsuite.result != 'cancelled'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set release/e2e commit status
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RESULT: ${{ needs.testsuite.result }}
+        run: |
+          set -euo pipefail
+          sha="$(gh api repos/${{ github.repository }}/commits/main --jq .sha)"
+          state=$([ "${RESULT}" = "success" ] && echo success || echo failure)
+          gh api -X POST "repos/${{ github.repository }}/statuses/${sha}" \
+            -f state="${state}" \
+            -f context="release/e2e" \
+            -f description="Post-merge E2E: ${RESULT}" \
+            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
