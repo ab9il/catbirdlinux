@@ -102,7 +102,7 @@ refute_logged() {
 @test "_rootful_load_image: exits without touching podman when SUDO_USER is set" {
 	run env SUDO_USER=someone \
 		just --justfile "${SANDBOX}/Justfile" --working-directory "${SANDBOX}" \
-		_rootful_load_image localhost/finpilot stable
+		_rootful_load_image localhost/catbirdlinux stable
 	[ "$status" -eq 0 ]
 	[[ "$output" == *"Already root or running under sudo"* ]]
 	[ ! -s "${PODMAN_LOG}" ]
@@ -111,18 +111,18 @@ refute_logged() {
 
 @test "_rootful_load_image: copies the user image to root when root holds a different ID" {
 	run_recipe just --justfile "${SANDBOX}/Justfile" --working-directory "${SANDBOX}" \
-		_rootful_load_image localhost/finpilot stable
+		_rootful_load_image localhost/catbirdlinux stable
 	[ "$status" -eq 0 ]
 
-	grep -qx 'user: inspect -t image localhost/finpilot:stable' "${PODMAN_LOG}"
-	grep -qx 'root: images -q --filter reference=localhost/finpilot:stable' "${PODMAN_LOG}"
-	grep -qx "root: image scp ${UID}@localhost::localhost/finpilot:stable root@localhost::localhost/finpilot:stable" "${PODMAN_LOG}"
+	grep -qx 'user: inspect -t image localhost/catbirdlinux:stable' "${PODMAN_LOG}"
+	grep -qx 'root: images -q --filter reference=localhost/catbirdlinux:stable' "${PODMAN_LOG}"
+	grep -qx "root: image scp ${UID}@localhost::localhost/catbirdlinux:stable root@localhost::localhost/catbirdlinux:stable" "${PODMAN_LOG}"
 	refute_logged ' pull ' "${PODMAN_LOG}"
 }
 
 @test "_rootful_load_image: escalates the scp with TMPDIR inside the repository" {
 	run_recipe just --justfile "${SANDBOX}/Justfile" --working-directory "${SANDBOX}" \
-		_rootful_load_image localhost/finpilot stable
+		_rootful_load_image localhost/catbirdlinux stable
 	[ "$status" -eq 0 ]
 
 	# The scp stages a full image export; /tmp is often a small tmpfs, so the
@@ -133,7 +133,7 @@ refute_logged() {
 
 @test "_rootful_load_image: removes its scp scratch directory after a successful copy" {
 	run_recipe just --justfile "${SANDBOX}/Justfile" --working-directory "${SANDBOX}" \
-		_rootful_load_image localhost/finpilot stable
+		_rootful_load_image localhost/catbirdlinux stable
 	[ "$status" -eq 0 ]
 
 	run compgen -G "${SANDBOX}/_build_podman_scp.*"
@@ -143,7 +143,7 @@ refute_logged() {
 @test "_rootful_load_image: does not copy when root already holds the same image ID" {
 	export STUB_ROOT_ID="${STUB_USER_ID}"
 	run_recipe just --justfile "${SANDBOX}/Justfile" --working-directory "${SANDBOX}" \
-		_rootful_load_image localhost/finpilot stable
+		_rootful_load_image localhost/catbirdlinux stable
 	[ "$status" -eq 0 ]
 
 	refute_logged 'image scp' "${PODMAN_LOG}"
@@ -155,11 +155,11 @@ refute_logged() {
 @test "_rootful_load_image: pulls into root when the image is not in the user store" {
 	export STUB_INSPECT_STATUS=125
 	run_recipe just --justfile "${SANDBOX}/Justfile" --working-directory "${SANDBOX}" \
-		_rootful_load_image ghcr.io/projectbluefin/finpilot stable
+		_rootful_load_image ghcr.io/ab9il/catbirdlinux stable
 	[ "$status" -eq 0 ]
 
-	grep -qx 'root: pull ghcr.io/projectbluefin/finpilot:stable' "${PODMAN_LOG}"
-	grep -qx 'podman pull ghcr.io/projectbluefin/finpilot:stable' "${SUDO_LOG}"
+	grep -qx 'root: pull ghcr.io/ab9il/catbirdlinux:stable' "${PODMAN_LOG}"
+	grep -qx 'podman pull ghcr.io/ab9il/catbirdlinux:stable' "${SUDO_LOG}"
 	refute_logged 'image scp' "${PODMAN_LOG}"
 	refute_logged '^root: images' "${PODMAN_LOG}"
 }
@@ -167,7 +167,7 @@ refute_logged() {
 @test "_rootful_load_image: fails when the escalated scp fails" {
 	export STUB_SCP_STATUS=1
 	run_recipe just --justfile "${SANDBOX}/Justfile" --working-directory "${SANDBOX}" \
-		_rootful_load_image localhost/finpilot stable
+		_rootful_load_image localhost/catbirdlinux stable
 	[ "$status" -ne 0 ]
 }
 

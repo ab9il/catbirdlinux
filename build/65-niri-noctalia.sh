@@ -26,7 +26,10 @@ echo "::group:: Install More Default Packages"
 copr_install_isolated "supervillain/i2pd" "i2pd"
 
 # From agriffis/neovim-nightly
-copr_install_isolated "villainy/neovim" "neovim python3-neovim"
+copr_install_isolated "agriffis/neovim-nightly" "neovim"
+
+# From agriffis/neovim-nightly
+copr_install_isolated "agriffis/neovim-nightly" "python3-neovim"
 
 # From lukasfr/ripgrep-all
 copr_install_isolated "lukasfr/ripgrep-all" "ripgrep-all"
