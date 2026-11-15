@@ -240,7 +240,9 @@ _Last updated: [2026-11-09]_
 Built with ❤️ on top of [Universal Blue](https://universal-blue.org) and [Bluefin](https://projectbluefin.io).
 
 - 💬 [Universal Blue Forums](https://universal-blue.discourse.group/)
-- 📖 [bootc Discussion](https://github.com/bootc-dev/bootc/discussions)
+- 💬 [Universal Blue Discord](https://discord.gg/WEu6BdFEtp)
+- 📖 [Bluefin Discussions](https://github.com/ublue-os/bluefin/discussions)
+- 📖 [Bootc Discussions](https://github.com/bootc-dev/bootc/discussions)
 - 📖 [Book: The Era of Atomic Linux](https://skywavelinux.com/atomic-linux)
 
 ### Learn more
