@@ -160,7 +160,6 @@ This image is based on [Project Bluefin](https://projectbluefin.io) and includes
   - Cosign (authentication keys for git, etc.)
   - Fzf / Ripgrep / terminal based search tools
   - Tor (The Onion Router)
-  - I2P (Invisible Internet Project)
   - Lazygit (git content manager)
   - Lf (file manager)
   - Neovim (text / code editor)
@@ -194,7 +193,6 @@ This image is based on [Project Bluefin](https://projectbluefin.io) and includes
   - Cosign (authentication keys for git, etc.)
   - Fzf / Ripgrep / terminal based search tools
   - Tor (The Onion Router)
-  - I2P (Invisible Internet Project)
   - Lazygit (git content manager)
   - Lf (file manager)
   - Neovim (text / code editor)

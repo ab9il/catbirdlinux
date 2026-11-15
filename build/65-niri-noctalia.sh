@@ -22,9 +22,6 @@ shopt -s nullglob
 
 echo "::group:: Install More Default Packages"
 
-# From supervillain/i2pd
-copr_install_isolated "supervillain/i2pd" "i2pd"
-
 # From agriffis/neovim-nightly
 copr_install_isolated "agriffis/neovim-nightly" "neovim"
 
