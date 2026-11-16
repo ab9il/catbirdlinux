@@ -29,6 +29,7 @@
 #    - `quay.io/fedora-ostree-desktops/base-atomic` (Fedora, no desktop)
 #    - `quay.io/centos-bootc/centos-bootc:stream10` (CentOS-based)
 #    - `quay.io/hummingbird-community/bootc-os` (Hummingbird-based, minimal)
+#    - `ghcr.io/ublue-os/base-main` (Fedora, no desktop)
 #
 # See: https://docs.projectbluefin.io/contributing/ for architecture diagram
 ###############################################################################
