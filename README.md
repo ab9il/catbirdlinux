@@ -32,7 +32,8 @@ you so choose.
 
 ### ✨ Key Pillars
 
-- 🐧 **Fedora Linux Core:** This base image uses [Fedora Hummingbird](https://fedoraproject.org/wiki/hummingbird).
+- 🐧 **Fedora Linux Core:** This base image uses [Fedora Silverblue](https://fedoraproject.org/atomic-desktops/silverblue/).
+- 🚀 **Enhancements from Project Bluefin:** Cloud-ready builds and deployment pipeline of [Project Bluefin](https://docs.projectbluefin.io/).
 - 🌀 **Scrollable Tiling**: Navigate windows on an infinite horizontal ribbon using Niri, augmented by the [Noctalia](https://github.com/noctalia-dev/noctalia) desktop shell.
 - 🛡️ **Frequent Security & Atomic Upgrades**: Images are rebuilt daily, pulling the latest upstream updates and packages. Updates apply atomically in the background.
 
