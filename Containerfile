@@ -26,7 +26,7 @@
 #
 # 2. Base Image Options (edit the FROM line below):
 #    - `quay.io/fedora-ostree-desktops/silverblue` (Fedora, GNOME desktop)
-#    - `quay.io/fedora-ostree-desktops/base-main` (Fedora, no desktop)
+#    - `quay.io/fedora-ostree-desktops/base-atomic` (Fedora, no desktop)
 #    - `quay.io/centos-bootc/centos-bootc:stream10` (CentOS-based)
 #    - `quay.io/hummingbird-community/bootc-os` (Hummingbird-based, minimal)
 #
@@ -50,7 +50,7 @@ COPY --from=brew /system_files /oci/brew
 
 # Base Image - GNOME included (Fedora official OSTree desktop)
 # Renovate will keep the digest pin up to date.
-FROM quay.io/fedora-ostree-desktops/silverblue:44@sha256:74172123c8f6f5dc0208ea3f4764906d358b33ff9469a9a6d67f25d7b4763bbb
+FROM ghcr.io/ublue-os/base-main:44-20261108.19@sha256:0c2505e41b61f2f08e58aad34c2d6c7ac982c54c9c27bbac74733ce894c0d310
 
 # Image identity - these define how bootc, fastfetch, and the ublue ecosystem
 # recognize your image. Change these to match your project name.
