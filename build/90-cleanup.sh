@@ -74,6 +74,9 @@ for repo_file in "${third_party_repo_files[@]}"; do
 	disable_repo_file "${repo_file}"
 done
 
+# Last chance disablement for repos not already caught
+dnf5 config-manager  --setopt=fedora-multimedia:enabled=0
+
 # Fail loudly rather than shipping a third-party repository that is still live.
 # Ask dnf which repositories are actually enabled, rather than pattern-matching
 # the .repo files: a repository that ships with no enabled= key is enabled by
