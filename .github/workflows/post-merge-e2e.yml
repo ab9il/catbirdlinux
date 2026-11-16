@@ -33,7 +33,7 @@ jobs:
   testsuite:
     name: Run smoke suite
     needs: [verify-manifest]
-    uses: projectbluefin/testsuite/.github/workflows/run-testsuite.yml@8b14d630a58f23defb79d2c6fdbdcd64c2fa429e # v1
+    uses: projectbluefin/testsuite/.github/workflows/run-testsuite.yml@65afdeb716f05c028baa3cb443be5317eae27b94 # v1
     with:
       image: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:testing@${{ needs.verify-manifest.outputs.digest }}
       suites: smoke
