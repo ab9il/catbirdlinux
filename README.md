@@ -6,8 +6,6 @@
 
 </div>
 
----
-
 ### 📖 About
 
 Catbird Linux is now adopting atomic / image-based architecture! It comes to
