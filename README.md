@@ -2,13 +2,13 @@
 
 # 🌊 Catbird Linux
 
-**An immutable, daily-built Wayland desktop powered by Niri, based on Bluefin.**
+## General Purpose Computing, Deshittified
 
 </div>
 
 ---
 
-## 📖 About
+### 📖 About
 
 Catbird Linux is now adopting atomic / image-based architecture! It comes to
 you as a bootc operating system image, assembled similarly to Bluefin and Bazzite,
@@ -72,7 +72,7 @@ sudo bootc rollback
 
 ---
 
-## 🪟 Niri & Noctalia
+### 🪟 Niri & Noctalia
 
 [**Niri**](https://github.com/YaLTeR/niri) abandons the standard grid layout for a scrollable horizontal workspace. Windows never shrink uncontrollably; instead, they tile into columns that you can scroll through effortlessly.
 
@@ -83,9 +83,9 @@ To make the system immediately usable, `Catbird Linux` pairs Niri with **Noctali
 
 ---
 
-## 🏗️ Under the Hood
+### 🏗️ Under the Hood
 
-### Repository Structure
+#### Repository Structure
 
 ```text
 catbirdlinux/
@@ -99,7 +99,7 @@ catbirdlinux/
 └── tests/                  # build0time quality and integrity tests
 ```
 
-### Image Authenticity and Signing
+#### Image Authenticity and Signing
 
 Images are signed with keyless OIDC via Cosign and GitHub Actions. There is no
 key to generate or store.
@@ -142,46 +142,6 @@ catcatbirdtall before shipping it: a scope that does not match turns `bootc upgr
 into a hard refusal. `tests/contract/image-signing_test.bats` holds the two
 sides together, so changing one without the other fails the suite.
 
----
-
-#### History
-
-The Project began in 2019 as "Pemmican Linux" for web scraping and data science. It encompassed several successive respins of Linux Mint, Ubuntu, and Debian, and expanded in scope to include web development and media creation tools. Original distribution was via bit torrents and traditional iso files. It carried tools useful for data science, open source intelligence gathering, and creating multimedia content.
-
-This is the fourth generation of Catbird Linux. Since adopting image-based Linux architecture and containerized / universal application packaging, it is a system which can truly operate on the frontiers of general purpose computing. The system is now distributed as a lightweight bootc image, and users install whatever software they want via Flatpaks, AppImages, Homebrew, or Docker images.
-
-### What Makes this System Different?
-
-This image is based on [Project Bluefin](https://projectbluefin.io) and includes these customizations:
-
-#### Added Applications (Runtime):
-
-- **CLI tools (Homebrew)**:
-  - Extra bling and conveniences for the Bash shell
-  - Cosign (authentication keys for git, etc.)
-  - Fzf / Ripgrep / terminal based search tools
-  - Tor (The Onion Router)
-  - Lazygit (git content manager)
-  - Lf (file manager)
-  - Neovim (text / code editor)
-  - Sshuttle (ssh based tunneling / VPN)
-  - Uv (Python manager)
-- **GUI apps (Flatpak)**:
-  - Audacity (audio editor)
-  - Bleachbit (system cleaner)
-  - Bottles (run Windows apps)
-  - Brave (web browser)
-  - GIMP (image editor)
-  - LibreOffice (office suite)
-  - Obsidian (Markdown based note-taking)
-  - Shotcut (video editor)
----
-
-#### History
-
-The Project began in 2019 as "Pemmican Linux" for web scraping and data science. It encompassed several successive respins of Linux Mint, Ubuntu, and Debian, and expanded in scope to include web development and media creation tools. Original distribution was via bit torrents and traditional iso files. It carried tools useful for data science, open source intelligence gathering, and creating multimedia content.
-
-This is the fourth generation of Catbird Linux. Since adopting image-based Linux architecture and containerized / universal application packaging, it is a system which can truly operate on the frontiers of general purpose computing. The system is now distributed as a lightweight bootc image, and users install whatever software they want via Flatpaks, AppImages, Homebrew, or Docker images.
 
 ### What Makes this System Different?
 
@@ -236,7 +196,13 @@ This image is based on [Project Bluefin](https://projectbluefin.io) and includes
 
 _Last updated: [2026-11-09]_
 
-## 🤝 Community & Support
+### History
+
+The Project began in 2019 as "Pemmican Linux" for web scraping and data science. It encompassed several successive respins of Linux Mint, Ubuntu, and Debian, and expanded in scope to include web development and media creation tools. Original distribution was via bit torrents and traditional iso files. It carried tools useful for data science, open source intelligence gathering, and creating multimedia content.
+
+This is the fourth generation of Catbird Linux. Since adopting image-based Linux architecture and containerized / universal application packaging, it is a system which can truly operate on the frontiers of general purpose computing. The system is now distributed as a lightweight bootc image, and users install whatever software they want via Flatpaks, AppImages, Homebrew, or Docker images.
+
+### 🤝 Community & Support
 
 Built with ❤️ on top of [Universal Blue](https://universal-blue.org) and [Bluefin](https://projectbluefin.io).
 
