@@ -20,8 +20,18 @@ echo "::group:: Finalise package repositories"
 # Revert the build-time dnf settings the Containerfile installs. Removing the
 # keys, rather than overwriting one, leaves the base image's dnf.conf as it was,
 # so packages installed on top of the image still pull in weak dependencies.
+calls=()
 dnf5 config-manager unsetopt keepcache install_weak_deps
+calls+=("unsetopt keepcache install_weak_deps")
+
 dnf5 versionlock clear
+calls+=("versionlock clear")
+
+# Optional: assert in the script itself
+if [ "${#calls[@]}" -ne 2 ]; then
+    echo "::error::Expected exactly 2 dnf5 config-manager calls" >&2
+    exit 1
+fi
 
 # Disable every third-party repository. copr_install_isolated already disables
 # each COPR it uses; this is the backstop for anything else the build enabled.
