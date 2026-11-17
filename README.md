@@ -6,7 +6,7 @@
 
 </div>
 
-### 📖 About
+### 📖 About this New Way of Building an Operating System
 
 Catbird Linux is now adopting atomic / image-based architecture! It comes to
 you as a bootc operating system image, assembled similarly to Bluefin and Bazzite,
@@ -28,7 +28,7 @@ you so choose.
 
 </div>
 
-### ✨ Key Pillars
+### ✨ What Makes this System Different?
 
 - 🐧 **Fedora Linux Core:** This base image uses [Fedora Silverblue](https://fedoraproject.org/atomic-desktops/silverblue/).
 - 🚀 **Enhancements from Project Bluefin:** Cloud-ready builds and deployment pipeline of [Project Bluefin](https://docs.projectbluefin.io/).
@@ -141,7 +141,7 @@ into a hard refusal. `tests/contract/image-signing_test.bats` holds the two
 sides together, so changing one without the other fails the suite.
 
 
-### What Makes this System Different?
+### Customizations
 
 This image is based on [Project Bluefin](https://projectbluefin.io) and includes these customizations:
 
