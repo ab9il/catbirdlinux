@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Note Sorter
+Name[en]=Note Sorter
+GenericName=Search and sort your notes.
+Comment=Search and sort markdown notes.
+Icon=utilities-terminal
+Exec=note-sorter --gui
+Terminal=true
+Categories=Text;Editor;Programming
+MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
