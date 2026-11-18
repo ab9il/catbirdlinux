@@ -44,6 +44,7 @@ FONTS=(
     fira-code-fonts
     fontawesome-fonts-all
     google-noto-emoji-fonts
+    levien-inconsolata-fonts
     polarsys-b612-fonts
 )
 
@@ -60,7 +61,7 @@ ADDITIONAL_SYSTEM_APPS=(
     ripgrep
     sshuttle
     tor
-	wl-clipboard
+    wl-clipboard
     # --- software-defined-radio ---
     hackrf
     hackrf-devel
