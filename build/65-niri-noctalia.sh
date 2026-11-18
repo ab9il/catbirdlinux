@@ -52,6 +52,7 @@ ADDITIONAL_SYSTEM_APPS=(
     aria2
     bat
     cliphist
+    distrobox
     fuzzel
     glow
     pandoc
