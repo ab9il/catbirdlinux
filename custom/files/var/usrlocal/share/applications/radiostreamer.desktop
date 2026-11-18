@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Internet Radio Playlist
+GenericName=Internet Radio Playlist
+Comment=Open an internet radio stream
+Exec=radiostreamer --gui
+Icon=applications-internet
+Terminal=false
+Type=Application
+Categories=AudioVideo;Player;Recorder;Network

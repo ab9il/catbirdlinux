@@ -10,4 +10,18 @@
 # This script makes it easy to sort and search a large volume of notes
 # and find files according to name or internal text.
 
-/home/linuxbrew/.linuxbrew/bin/lf -command 'set hidden false' ~/Documents/Notes/
+
+CLI_COMMAND1=(lf -command "set hidden false" "$HOME/Documents/Notes/")
+GUI_COMMAND1=(ptyxis --new-window -e lf -command "set hidden false" "$HOME/Documents/Notes/")
+
+case "$1" in
+--gui)
+    COMMAND1=("${GUI_COMMAND1[@]}")
+    ;;
+*)
+    COMMAND1=("${CLI_COMMAND1[@]}")
+    ;;
+esac
+
+"${COMMAND1[@]}"
+

@@ -365,9 +365,10 @@ binds {
     Mod+T hotkey-overlay-title="Open a Terminal: Ptyxis" { spawn "ptyxis"; }
     Ctrl+Alt+T hotkey-overlay-title="Open a Terminal: Ptyxis" { spawn "ptyxis"; }
     Mod+Return hotkey-overlay-title="Open a Terminal: Ptyxis" { spawn "ptyxis"; }
-    Mod+B hotkey-overlay-title="Run an Application: Vivaldi" { spawn-sh "flatpak run com.vivaldi.Vivaldi"; }
-    // Mod+B hotkey-overlay-title="Run an Application: Brave" { spawn-sh "flatpak run com.brave.Browser"; }
-    Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
+    // Mod+B hotkey-overlay-title="Run an Application: Vivaldi" { spawn-sh "flatpak run com.vivaldi.Vivaldi"; }
+    Mod+B hotkey-overlay-title="Run an Application: Brave" { spawn-sh "flatpak run com.brave.Browser"; }
+    Mod+D hotkey-overlay-title="Run an Application: Fuzzel" { spawn "fuzzel"; }
+    Mod+Space hotkey-overlay-title="Open the App Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     Mod+E hotkey-overlay-title="Open a File Manager: Nautilus" { spawn "nautilus"; }
 

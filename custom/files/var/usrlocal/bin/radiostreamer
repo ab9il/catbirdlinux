@@ -7,6 +7,8 @@
 # (at your option) any later version. There is NO warranty; not even for
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
+# Run this script as a regular user
+
 PLAYER="ffplay" # use mpv, ffplay, or cvlc
 STREAMS_FILE="$HOME/.config/radiostreams"
 OPTION1="Connect Internet Radio Stream"
@@ -14,18 +16,18 @@ OPTION2="Stop Streaming"
 OPTION3="Edit Station List"
 OPTIONS="$OPTION1\n$OPTION2\n$OPTION3"
 FZF_COMMAND1='fzf --layout=reverse --header=Select:'
-ROFI_COMMAND1='rofi -dmenu -l 3 -p Select'
+FUZZEL_COMMAND1='fuzzel -d -w 50 -l 3 -p Select'
 FZF_COMMAND2='fzf --layout=reverse --header=Select:'
-ROFI_COMMAND2='rofi -dmenu -p Select'
-FZF_COMMAND3="vim $STREAMS_FILE"
-ROFI_COMMAND3="x-terminal-emulator -e vim $STREAMS_FILE"
+FUZZEL_COMMAND2='fuzzel -d -p Select'
+FZF_COMMAND3="$EDITOR $STREAMS_FILE"
+FUZZEL_COMMAND3="ptyxis --new-window -e $EDITOR $STREAMS_FILE"
 
 # interface based on commandline arguments
 case "$1" in
-gui)
-    COMMAND1=$ROFI_COMMAND1
-    COMMAND2=$ROFI_COMMAND2
-    COMMAND3=$ROFI_COMMAND3
+--gui)
+    COMMAND1=$FUZZEL_COMMAND1
+    COMMAND2=$FUZZEL_COMMAND2
+    COMMAND3=$FUZZEL_COMMAND3
     ;;
 *)
     COMMAND1=$FZF_COMMAND1
