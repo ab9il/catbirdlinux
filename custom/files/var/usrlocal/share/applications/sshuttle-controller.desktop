@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Comment=SSH Tunneling application for unblocked internet access.
+Name=Sshuttle
+Exec=sshuttle-controller --gui
+Categories=Network;Internet;Networking;Privacy;sshuttle;VPN;proxy;
+Icon=applications-internet
+NoDisplay=false
+StartupNotify=false
+Terminal=true
+TerminalOptions=

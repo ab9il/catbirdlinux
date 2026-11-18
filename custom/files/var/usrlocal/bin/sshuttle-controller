@@ -16,12 +16,12 @@ CONFIGFILE="$HOME/.ssh/config"
 PIDFILE="/tmp/sshuttle.pid"
 IPTABLES_BACKUP="/tmp/iptables.backup"
 
-ROFI_COMMAND1='rofi -dmenu -p Select -l 3'
+FUZZEL_COMMAND1='fuzzel -d -p Select -l 3'
 FZF_COMMAND1='fzf --layout=reverse --header=Select:'
-ROFI_COMMAND2='rofi -dmenu -p Select'
+FUZZEL_COMMAND2='fuzzel -d -p Select'
 FZF_COMMAND2='fzf --layout=reverse --header=Select:'
-FZF_COMMAND3="vim $CONFIGFILE"
-ROFI_COMMAND3="x-terminal-emulator -e vim $CONFIGFILE"
+FZF_COMMAND3="$EDITOR $CONFIGFILE"
+FUZZEL_COMMAND3="ptyxis --new-window -e $EDITOR $CONFIGFILE"
 
 edit_data(){
     $COMMAND3
@@ -33,7 +33,7 @@ echo -e "\nSSH Tunnel manager (using sshuttle).
 Note:  You MUST set up key based logins on the servers.
 
 Usage: $0 <option>
-Options:    gui     Graphical user interface.
+Options:    --gui     Graphical user interface.
             --help  This help screen.\n"
 }
 
@@ -68,10 +68,10 @@ case "$1" in
         COMMAND2=$FZF_COMMAND2
         COMMAND3=$FZF_COMMAND3
         ;;
-    "gui")
-        COMMAND1=$ROFI_COMMAND1
-        COMMAND2=$ROFI_COMMAND2
-        COMMAND3=$ROFI_COMMAND3
+    "--gui")
+        COMMAND1=$FUZZEL_COMMAND1
+        COMMAND2=$FUZZEL_COMMAND2
+        COMMAND3=$FUZZEL_COMMAND3
         ;;
     *)
         showhelp
