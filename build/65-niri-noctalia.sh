@@ -25,6 +25,9 @@ echo "::group:: Install More Default Packages"
 # From agriffis/neovim-nightly
 copr_install_isolated "agriffis/neovim-nightly" "neovim"
 
+# From che/nerd-fonts
+copr_install_isolated "che/nerd-fonts" "nerd-fonts"
+
 # From agriffis/neovim-nightly
 copr_install_isolated "agriffis/neovim-nightly" "python3-neovim"
 
