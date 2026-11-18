@@ -31,8 +31,12 @@ Branch=stable
 # [Flatpak Preinstall io.github.flattool.Warehouse]
 # Branch=stable
 
-# Audacity (audio editor))
+# Audacity (audio editor)
 [Flatpak Preinstall org.audacityteam.Audacity]
+Branch=stable
+
+# Bazaar (Flatpak manager)
+[Flatpak Preinstall io.github.kolunmi.Bazaar]
 Branch=stable
 
 # Bleachbit (system cleaner)
@@ -45,6 +49,10 @@ Branch=stable
 
 # Brave (web browser)
 [Flatpak Preinstall com.brave.Browser]
+Branch=stable
+
+# DistroShelf (container manager)
+[Flatpak Preinstall com.ranfdev.DistroShelf]
 Branch=stable
 
 # GIMP (photo editor)
