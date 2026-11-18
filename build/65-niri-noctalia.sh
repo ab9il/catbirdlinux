@@ -25,6 +25,9 @@ echo "::group:: Install More Default Packages"
 # From agriffis/neovim-nightly
 copr_install_isolated "agriffis/neovim-nightly" "neovim"
 
+# From che/nerd-fonts
+copr_install_isolated "che/nerd-fonts" "nerd-fonts"
+
 # From agriffis/neovim-nightly
 copr_install_isolated "agriffis/neovim-nightly" "python3-neovim"
 
@@ -41,6 +44,7 @@ FONTS=(
     fira-code-fonts
     fontawesome-fonts-all
     google-noto-emoji-fonts
+    levien-inconsolata-fonts
     polarsys-b612-fonts
 )
 
@@ -57,7 +61,7 @@ ADDITIONAL_SYSTEM_APPS=(
     ripgrep
     sshuttle
     tor
-	wl-clipboard
+    wl-clipboard
     # --- software-defined-radio ---
     hackrf
     hackrf-devel
