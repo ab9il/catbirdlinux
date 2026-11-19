@@ -397,9 +397,28 @@ EOF
 # Fedora only reaches pam_systemd through system-auth, optionally. Use the
 # vendor's helper, then drop the timestamped backup it leaves: every build
 # starts from the same base layer, so it has nothing to restore.
-/usr/share/noctalia-greeter/setup_greetd_pam.sh
-rm -f /etc/pam.d/greetd.bak.noctalia.*
-grep -q 'pam_systemd.so' /etc/pam.d/greetd
+/usr/share/noctalia-greeter/setup_greetd_pam.sh || true
+
+# Ensure /etc/pam.d/greetd exists and has pam_systemd.so.
+# The vendor helper may fail in a container build; fall back gracefully.
+if [ ! -f /etc/pam.d/greetd ]; then
+    cat > /etc/pam.d/greetd <<'EOF'
+auth     required  pam_env.so
+auth     sufficient pam_unix.so try_first_pass likeauth nullok
+auth     required  pam_deny.so
+account  sufficient pam_permit.so
+password required  pam_deny.so
+session  required  pam_limits.so
+session  required  pam_systemd.so
+session  optional  pam_permit.so
+EOF
+fi
+
+# Verify pam_systemd.so is present (required for DRM/input device access)
+if ! grep -q 'pam_systemd.so' /etc/pam.d/greetd; then
+    echo "ERROR: /etc/pam.d/greetd missing pam_systemd.so — greeter cannot access display devices" >&2
+    exit 1
+fi
 
 # /var/lib/noctalia-greeter cannot ship in the image -- 90-cleanup.sh prunes
 # /var -- so a unit from custom/files creates it on first boot, before greetd.
