@@ -159,9 +159,12 @@ This image is based on [Project Bluefin](https://projectbluefin.io) and includes
   - Uv (Python manager)
 - **GUI apps (Flatpak)**:
   - Audacity (audio editor)
+  - Bazaar (Flatpak manager)
   - Bleachbit (system cleaner)
   - Bottles (run Windows apps)
   - Brave (web browser)
+   - DistroShelf (container manager)
+  - Filezilla (ftp client)
   - GIMP (image editor)
   - LibreOffice (office suite)
   - Obsidian (Markdown based note-taking)
