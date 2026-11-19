@@ -55,6 +55,10 @@ Branch=stable
 [Flatpak Preinstall com.ranfdev.DistroShelf]
 Branch=stable
 
+# Filezilla (ftp client)
+[Flatpak Preinstall org.filezillaproject.Filezilla]
+Branch=stable
+
 # GIMP (photo editor)
 [Flatpak Preinstall org.gimp.GIMP]
 Branch=stable
