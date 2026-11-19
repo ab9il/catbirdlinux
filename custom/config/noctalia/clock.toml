@@ -1,0 +1,4 @@
+[widget.clock]
+format = "%Y/%m/%d  %H:%M:%S"
+scale = 1.1000000000000001
+
