@@ -92,9 +92,9 @@ echo "::group:: Install niri and Noctalia"
 # xwayland-satellite is niri's hard requirement today; named anyway, because a
 # demotion to Recommends would silently drop X11 support.
 NIRI_PKGS=(
-	niri
-	noctalia
-	sound-theme-freedesktop
+    niri
+    noctalia
+    sound-theme-freedesktop
     xwayland-satellite
 )
 dnf5 install -y "${NIRI_PKGS[@]}"
@@ -107,14 +107,14 @@ echo "::group:: Install session support packages"
 # Noctalia's screenshot panel shell out to. ddcutil drives brightness on
 # external monitors; gnome-keyring-pam unlocks the keyring at login.
 SESSION_SUPP_PKGS=(
-	brightnessctl
-	ddcutil
-	gnome-keyring
-	gnome-keyring-pam
-	grim
-	playerctl
-	slurp
-	upower
+    brightnessctl
+    ddcutil
+    gnome-keyring
+    gnome-keyring-pam
+    grim
+    playerctl
+    slurp
+    upower
     blueman
     bluez
     bluez-tools
@@ -207,23 +207,23 @@ echo "::group:: Install the greeter"
 #                rebase fail here until someone verifies the new key, which is
 #                the point: a rotated trust root should be a decision.
 declare -A TERRA_KEY_FINGERPRINTS=(
-	[43]="47F7A5060E38FC07F674D11BE43DBFE05C4F92A3"
-	[44]="AE09157A4DE88B497EA1D5D300CDAB43DE226D6F"
-	[45]="C2AC02124AF114F086592E3C8DDE7D14C1C23D8C"
+    [43]="47F7A5060E38FC07F674D11BE43DBFE05C4F92A3"
+    [44]="AE09157A4DE88B497EA1D5D300CDAB43DE226D6F"
+    [45]="C2AC02124AF114F086592E3C8DDE7D14C1C23D8C"
 )
 
 FEDORA_MAJOR="$(sed -nE 's/^VERSION_ID=([0-9]+)$/\1/p' /usr/lib/os-release)"
 if [[ -z "${FEDORA_MAJOR}" ]]; then
-	echo "ERROR: could not read VERSION_ID from /usr/lib/os-release" >&2
-	exit 1
+    echo "ERROR: could not read VERSION_ID from /usr/lib/os-release" >&2
+    exit 1
 fi
 
 EXPECTED_FINGERPRINT="${TERRA_KEY_FINGERPRINTS[${FEDORA_MAJOR}]:-}"
 if [[ -z "${EXPECTED_FINGERPRINT}" ]]; then
-	echo "ERROR: no pinned Terra signing key for Fedora ${FEDORA_MAJOR}." >&2
-	echo "       Verify https://repos.fyralabs.com/terra${FEDORA_MAJOR}/key.asc and add" >&2
-	echo "       its fingerprint to TERRA_KEY_FINGERPRINTS in this script." >&2
-	exit 1
+    echo "ERROR: no pinned Terra signing key for Fedora ${FEDORA_MAJOR}." >&2
+    echo "       Verify https://repos.fyralabs.com/terra${FEDORA_MAJOR}/key.asc and add" >&2
+    echo "       its fingerprint to TERRA_KEY_FINGERPRINTS in this script." >&2
+    exit 1
 fi
 
 TERRA_KEY_FILE="/etc/pki/rpm-gpg/RPM-GPG-KEY-terra"
@@ -231,19 +231,19 @@ TERRA_GPG_HOME="$(mktemp -d)"
 trap 'rm -rf -- "${TERRA_GPG_HOME}"' EXIT
 
 curl --fail --retry 3 --silent --show-error --location \
-	--proto '=https' --proto-redir '=https' \
-	--output "${TERRA_KEY_FILE}" \
-	"https://repos.fyralabs.com/terra${FEDORA_MAJOR}/key.asc"
+    --proto '=https' --proto-redir '=https' \
+    --output "${TERRA_KEY_FILE}" \
+    "https://repos.fyralabs.com/terra${FEDORA_MAJOR}/key.asc"
 
 ACTUAL_FINGERPRINT="$(gpg --batch --homedir "${TERRA_GPG_HOME}" \
-	--show-keys --with-colons "${TERRA_KEY_FILE}" |
-	awk -F: '$1 == "fpr" { print $10; exit }')"
+    --show-keys --with-colons "${TERRA_KEY_FILE}" |
+    awk -F: '$1 == "fpr" { print $10; exit }')"
 
 if [[ "${ACTUAL_FINGERPRINT}" != "${EXPECTED_FINGERPRINT}" ]]; then
-	echo "ERROR: Terra signing key fingerprint mismatch for Fedora ${FEDORA_MAJOR}" >&2
-	echo "       expected ${EXPECTED_FINGERPRINT}" >&2
-	echo "       got      ${ACTUAL_FINGERPRINT:-<none>}" >&2
-	exit 1
+    echo "ERROR: Terra signing key fingerprint mismatch for Fedora ${FEDORA_MAJOR}" >&2
+    echo "       expected ${EXPECTED_FINGERPRINT}" >&2
+    echo "       got      ${ACTUAL_FINGERPRINT:-<none>}" >&2
+    exit 1
 fi
 
 cat >/etc/yum.repos.d/terra.repo <<EOF
@@ -279,11 +279,11 @@ EXCLUDED_PACKAGES=(
     fedora-chromium-config-gnome
     firefox
     firefox-langpacks
-	gdm
-	gnome-control-center
-	gnome-classic-session
+    gdm
+    gnome-control-center
+    gnome-classic-session
     gnome-extensions-app
-	gnome-initial-setup
+    gnome-initial-setup
     gnome-session
     gnome-session-wayland-session
     gnome-shell
@@ -315,8 +315,8 @@ echo "::group:: Verify the desktop is coherent"
 
 test -f /usr/share/wayland-sessions/niri.desktop
 if compgen -G "/usr/share/wayland-sessions/gnome*.desktop" >/dev/null; then
-	echo "ERROR: a GNOME session entry survived the removal" >&2
-	exit 1
+    echo "ERROR: a GNOME session entry survived the removal" >&2
+    exit 1
 fi
 
 # niri speaks Mutter's ScreenCast D-Bus API, so the GNOME portal backend stays
@@ -347,7 +347,7 @@ test -d /usr/share/themes/adw-gtk3-dark
 # Whole directory rather than a filename, so it follows the seam and not one
 # file; a fork that ships no Noctalia defaults has nothing to check.
 if [[ -d /etc/skel/.config/noctalia ]]; then
-	noctalia config validate /etc/skel/.config/noctalia
+    noctalia config validate /etc/skel/.config/noctalia
 fi
 
 # custom/files placed the config during the overlay phase; this is the first
