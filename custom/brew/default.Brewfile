@@ -3,6 +3,8 @@
 # Users install via: ujust install-default-apps
 
 brew "cosign"
+brew "fd"
 brew "lazygit"
 brew "lf"
+brew "npm"
 brew "uv"
