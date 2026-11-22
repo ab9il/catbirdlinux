@@ -31,7 +31,7 @@ jobs:
         uses: projectbluefin/actions/bootc-build/ghcr-cleanup@9eccc77361d4e1bdc8c412dd3b6573d8680d2246 # v1
         with:
           packages: ${{ steps.package.outputs.name }}
-          older-than: 7 days
+          older-than: 90 days
           keep-n-tagged: 7
           keep-n-untagged: 7
           github-token: ${{ secrets.GITHUB_TOKEN }}
