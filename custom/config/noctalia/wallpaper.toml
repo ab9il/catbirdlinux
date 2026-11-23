@@ -1,0 +1,7 @@
+[wallpaper]
+directory = "/usr/share/backgrounds/"
+directory_dark = "/usr/share/backgrounds/"
+directory_light = "/usr/share/backgrounds/"
+
+[wallpaper.default]
+path = "/usr/share/backgrounds/fedora-workstation/montclair_dark.webp"
