@@ -14,6 +14,7 @@ set -euo pipefail
 
 CLEAN_ROOT="${CLEAN_ROOT:-/}"
 REPOS_DIR="${CLEAN_ROOT}/etc/yum.repos.d"
+REPOS_DIR="${REPOS_DIR//#\//\/}" # Replace // with /
 
 echo "::group:: Finalise package repositories"
 
