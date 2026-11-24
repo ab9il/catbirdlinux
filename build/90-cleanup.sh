@@ -13,7 +13,9 @@ set -euo pipefail
 ###############################################################################
 
 CLEAN_ROOT="${CLEAN_ROOT:-/}"
-REPOS_DIR="/etc/yum.repos.d"
+CLEAN_ROOT="${CLEAN_ROOT%/}"        # strip trailing slash; "/" becomes ""
+CLEAN_ROOT="${CLEAN_ROOT//\/\//\/}" # collapse any doubled slashes
+REPOS_DIR="${CLEAN_ROOT}/etc/yum.repos.d"
 
 echo "::group:: Finalise package repositories"
 
@@ -65,12 +67,32 @@ for repo_file in "${third_party_repo_files[@]}"; do
     third_party_unique+=("${repo_file}")
 done
 
-# Remove detected third-party repo files.
-for repo_file in "${third_party_unique[@]}"; do
-    if [[ -f "${repo_file}" ]]; then
-        echo "Removing third-party repo file: ${repo_file}"
-        rm -f "${repo_file}"
+# Never remove a file that provides one of Fedora's own repository ids, even if
+# the ownership heuristic misfires (no rpmdb, chroot, or a repo bundled into
+# fedora-repos such as fedora-multimedia).
+first_party_basenames=(
+    fedora updates fedora-updates fedora-cisco-openh264
+    fedora-updates-archive updates-archive
+)
+
+is_first_party() {
+    local base="${1##*/}"
+    base="${base%.repo}"
+    local name
+    for name in "${first_party_basenames[@]}"; do
+        [[ "${base}" == "${name}" ]] && return 0
+    done
+    return 1
+}
+
+for repo_file in "${third_party_repo_files[@]}"; do
+    [[ -f "${repo_file}" ]] || continue
+    if is_first_party "${repo_file}"; then
+        echo "Preserving first-party repository file: ${repo_file}"
+        continue
     fi
+    echo "Removing third-party repo file: ${repo_file}"
+    rm -f "${repo_file}"
 done
 
 # Fail loudly rather than shipping a third-party repository that is still live.
