@@ -45,7 +45,7 @@ third_party_repo_files=(
     "${REPOS_DIR}"/_copr_*.repo
     "${REPOS_DIR}"/rpmfusion-*.repo
 )
-for repo_name in fedora-multimedia tailscale fedora-cisco-openh264 fedora-coreos-pool; do
+for repo_name in tailscale fedora-cisco-openh264 fedora-coreos-pool; do
     third_party_repo_files+=("${REPOS_DIR}/${repo_name}.repo")
 done
 
@@ -72,7 +72,7 @@ done
 # fedora-repos such as fedora-multimedia).
 first_party_basenames=(
     fedora updates fedora-updates fedora-cisco-openh264
-    fedora-updates-archive updates-archive
+    fedora-updates-archive updates-archive fedora-multimedia
 )
 
 is_first_party() {
