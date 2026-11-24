@@ -34,8 +34,9 @@ setup() {
 	touch "${SANDBOX}/.gitkeep"
 	touch "${SANDBOX}/run/dnf/state"
 
-	# One repository file per shape the script disables, plus a Fedora repo it
-	# must leave alone.
+	# One repository file per shape the script disables and leaves alone.
+	# All are written with explicit enabled=1 so deletion (not sed rewrite)
+	# is the thing being tested.
 	printf '[copr]\nenabled=1\n' \
 		>"${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo"
 	printf '[rpmfusion]\nenabled=1\n' >"${REPOS_DIR}/rpmfusion-free.repo"
@@ -75,11 +76,14 @@ EOF
 	chmod +x "${STUB_BIN}/mountpoint"
 
 	# rpm(1) classifies a .repo file as base-owned only when an installed RPM
-	# owns it. fedora.repo is provided by fedora-repos; every file the build
-	# added (copr, addrepo, curl) is unowned, so ownership says third-party.
+	# owns it. fedora.repo and fedora-multimedia.repo are provided by
+	# fedora-repos; every file the build added (copr, addrepo, curl) is unowned,
+	# so ownership says third-party.
 	cat >"${STUB_BIN}/rpm" <<'EOF'
 #!/usr/bin/bash
-[[ "$(basename "$2")" == "fedora.repo" ]] && exit 0
+case "$(basename "$2")" in
+  fedora.repo|fedora-multimedia.repo) exit 0 ;;
+esac
 exit 1
 EOF
 	chmod +x "${STUB_BIN}/rpm"
@@ -137,30 +141,29 @@ run_cleanup() {
 	[ ! -e "${SANDBOX}/usr/lib/systemd/system/flatpak-add-fedora-repos.service" ]
 }
 
-@test "90-cleanup: disables every third-party repository and leaves Fedora's alone" {
+@test "90-cleanup: removes every third-party repository and leaves Fedora's alone" {
 	run_cleanup
 	[ "$status" -eq 0 ]
 
-	# grep -q '^enabled=0' "${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo"
-	# grep -q '^enabled=0' "${REPOS_DIR}/rpmfusion-free.repo"
-	# grep -q '^enabled=0' "${REPOS_DIR}/fedora-multimedia.repo"
+	[ ! -e "${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo" ]
+	[ ! -e "${REPOS_DIR}/rpmfusion-free.repo" ]
+	[ ! -e "${REPOS_DIR}/fedora-multimedia.repo" ]
+	[ -f "${REPOS_DIR}/fedora.repo" ]
 	grep -q '^enabled=1' "${REPOS_DIR}/fedora.repo"
 }
 
-@test "90-cleanup: leaves an already-disabled third-party repository disabled" {
+@test "90-cleanup: removes an already-disabled third-party repository" {
 	printf '[copr]\nenabled=0\n' \
 		>"${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo"
 
 	run_cleanup
 	[ "$status" -eq 0 ]
-
-	# grep -q '^enabled=0' "${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo"
+	[ ! -e "${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo" ]
 }
 
-@test "90-cleanup: fails the build when sed cannot rewrite a third-party repository" {
-	# This covers the sed failure under set -e, not the final guard. The build must never ship a live third-party repository, so a repository
-	# the script cannot rewrite is a hard failure. sed -i needs a writable
-	# directory rather than a writable file, and root bypasses permissions.
+@test "90-cleanup: fails the build when a third-party repository cannot be removed" {
+	# Deletion needs write permission on the containing directory. A directory
+	# that cannot be written must fail the build rather than ship a live repo.
 	[ "$(id -u)" -ne 0 ] || skip "file permissions do not apply to root"
 	chmod 500 "${REPOS_DIR}"
 
@@ -169,7 +172,7 @@ run_cleanup() {
 	chmod 700 "${REPOS_DIR}"
 }
 
-@test "90-cleanup: disables third-party repositories whatever spelling enables them" {
+@test "90-cleanup: removes third-party repositories whatever spelling enables them" {
 	printf '[copr]\nenabled = 1\n' \
 		>"${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo"
 	printf '[rpmfusion]\nenabled=true\n' >"${REPOS_DIR}/rpmfusion-free.repo"
@@ -178,9 +181,9 @@ run_cleanup() {
 	run_cleanup
 	[ "$status" -eq 0 ]
 
-	# grep -qx 'enabled=0' "${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo"
-	# grep -qx 'enabled=0' "${REPOS_DIR}/rpmfusion-free.repo"
-	# grep -qx 'enabled=0' "${REPOS_DIR}/fedora-multimedia.repo"
+	[ ! -e "${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo" ]
+	[ ! -e "${REPOS_DIR}/rpmfusion-free.repo" ]
+	[ ! -e "${REPOS_DIR}/fedora-multimedia.repo" ]
 }
 
 @test "90-cleanup: guard fails the build when dnf reports a third-party repository enabled" {
@@ -201,16 +204,15 @@ run_cleanup() {
 	[[ "$output" == *"::error::third-party repository still enabled: tailscale"* ]]
 }
 
-@test "90-cleanup: disables an unowned third-party repository the name list misses" {
+@test "90-cleanup: removes an unowned third-party repository the name list misses" {
 	# A vendor repository the build added (for example vscode.repo from an
 	# addrepo) has no fixed name in the list, so ownership classification must
-	# still disable it before the guard runs.
+	# still remove it before the guard runs.
 	printf '[vscode]\nenabled=1\n' >"${REPOS_DIR}/vscode.repo"
 
 	run_cleanup
 	[ "$status" -eq 0 ]
-
-	# grep -q '^enabled=0' "${REPOS_DIR}/vscode.repo"
+	[ ! -e "${REPOS_DIR}/vscode.repo" ]
 }
 
 @test "90-cleanup: leaves base repositories enabled when rpm is absent" {
@@ -223,7 +225,7 @@ run_cleanup() {
 
 	# Run the script with a PATH that has no rpm at all, but still has the real
 	# tools it needs so the disable pass and the guard behave normally.
-	for tool in bash rm find mkdir rmdir basename grep sed awk; do
+	for tool in bash rm find mkdir rmdir grep sed awk printf cat; do
 		ln -s "$(command -v "${tool}")" "${no_rpm_bin}/${tool}"
 	done
 
@@ -249,6 +251,7 @@ EOF
 	export PATH="${saved_path}"
 
 	[ "$status" -eq 0 ]
+	[ -f "${REPOS_DIR}/fedora.repo" ]
 	grep -q '^enabled=1' "${REPOS_DIR}/fedora.repo"
 }
 
@@ -320,6 +323,21 @@ EOF
 	DNF5_REPO_LIST="leaked" run_cleanup
 	[ "$status" -eq 1 ]
 	[[ "$output" == *"::error::third-party repository still enabled: leaked"* ]]
+}
+
+@test "90-cleanup: preserves first-party repo files even when rpm misclassifies them" {
+	# Simulate a broken/absent rpmdb where every file looks unowned. The
+	# allowlist must still protect fedora.repo and fedora-multimedia.repo.
+	cat >"${STUB_BIN}/rpm" <<'EOF'
+#!/usr/bin/bash
+exit 1
+EOF
+	chmod +x "${STUB_BIN}/rpm"
+
+	run_cleanup
+	[ "$status" -eq 0 ]
+	[ -f "${REPOS_DIR}/fedora.repo" ]
+	[ -f "${REPOS_DIR}/fedora-multimedia.repo" ]
 }
 
 @test "90-cleanup: removes the root .gitkeep placeholder" {
