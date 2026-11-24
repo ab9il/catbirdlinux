@@ -33,15 +33,11 @@ if [ "${#calls[@]}" -ne 2 ]; then
     exit 1
 fi
 
-# Disable every third-party repository. copr_install_isolated already disables
-# each COPR it uses; this is the backstop for anything else the build enabled.
-disable_repo_file() {
-    [[ -f "$1" ]] || return 0
-    sed -i -E 's@^[[:space:]]*enabled[[:space:]]*=.*@enabled=0@I' "$1"
-}
+# Detect and remove third-party repository files entirely.
+# Deleting the file is more robust than editing it: a repo with no explicit
+# enabled= key (enabled by dnf default) cannot be disabled via sed, but a
+# missing file cannot be enabled at all.
 
-# One list feeds both the disable pass and the guard below, so a repository
-# the script knows how to disable is always one the guard re-checks.
 third_party_repo_files=(
     "${REPOS_DIR}"/_copr:*.repo
     "${REPOS_DIR}"/_copr_*.repo
@@ -51,16 +47,7 @@ for repo_name in fedora-multimedia tailscale fedora-cisco-openh264 fedora-coreos
     third_party_repo_files+=("${REPOS_DIR}/${repo_name}.repo")
 done
 
-# A vendor repository the build added (for example vscode.repo from an
-# addrepo, or nvidia-container-toolkit.repo from a curl) has no fixed name in
-# this list, so classify by ownership too: base Fedora repo files are owned by
-# fedora-repos*, while anything dnf5, config-manager or a script writes is
-# owned by nothing and is therefore third-party.
-#
-# rpm is always present in a bootc Fedora image, but guard the pass so a
-# missing rpm can never make every base file look unowned and disable the base
-# repositories. De-duplicate below, since the ownership pass can name a file
-# the fixed list already covers.
+# Ownership pass: anything not owned by an RPM package is third-party.
 if command -v rpm >/dev/null 2>&1; then
     for repo_file in "${REPOS_DIR}"/*.repo; do
         [[ -f "${repo_file}" ]] || continue
@@ -69,8 +56,7 @@ if command -v rpm >/dev/null 2>&1; then
     done
 fi
 
-# The fixed globs and the ownership pass can name the same file twice, so
-# de-duplicate before both loops see the list.
+# De-duplicate before removal.
 declare -A third_party_seen=()
 third_party_unique=()
 for repo_file in "${third_party_repo_files[@]}"; do
@@ -78,14 +64,14 @@ for repo_file in "${third_party_repo_files[@]}"; do
     third_party_seen["${repo_file}"]=1
     third_party_unique+=("${repo_file}")
 done
-third_party_repo_files=("${third_party_unique[@]}")
 
-for repo_file in "${third_party_repo_files[@]}"; do
-    disable_repo_file "${repo_file}"
+# Remove detected third-party repo files.
+for repo_file in "${third_party_unique[@]}"; do
+    if [[ -f "${repo_file}" ]]; then
+        echo "Removing third-party repo file: ${repo_file}"
+        rm -f "${repo_file}"
+    fi
 done
-
-# Last chance disablement for repos not already caught
-dnf5 config-manager --setopt fedora-multimedia.enabled=0 || true
 
 # Fail loudly rather than shipping a third-party repository that is still live.
 # Ask dnf which repositories are actually enabled, rather than pattern-matching
