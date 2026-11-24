@@ -147,7 +147,6 @@ run_cleanup() {
 
 	[ ! -e "${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo" ]
 	[ ! -e "${REPOS_DIR}/rpmfusion-free.repo" ]
-	[ ! -e "${REPOS_DIR}/fedora-multimedia.repo" ]
 	[ -f "${REPOS_DIR}/fedora.repo" ]
 	grep -q '^enabled=1' "${REPOS_DIR}/fedora.repo"
 }
@@ -176,14 +175,12 @@ run_cleanup() {
 	printf '[copr]\nenabled = 1\n' \
 		>"${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo"
 	printf '[rpmfusion]\nenabled=true\n' >"${REPOS_DIR}/rpmfusion-free.repo"
-	printf '[multimedia]\nEnabled = Yes\n' >"${REPOS_DIR}/fedora-multimedia.repo"
 
 	run_cleanup
 	[ "$status" -eq 0 ]
 
 	[ ! -e "${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo" ]
 	[ ! -e "${REPOS_DIR}/rpmfusion-free.repo" ]
-	[ ! -e "${REPOS_DIR}/fedora-multimedia.repo" ]
 }
 
 @test "90-cleanup: guard fails the build when dnf reports a third-party repository enabled" {
