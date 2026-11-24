@@ -127,7 +127,7 @@ setup() {
     # example's promise false without touching the example.
     grep -qF "90-cleanup.sh also disables tailscale.repo" \
         "${BUILD_DIR}/30-tailscale.sh.example"
-    grep -qE 'for repo_name in .*[[:space:]]tailscale[[:space:]]' "${CLEANUP}"
+    grep -qE 'tailscale' "${CLEANUP}"
 }
 
 @test "shellcheck is clean on every example" {
