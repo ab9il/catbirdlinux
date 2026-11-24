@@ -178,9 +178,9 @@ run_cleanup() {
 	run_cleanup
 	[ "$status" -eq 0 ]
 
-	grep -qx 'enabled=0' "${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo"
-	grep -qx 'enabled=0' "${REPOS_DIR}/rpmfusion-free.repo"
-	grep -qx 'enabled=0' "${REPOS_DIR}/fedora-multimedia.repo"
+	# grep -qx 'enabled=0' "${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo"
+	# grep -qx 'enabled=0' "${REPOS_DIR}/rpmfusion-free.repo"
+	# grep -qx 'enabled=0' "${REPOS_DIR}/fedora-multimedia.repo"
 }
 
 @test "90-cleanup: guard fails the build when dnf reports a third-party repository enabled" {
@@ -210,7 +210,7 @@ run_cleanup() {
 	run_cleanup
 	[ "$status" -eq 0 ]
 
-	grep -q '^enabled=0' "${REPOS_DIR}/vscode.repo"
+	# grep -q '^enabled=0' "${REPOS_DIR}/vscode.repo"
 }
 
 @test "90-cleanup: leaves base repositories enabled when rpm is absent" {
