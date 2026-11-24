@@ -85,9 +85,7 @@ for repo_file in "${third_party_repo_files[@]}"; do
 done
 
 # Last chance disablement for repos not already caught
-if [ -f "${REPOS_DIR}/fedora-multimedia.repo" ]; then
-    sed -i -E 's@^[[:space:]]*enabled[[:space:]]*=.*@enabled=0@I' "${REPOS_DIR}/fedora-multimedia.repo"
-fi
+dnf5 config-manager --setopt fedora-multimedia.enabled=0 || true
 
 # Fail loudly rather than shipping a third-party repository that is still live.
 # Ask dnf which repositories are actually enabled, rather than pattern-matching
