@@ -15,14 +15,6 @@ set -euo pipefail
 CLEAN_ROOT="${CLEAN_ROOT:-/}"
 REPOS_DIR="${CLEAN_ROOT}/etc/yum.repos.d"
 
-setopt_if_exists() {
-    local repo="${1%%:*}"
-    if [ -f "${REPOS_DIR}/${repo}.repo" ]; then
-        dnf5 config-manager --setopt="$1"
-    fi
-    return 0
-}
-
 echo "::group:: Finalise package repositories"
 
 # Revert the build-time dnf settings the Containerfile installs. Removing the
@@ -93,7 +85,9 @@ for repo_file in "${third_party_repo_files[@]}"; do
 done
 
 # Last chance disablement for repos not already caught
-setopt_if_exists fedora-multimedia:enabled=0
+if [ -f "${REPOS_DIR}/fedora-multimedia.repo" ]; then
+    sed -i -E 's@^[[:space:]]*enabled[[:space:]]*=.*@enabled=0@I' "${REPOS_DIR}/fedora-multimedia.repo"
+fi
 
 # Fail loudly rather than shipping a third-party repository that is still live.
 # Ask dnf which repositories are actually enabled, rather than pattern-matching
