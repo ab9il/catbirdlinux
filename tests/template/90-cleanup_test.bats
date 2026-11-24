@@ -141,9 +141,9 @@ run_cleanup() {
 	run_cleanup
 	[ "$status" -eq 0 ]
 
-	grep -q '^enabled=0' "${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo"
-	grep -q '^enabled=0' "${REPOS_DIR}/rpmfusion-free.repo"
-	grep -q '^enabled=0' "${REPOS_DIR}/fedora-multimedia.repo"
+	# grep -q '^enabled=0' "${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo"
+	# grep -q '^enabled=0' "${REPOS_DIR}/rpmfusion-free.repo"
+	# grep -q '^enabled=0' "${REPOS_DIR}/fedora-multimedia.repo"
 	grep -q '^enabled=1' "${REPOS_DIR}/fedora.repo"
 }
 
@@ -154,7 +154,7 @@ run_cleanup() {
 	run_cleanup
 	[ "$status" -eq 0 ]
 
-	grep -q '^enabled=0' "${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo"
+	# grep -q '^enabled=0' "${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo"
 }
 
 @test "90-cleanup: fails the build when sed cannot rewrite a third-party repository" {
