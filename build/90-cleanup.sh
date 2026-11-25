@@ -29,6 +29,13 @@ calls+=("unsetopt keepcache install_weak_deps")
 dnf5 versionlock clear
 calls+=("versionlock clear")
 
+# Disable every third-party repository. copr_install_isolated already disables
+# each COPR it uses; this is the backstop for anything else the build enabled.
+disable_repo_file() {
+    [[ -f "$1" ]] || return 0
+    sed -i -E 's@^[[:space:]]*enabled[[:space:]]*=.*@enabled=0@I' "$1"
+}
+
 # Optional: assert in the script itself
 if [ "${#calls[@]}" -ne 2 ]; then
     echo "::error::Expected exactly 2 dnf5 config-manager calls" >&2
@@ -92,6 +99,7 @@ for repo_file in "${third_party_repo_files[@]}"; do
         continue
     fi
     echo "Removing third-party repo file: ${repo_file}"
+    disable_repo_file "${repo_file}"
     rm -f "${repo_file}"
 done
 
