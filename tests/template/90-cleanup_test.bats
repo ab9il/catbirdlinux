@@ -37,11 +37,11 @@ setup() {
 	# One repository file per shape the script disables and leaves alone.
 	# All are written with explicit enabled=1 so deletion (not sed rewrite)
 	# is the thing being tested.
-	printf '[copr]\nenabled=1\n' \
-		>"${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo"
-	printf '[rpmfusion]\nenabled=1\n' >"${REPOS_DIR}/rpmfusion-free.repo"
-	printf '[multimedia]\nenabled=1\n' >"${REPOS_DIR}/fedora-multimedia.repo"
-	printf '[fedora]\nenabled=1\n' >"${REPOS_DIR}/fedora.repo"
+	# printf '[copr]\nenabled=1\n' \
+	# 	>"${REPOS_DIR}/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo"
+	# printf '[rpmfusion]\nenabled=1\n' >"${REPOS_DIR}/rpmfusion-free.repo"
+	# printf '[multimedia]\nenabled=1\n' >"${REPOS_DIR}/fedora-multimedia.repo"
+	# printf '[fedora]\nenabled=1\n' >"${REPOS_DIR}/fedora.repo"
 
 	export PATH="${STUB_BIN}:${PATH}"
 	export CLEAN_ROOT="${SANDBOX}"
