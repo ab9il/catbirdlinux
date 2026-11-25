@@ -116,8 +116,7 @@ live="$(printf '%s\n' "${repo_list}" | awk '
 	!($1 in allowed) { print $1 }
 ')"
 if [ -n "${live}" ]; then
-    # say nothing, exit cleanly
-    # echo "::error::third-party repository still enabled: ${live}" >&2
+    echo "::error::third-party repository still enabled: ${live}" >&2
     exit 0
 fi
 
