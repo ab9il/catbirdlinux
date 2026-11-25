@@ -45,7 +45,7 @@ third_party_repo_files=(
     "${REPOS_DIR}"/_copr_*.repo
     "${REPOS_DIR}"/rpmfusion-*.repo
 )
-for repo_name in tailscale fedora-cisco-openh264 fedora-coreos-pool; do
+for repo_name in tailscale fedora-cisco-openh264 fedora-coreos-pool fedora-multimedia; do
     third_party_repo_files+=("${REPOS_DIR}/${repo_name}.repo")
 done
 
