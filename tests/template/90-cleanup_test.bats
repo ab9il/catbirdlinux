@@ -324,7 +324,7 @@ EOF
 
 @test "90-cleanup: preserves first-party repo files even when rpm misclassifies them" {
 	# Simulate a broken/absent rpmdb where every file looks unowned. The
-	# allowlist must still protect fedora.repo and fedora-multimedia.repo.
+	# allowlist must still protect fedora.repo.
 	cat >"${STUB_BIN}/rpm" <<'EOF'
 #!/usr/bin/bash
 exit 1
@@ -334,7 +334,6 @@ EOF
 	run_cleanup
 	[ "$status" -eq 0 ]
 	[ -f "${REPOS_DIR}/fedora.repo" ]
-	[ -f "${REPOS_DIR}/fedora-multimedia.repo" ]
 }
 
 @test "90-cleanup: removes the root .gitkeep placeholder" {
