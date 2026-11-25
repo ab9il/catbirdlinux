@@ -72,7 +72,7 @@ done
 # fedora-repos such as fedora-multimedia).
 first_party_basenames=(
     fedora updates fedora-updates fedora-cisco-openh264
-    fedora-updates-archive updates-archive fedora-multimedia
+    fedora-updates-archive updates-archive
 )
 
 is_first_party() {
