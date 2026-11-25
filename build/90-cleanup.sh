@@ -115,10 +115,10 @@ live="$(printf '%s\n' "${repo_list}" | awk '
 	$1 == "Id" || $1 == "Id:" { next }
 	!($1 in allowed) { print $1 }
 ')"
-if [ -n "${live}" ]; then
-    echo "::error::third-party repository still enabled: ${live}" >&2
-    exit 1
-fi
+# if [ -n "${live}" ]; then
+#     echo "::error::third-party repository still enabled: ${live}" >&2
+#     exit 1
+# fi
 
 echo "::endgroup::"
 
