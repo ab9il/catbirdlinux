@@ -162,11 +162,13 @@ rm -rf "${CLEAN_ROOT}/.gitkeep"
 # Use -mindepth/-maxdepth instead of shell globs so these are no-ops when the
 # directories are empty (e.g. /var/cache/{libdnf5,rpm-ostree} only exist as
 # transient buildah cache mounts and are not present in this layer).
-find "${CLEAN_ROOT}/var" -mindepth 1 -maxdepth 1 -type d \! -name cache -exec rm -fr {} \;
-find "${CLEAN_ROOT}/var/cache" -mindepth 1 -maxdepth 1 -type d \! -name libdnf5 \! -name rpm-ostree -exec rm -fr {} \;
-find "${CLEAN_ROOT}/var/lib" -mindepth 1 -maxdepth 1 -type f -exec rm -fr {} \;
-find "${CLEAN_ROOT}/var/log" -mindepth 1 -maxdepth 1 -type f -exec rm -fr {} \;
-find "${CLEAN_ROOT}/var/tmp" -mindepth 1 -maxdepth 1 -type f -exec rm -fr {} \;
+find "${CLEAN_ROOT}/run/dnf" -mindepth 1 -type f -exec rm -fr {} \;
+find "${CLEAN_ROOT}/run/selinux-policy" -mindepth 1 -type f -exec rm -fr {} \;
+find "${CLEAN_ROOT}/var" -mindepth 1 -type d \! -name cache -exec rm -fr {} \;
+find "${CLEAN_ROOT}/var/cache" -mindepth 1 -type d \! -name libdnf5 \! -name rpm-ostree -exec rm -fr {} \;
+find "${CLEAN_ROOT}/var/lib" -mindepth 1 -type f -exec rm -fr {} \;
+find "${CLEAN_ROOT}/var/log" -mindepth 1 -type f -exec rm -fr {} \;
+find "${CLEAN_ROOT}/var/tmp" -mindepth 1 -type f -exec rm -fr {} \;
 
 # Clear tmpfs-backed runtime directories without deleting the directories
 # themselves. Buildah may have bind mounts in these paths during RUN, so
