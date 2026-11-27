@@ -439,8 +439,8 @@ EOF
 fi
 
 # Verify pam_systemd.so is present (required for DRM/input device access)
-if ! grep -q 'pam_systemd.so' /etc/pam.d/greetd; then
-    echo "ERROR: /etc/pam.d/greetd missing pam_systemd.so — greeter cannot access display devices" >&2
+if ! grep -q 'pam_systemd.so' /usr/lib/pam.d/greetd; then
+    echo "ERROR: /usr/lib/pam.d/greetd missing pam_systemd.so — greeter cannot access display devices" >&2
     exit 1
 fi
 
