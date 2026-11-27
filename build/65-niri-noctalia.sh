@@ -356,7 +356,7 @@ fi
 # niri speaks Mutter's ScreenCast D-Bus API, so the GNOME portal backend stays
 # correct with mutter gone. niri's own niri-portals.conf names these three
 # backends, which is why this image ships no portal config of its own.
-rpm -q xdg-desktop-portal-gnome xdg-desktop-portal-gtk gnome-keyring
+rpm -q xdg-desktop-portal-gnome xdg-desktop-portal-gtk
 test -f /usr/share/xdg-desktop-portal/niri-portals.conf
 
 # The editor and the entry that launches it. Fedora's package ships no desktop
