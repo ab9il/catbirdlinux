@@ -182,6 +182,30 @@ dnf5 install -y nm-connection-editor
 
 echo "::endgroup::"
 
+echo "::group:: Install the printer manager"
+
+###############################################################################
+# Managing printers
+###############################################################################
+# The same gap as the connection editor, for printers. GNOME's Printers panel
+# was part of gnome-control-center, removed below, and Noctalia has no printing
+# surface at all. CUPS and cups-pk-helper are in the base image, so printing
+# works and an unprivileged tool can administer it through Polkit -- there is
+# just nothing graphical that does. What was left was localhost:631 in a
+# browser.
+#
+# system-config-printer is Fedora's printer tool: add a queue, pick a driver,
+# set the default, watch jobs. It is GTK 3 and Python, links against nothing
+# from gnome-shell or gnome-session, and asks for privileges through
+# cups-pk-helper -- the password prompt is Noctalia's Polkit agent, which
+# custom/config/noctalia/20-polkit-agent.toml turns on. Unlike
+# nm-connection-editor it ships its own desktop entry, as "Print Settings".
+###############################################################################
+
+dnf5 install -y system-config-printer
+
+echo "::endgroup::"
+
 echo "::group:: Install the greeter"
 
 ###############################################################################
@@ -384,7 +408,7 @@ echo "::group:: Configure and enable the greeter"
 # meaningful if a second one is ever added.
 mkdir -p /etc/greetd
 cat >/etc/greetd/config.toml <<'EOF'
-# Written by build/60-niri-noctalia.sh. Replaced on every image update.
+# Written by build/65-niri-noctalia.sh. Replaced on every image update.
 [terminal]
 vt = 1
 
@@ -401,8 +425,8 @@ EOF
 
 # Ensure /etc/pam.d/greetd exists and has pam_systemd.so.
 # The vendor helper may fail in a container build; fall back gracefully.
-if [ ! -f /etc/pam.d/greetd ]; then
-    cat > /etc/pam.d/greetd <<'EOF'
+if [ ! -f /usr/lib/pam.d/greetd ]; then
+    cat >/usr/lib/pam.d/greetd <<'EOF'
 auth     required  pam_env.so
 auth     sufficient pam_unix.so try_first_pass likeauth nullok
 auth     required  pam_deny.so
