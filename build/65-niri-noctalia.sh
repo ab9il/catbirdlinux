@@ -97,7 +97,7 @@ NIRI_PKGS=(
     sound-theme-freedesktop
     xwayland-satellite
 )
-dnf5 install -y "${NIRI_PKGS[@]}"
+dnf5 install --setopt=install_weak_deps=False -y "${NIRI_PKGS[@]}"
 
 echo "::endgroup::"
 
@@ -109,8 +109,6 @@ echo "::group:: Install session support packages"
 SESSION_SUPP_PKGS=(
     brightnessctl
     ddcutil
-    gnome-keyring
-    gnome-keyring-pam
     grim
     playerctl
     slurp
@@ -120,6 +118,10 @@ SESSION_SUPP_PKGS=(
     bluez-tools
     gnome-bluetooth
     gvfs
+    oo7-cli
+    oo7-daemon
+    oo7-portal
+    pam_oo7
     libgtop2
     pamixer
     pavucontrol
@@ -140,18 +142,23 @@ echo "::group:: Install the terminal and file manager"
 
 # From the base image, and outside the GNOME removal's closure below. Named
 # because /etc/niri/config.kdl binds Mod+E to it.
-dnf5 install -y nautilus ptyxis
-
+#
 # Also from the base image, and nothing requires it, so it would leave silently.
 # It is the GTK 3 half of Noctalia's gtk3/gtk4 templates: the templates' apply
 # hook sets gtk-theme to adw-gtk3 or adw-gtk3-dark and skips that step when the
 # theme is absent, leaving GTK 3 applications on Adwaita with a stylesheet
 # written for adw-gtk3. custom/config/noctalia/ turns those templates on.
-dnf5 install -y adw-gtk3-theme
-
+#
 # Likewise unrequired by anything, and it owns the SSH agent this session runs:
 # see "Restore the SSH agent" below.
-dnf5 install -y gcr
+
+NIRI_SUPP_PKGS=(
+    nautilus
+    ptyxis
+    adw-gtk3-theme
+    gcr
+)
+dnf5 install -y "${NIRI_SUPP_PKGS[@]}"
 
 echo "::endgroup::"
 
@@ -306,6 +313,9 @@ EXCLUDED_PACKAGES=(
     gdm
     gnome-control-center
     gnome-classic-session
+    gnome-keyring
+    gnome-keyring-pam
+    grim
     gnome-extensions-app
     gnome-initial-setup
     gnome-session
@@ -430,11 +440,13 @@ if [ ! -f /usr/lib/pam.d/greetd ]; then
 auth     required  pam_env.so
 auth     sufficient pam_unix.so try_first_pass likeauth nullok
 auth     required  pam_deny.so
+auth     optional  pam_oo7.so
 account  sufficient pam_permit.so
 password required  pam_deny.so
 session  required  pam_limits.so
 session  required  pam_systemd.so
 session  optional  pam_permit.so
+session  optional  pam_oo7.so auto_start
 EOF
 fi
 
@@ -442,6 +454,15 @@ fi
 if ! grep -q 'pam_systemd.so' /usr/lib/pam.d/greetd; then
     echo "ERROR: /usr/lib/pam.d/greetd missing pam_systemd.so — greeter cannot access display devices" >&2
     exit 1
+fi
+
+# Enable oo7-daemon for all users
+systemctl --global add-wants graphical-session.target oo7-daemon.service
+
+# If existing, change /etc/pam.d/passwd from ref to gnome-keyring to oo7
+if [ -f /etc/pam.d/passwd ]; then
+    sed -i $'/pam_gnome_keyring.so use_authtok$/a \
+    password optional\tpam_oo7.so use_authtok' /etc/pam.d/passwd
 fi
 
 # /var/lib/noctalia-greeter cannot ship in the image -- 90-cleanup.sh prunes
