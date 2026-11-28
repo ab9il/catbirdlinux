@@ -20,7 +20,13 @@ source /ctx/build/copr-helpers.sh
 # Enable nullglob for all glob operations to prevent failures on empty matches
 shopt -s nullglob
 
-echo "::group:: Install More Default Packages"
+echo "::group:: Explicitly swap oo7 for GNOME Keyring"
+# Swap the Secret Service before anything can pull gnome-keyring back in.
+dnf5 swap -y gnome-keyring oo7-daemon || true # no-op if base lacks it
+
+echo "::endgroup::"
+
+echo "::group:: Install Copr Packages"
 
 # From agriffis/neovim-nightly
 copr_install_isolated "agriffis/neovim-nightly" "neovim"
@@ -39,6 +45,10 @@ copr_install_isolated "atim/starship" "starship"
 
 # persistence for clipboard items
 copr_install_isolated "leloubil/wl-clip-persist" "wl-clip-persist"
+
+echo "::endgroup::"
+
+echo "::group:: Install More Default Packages"
 
 FONTS=(
     fira-code-fonts
@@ -105,7 +115,7 @@ echo "::group:: Install session support packages"
 
 # Weak dependencies of niri and noctalia, plus the utilities niri's defaults and
 # Noctalia's screenshot panel shell out to. ddcutil drives brightness on
-# external monitors; gnome-keyring-pam unlocks the keyring at login.
+# external monitors; pam_oo7 unlocks the keyring at login.
 SESSION_SUPP_PKGS=(
     brightnessctl
     ddcutil
@@ -134,7 +144,7 @@ SESSION_SUPP_PKGS=(
     xdg-desktop-portal-gnome
     xdg-desktop-portal-gtk
 )
-dnf5 install -y "${SESSION_SUPP_PKGS[@]}"
+dnf5 install --setopt=install_weak_deps=False -y "${SESSION_SUPP_PKGS[@]}"
 
 echo "::endgroup::"
 
@@ -301,8 +311,8 @@ echo "::group:: Remove GNOME"
 
 # The -session packages own /usr/share/wayland-sessions, so leaving them would
 # keep offering a session that can no longer start. dnf5 takes the dependents
-# along; nautilus, ptyxis, gnome-keyring and both portal backends are outside
-# that closure and stay.
+# along; nautilus, ptyxis, and both portal backends are outside that closure
+# and stay.
 EXCLUDED_PACKAGES=(
     cosign
     fedora-bookmarks
@@ -313,10 +323,9 @@ EXCLUDED_PACKAGES=(
     gdm
     gnome-control-center
     gnome-classic-session
+    gnome-extensions-app
     gnome-keyring
     gnome-keyring-pam
-    grim
-    gnome-extensions-app
     gnome-initial-setup
     gnome-session
     gnome-session-wayland-session
@@ -357,6 +366,11 @@ fi
 # correct with mutter gone. niri's own niri-portals.conf names these three
 # backends, which is why this image ships no portal config of its own.
 rpm -q xdg-desktop-portal-gnome xdg-desktop-portal-gtk
+rpm -q oo7-daemon oo7-portal pam_oo7
+if rpm -q gnome-keyring >/dev/null 2>&1; then
+    echo "ERROR: gnome-keyring survived; two Secret Service providers will race" >&2
+    exit 1
+fi
 test -f /usr/share/xdg-desktop-portal/niri-portals.conf
 
 # The editor and the entry that launches it. Fedora's package ships no desktop
@@ -451,8 +465,8 @@ EOF
 fi
 
 # Verify pam_systemd.so is present (required for DRM/input device access)
-if ! grep -q 'pam_systemd.so' /usr/lib/pam.d/greetd; then
-    echo "ERROR: /usr/lib/pam.d/greetd missing pam_systemd.so — greeter cannot access display devices" >&2
+if ! grep -q 'pam_systemd.so' /etc/pam.d/greetd /usr/lib/pam.d/greetd 2>/dev/null; then
+    echo "ERROR: no greetd PAM stack with pam_systemd.so in /etc or /usr/lib" >&2
     exit 1
 fi
 
@@ -461,8 +475,7 @@ systemctl --global add-wants graphical-session.target oo7-daemon.service
 
 # If existing, change /etc/pam.d/passwd from ref to gnome-keyring to oo7
 if [ -f /etc/pam.d/passwd ]; then
-    sed -i $'/pam_gnome_keyring.so use_authtok$/a \
-    password optional\tpam_oo7.so use_authtok' /etc/pam.d/passwd
+    sed -i 's/pam_gnome_keyring.so use_authtok/pam_oo7.so use_authtok' /etc/pam.d/passwd
 fi
 
 # /var/lib/noctalia-greeter cannot ship in the image -- 90-cleanup.sh prunes
@@ -500,7 +513,7 @@ echo "::group:: Restore the SSH agent"
 #
 # Socket-activated, so enabling it costs nothing until something connects, and
 # the agent picks its passphrases up from the login keyring that
-# pam_gnome_keyring unlocks in /etc/pam.d/greetd.
+# pam_oo7.so unlocks in /etc/pam.d/greetd.
 ###############################################################################
 
 test -f /usr/lib/systemd/user/gcr-ssh-agent.socket
