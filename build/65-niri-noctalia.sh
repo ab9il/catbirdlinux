@@ -470,7 +470,7 @@ systemctl --global add-wants graphical-session.target oo7-daemon.service
 
 # If existing, change /etc/pam.d/passwd from ref to gnome-keyring to oo7
 if [ -f /etc/pam.d/passwd ]; then
-    sed -i 's/pam_gnome_keyring.so use_authtok/pam_oo7.so use_authtok' /etc/pam.d/passwd
+    sed -i 's/pam_gnome_keyring.so use_authtok/pam_oo7.so use_authtok/' /etc/pam.d/passwd
 fi
 
 # /var/lib/noctalia-greeter cannot ship in the image -- 90-cleanup.sh prunes
