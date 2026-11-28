@@ -445,28 +445,26 @@ EOF
 # Fedora only reaches pam_systemd through system-auth, optionally. Use the
 # vendor's helper, then drop the timestamped backup it leaves: every build
 # starts from the same base layer, so it has nothing to restore.
-/usr/share/noctalia-greeter/setup_greetd_pam.sh || true
-
-# Ensure /etc/pam.d/greetd exists and has pam_systemd.so.
-# The vendor helper may fail in a container build; fall back gracefully.
-if [ ! -f /usr/lib/pam.d/greetd ]; then
-    cat >/usr/lib/pam.d/greetd <<'EOF'
-auth     required  pam_env.so
-auth     sufficient pam_unix.so try_first_pass likeauth nullok
-auth     required  pam_deny.so
-auth     optional  pam_oo7.so
-account  sufficient pam_permit.so
-password required  pam_deny.so
-session  required  pam_limits.so
-session  required  pam_systemd.so
-session  optional  pam_permit.so
-session  optional  pam_oo7.so auto_start
+# greetd's upstream PAM stack is /etc/pam.d/greetd. On this base the
+# vendor helper skips because no file exists; write ours directly.
+mkdir -p /etc/pam.d
+cat >/etc/pam.d/greetd <<'EOF'
+# Written by build/65-niri-noctalia.sh. Replaces vendor default on every build.
+auth     required      pam_env.so
+auth     sufficient    pam_unix.so try_first_pass likeauth nullok
+auth     required      pam_deny.so
+auth     optional      pam_oo7.so
+account  sufficient    pam_permit.so
+password required      pam_deny.so
+session  required      pam_limits.so
+session  required      pam_systemd.so
+session  optional      pam_permit.so
+session  optional      pam_oo7.so auto_start
 EOF
-fi
 
-# Verify pam_systemd.so is present (required for DRM/input device access)
-if ! grep -q 'pam_systemd.so' /etc/pam.d/greetd /usr/lib/pam.d/greetd 2>/dev/null; then
-    echo "ERROR: no greetd PAM stack with pam_systemd.so in /etc or /usr/lib" >&2
+# Verify the stack PAM actually reads is coherent.
+if ! grep -q 'pam_systemd.so' /etc/pam.d/greetd; then
+    echo "ERROR: /etc/pam.d/greetd missing pam_systemd.so — greeter cannot access display devices" >&2
     exit 1
 fi
 
