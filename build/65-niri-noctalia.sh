@@ -441,12 +441,9 @@ command = "/usr/bin/noctalia-greeter-session"
 user = "greetd"
 EOF
 
-# The greeter needs a logind session to reach the seat's DRM and input devices;
-# Fedora only reaches pam_systemd through system-auth, optionally. Use the
-# vendor's helper, then drop the timestamped backup it leaves: every build
-# starts from the same base layer, so it has nothing to restore.
-# greetd's upstream PAM stack is /etc/pam.d/greetd. On this base the
-# vendor helper skips because no file exists; write ours directly.
+# The greeter needs a logind session to reach the seat's DRM and input devices.
+# greetd's upstream PAM stack is /etc/pam.d/greetd. On this base the vendor
+# helper (setup_greetd_pam.sh) skips because no file exists; write ours directly.
 mkdir -p /etc/pam.d
 cat >/etc/pam.d/greetd <<'EOF'
 # Written by build/65-niri-noctalia.sh. Replaces vendor default on every build.
