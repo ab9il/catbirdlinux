@@ -41,14 +41,15 @@ you so choose.
 
 1. Install Bluefin, Bazzite, Aurora, or any Universal Blue Linux system.
 2. Paste and execute this command in the terminal:
-3. Allow time for your Homebrew and Flatpak apps to download and install.
 
 ```bash
 sudo bootc switch --transport registry ghcr.io/ab9il/catbirdlinux:stable
 sudo systemctl reboot
 ```
 
-Then, as your user, in the terminal:
+3. Allow time for your Homebrew and Flatpak apps to download and install.
+
+As your normal user, you can execute these as needed, in the terminal:
 
 ```bash
 ujust install-default-apps    # Homebrew: the default Brewfile
@@ -57,7 +58,7 @@ ujust configure-dev-groups    # add yourself to docker and libvirt
 ujust install-config          # re-apply the image defaults, backing up yours
 ```
 
-First boot unpacks Homebrew and installs the declared Flatpaks; both need a
+First boot unpacks Homebrew and installs the default Flatpaks; both need a
 network connection. Check them with `systemctl status brew-setup.service` and
 `systemctl status flatpak-preinstall.service`.
 
@@ -87,13 +88,14 @@ To make the system immediately usable, `Catbird Linux` pairs Niri with **Noctali
 
 ```text
 catbirdlinux/
-├── Containerfile           # Image definitions pulling from uBlue bases
+├── Containerfile           # Image definitions pulling from uBlue base images
+├── Justfile                # Management of image build and maintenance tasks
 ├── build/
 │   └── build scripts       # Injects packages, configs, and COPR repos
 ├── custom/
 │   └── brew, config...     # Injects files and configurations
 ├── .github/workflows/      # CI that builds images daily and on-push
-└── iso/                    # build-time metadata for isi creation
+└── iso/                    # build-time metadata for iso creation
 └── tests/                  # build0time quality and integrity tests
 ```
 
