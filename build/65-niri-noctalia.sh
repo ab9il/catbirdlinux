@@ -115,7 +115,7 @@ echo "::group:: Install session support packages"
 
 # Weak dependencies of niri and noctalia, plus the utilities niri's defaults and
 # Noctalia's screenshot panel shell out to. ddcutil drives brightness on
-# external monitors; gnome-keyring-pam unlocks the keyring at login.
+# external monitors; pam_oo7 unlocks the keyring at login.
 SESSION_SUPP_PKGS=(
     brightnessctl
     ddcutil
@@ -311,8 +311,8 @@ echo "::group:: Remove GNOME"
 
 # The -session packages own /usr/share/wayland-sessions, so leaving them would
 # keep offering a session that can no longer start. dnf5 takes the dependents
-# along; nautilus, ptyxis, gnome-keyring and both portal backends are outside
-# that closure and stay.
+# along; nautilus, ptyxis, and both portal backends are outside that closure
+# and stay.
 EXCLUDED_PACKAGES=(
     cosign
     fedora-bookmarks
@@ -465,8 +465,8 @@ EOF
 fi
 
 # Verify pam_systemd.so is present (required for DRM/input device access)
-if ! grep -q 'pam_systemd.so' /usr/lib/pam.d/greetd; then
-    echo "ERROR: /usr/lib/pam.d/greetd missing pam_systemd.so — greeter cannot access display devices" >&2
+if ! grep -q 'pam_systemd.so' /etc/pam.d/greetd /usr/lib/pam.d/greetd 2>/dev/null; then
+    echo "ERROR: no greetd PAM stack with pam_systemd.so in /etc or /usr/lib" >&2
     exit 1
 fi
 
